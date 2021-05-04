@@ -1,26 +1,23 @@
 package com.mmp.wanandroid.ui
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.SparseArray
-import androidx.core.util.set
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.Tree
+import com.mmp.wanandroid.databinding.ActivityMainBinding
 import com.mmp.wanandroid.ui.base.BaseActivity
-import com.mmp.wanandroid.ui.home.HomeFragment
+import com.mmp.wanandroid.ui.home.view.HomeFragment
+import com.mmp.wanandroid.ui.mine.MineFragment
+import com.mmp.wanandroid.ui.navigation.NavigationFragment
+import com.mmp.wanandroid.ui.project.ProjectFragment
+import com.mmp.wanandroid.ui.system.SystemFragment
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
 
     private var mLastIndex = -1
     private val mFragmentArray = SparseArray<Fragment>()
     private var mCurrentFragment: Fragment? = null
     private var mLastFragment: Fragment? = null
 
-    private val mTreeList = mutableListOf<Tree>()
-
-    private val viewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
 
     override fun getLayoutId(): Int {
         return R.layout.activity_main
@@ -28,20 +25,21 @@ class MainActivity : BaseActivity() {
 
     override fun initView() {
         super.initView()
+        initNavigation()
+        switchFragment(1)
     }
 
-    override fun initData() {
-        super.initData()
-        mTreeList.add(Tree(null,0,"热门博文"))
-        mTreeList.add(Tree(null,152,"framework"))
-        viewModel.setFresh(true)
-        viewModel.treeLiveData.observe(this){
-            val treeList = it.getOrNull()
-            if (treeList != null){
-                mTreeList.addAll(treeList)
+
+    private fun initNavigation(){
+        binding.bottomNavigation.setOnNavigationItemReselectedListener {
+            when(it.itemId){
+                R.id.bottom_menu_home -> switchFragment(1)
+                R.id.bottom_menu_navigation -> switchFragment(2)
+                R.id.bottom_menu_system -> switchFragment(3)
+                R.id.bottom_menu_project -> switchFragment(4)
+                R.id.bottom_menu_mine -> switchFragment(5)
             }
         }
-        switchFragment(1)
     }
 
     private fun switchFragment(index: Int){
@@ -55,14 +53,14 @@ class MainActivity : BaseActivity() {
             }
             if (mCurrentFragment == null){
                 mCurrentFragment = getFragment(index)
-                transaction.add(R.id.content,mCurrentFragment!!,index.toString())
+                transaction.add(R.id.container,mCurrentFragment!!,index.toString())
             }else{
                 transaction.show(mCurrentFragment!!)
             }
         }else{
             if (mCurrentFragment == null){
                 mCurrentFragment = getFragment(index)
-                transaction.add(R.id.content,mCurrentFragment!!,index.toString())
+                transaction.add(R.id.container,mCurrentFragment!!,index.toString())
             }
         }
         transaction.commit()
@@ -73,7 +71,11 @@ class MainActivity : BaseActivity() {
         var fragment: Fragment? = mFragmentArray.get(index)
         if (fragment == null){
             when(index){
-                1 -> fragment = HomeFragment.getInstance(mTreeList)
+                1 -> fragment = HomeFragment.instance()
+                2 -> fragment = NavigationFragment.instance()
+                3 -> fragment = SystemFragment.instance()
+                4 -> fragment = ProjectFragment.instance()
+                5 -> fragment = MineFragment.instance()
             }
             mFragmentArray.put(index,fragment)
         }

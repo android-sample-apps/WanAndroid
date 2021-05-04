@@ -1,12 +1,15 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
     defaultConfig {
         applicationId "com.mmp.wanandroid"
         minSdkVersion 21
@@ -30,6 +33,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    dataBinding{
+        enabled true
+    }
 }
 
 dependencies {
@@ -46,7 +52,37 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+
     implementation 'com.google.android.material:material:1.4.0-alpha02'
-    implementation 'androidx.paging:paging-runtime:3.0.0-beta01'
+
+    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-rc01'
+
+    def room_version = "2.2.6"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    implementation 'com.kingja.loadsir:loadsir:1.3.8'
+
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha01"
+
+    implementation "androidx.activity:activity-ktx:1.2.2"
+
+    implementation 'com.gyf.immersionbar:immersionbar:2.3.3'
+
+    implementation 'com.youth.banner:banner:2.1.0'
+
+    implementation "com.github.bumptech.glide:glide:4.11.0"
+    implementation "com.github.bumptech.glide:compiler:4.11.0"
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+
+    implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'
+    implementation  'com.scwang.smart:refresh-header-classics:2.0.3'
+    implementation  'com.scwang.smart:refresh-footer-classics:2.0.3'
+
+    implementation 'com.github.sharish:ShimmerRecyclerView:v1.3'
+
 }

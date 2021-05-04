@@ -12,17 +12,17 @@
         android:title="@string/bottom_menu_navigation"
         android:icon="@drawable/navigation"/>
 
-    <item android:id="@+id/bottom_menu_wechat"
+    <item android:id="@+id/bottom_menu_system"
         app:showAsAction="ifRoom"
-        android:title="@string/bottom_menu_wechat"
-        android:icon="@drawable/weixin"/>
+        android:title="@string/bottom_menu_system"
+        android:icon="@drawable/system"/>
 
     <item android:id="@+id/bottom_menu_project"
         app:showAsAction="ifRoom"
         android:title="@string/bottom_menu_project"
         android:icon="@drawable/project"/>
 
-    <item android:id="@+id/bottom_menu_minr"
+    <item android:id="@+id/bottom_menu_mine"
         app:showAsAction="ifRoom"
         android:title="@string/bottom_menu_mine"
         android:icon="@drawable/mine"/>

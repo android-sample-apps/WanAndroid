@@ -37,6 +37,7 @@
                 app:layout_goneMarginStart="10dp"
                 android:layout_marginStart="10dp"
                 android:textSize="20sp"
+                android:maxLines="2"
                 tools:text="2222222"/>
 
             <ImageView

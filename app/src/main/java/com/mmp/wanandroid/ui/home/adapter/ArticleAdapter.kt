@@ -1,4 +1,4 @@
-package com.mmp.wanandroid.ui.home
+package com.mmp.wanandroid.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.Article
 
-class ArticleAdapter : PagingDataAdapter<Article,ArticleAdapter.ViewHolder>(COMPARATOR) {
+class ArticleAdapter : PagingDataAdapter<Article, ArticleAdapter.ViewHolder>(COMPARATOR) {
 
     companion object{
         private val COMPARATOR = object : DiffUtil.ItemCallback<Article>() {
