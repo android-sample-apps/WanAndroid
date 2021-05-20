@@ -4,9 +4,9 @@ import com.mmp.wanandroid.data.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
-import java.util.*
 
 interface WanAndroidService {
 
@@ -23,7 +23,7 @@ interface WanAndroidService {
 
     /*首页文章列表*/
     @GET("/article/list/{page}/json")
-    suspend fun getHomeArticle(@Path("page")page: Int) : BaseResponse<Data>
+    suspend fun getHomeArticle(@Path("page")page: Int) : BaseResponse<ArticleData>
 
     /*首页banner*/
     @GET("/banner/json")
@@ -37,11 +37,14 @@ interface WanAndroidService {
     suspend fun getTree() : BaseResponse<List<Tree>>
 
     @GET("/article/list/{page}/json")
-    suspend fun getArticle(@Path("page") page: Int,@Query("cid")cid: Int) : BaseResponse<Data>
+    suspend fun getArticle(@Path("page") page: Int,@Query("cid")cid: Int) : BaseResponse<ArticleData>
 
     @GET("/hotkey/json")
     suspend fun getHotKey() : BaseResponse<List<HotKey>>
 
-    @GET("/wenda/list/1/json ")
-    suspend fun getWenda() : BaseResponse<Data>
+//    @GET("/wenda/list/1/json ")
+//    suspend fun getWenda() : BaseResponse<List<Article>>
+
+    @POST("/article/query/{page}/json")
+    suspend fun getSearchArticle(@Path("page")page: Int,@Query("k")k: String) : BaseResponse<ArticleData>
 }

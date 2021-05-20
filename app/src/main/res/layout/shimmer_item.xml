@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:layout_width="25dp"
+        android:layout_height="15dp"
+        android:id="@+id/View1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#CACACA"
+        />
+
+    <TextView
+        android:layout_width="30dp"
+        android:layout_height="15dp"
+        android:id="@+id/View2"
+        android:background="#CACACA"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/View1"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <View
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="#CACACA"
+        android:id="@+id/View3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="15dp"/>
+
+    <TextView
+        android:layout_width="350dp"
+        android:layout_height="15dp"
+        android:id="@+id/View4"
+        app:layout_constraintTop_toBottomOf="@id/View2"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="#CACACA"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:layout_width="35dp"
+        android:layout_height="15dp"
+        app:layout_constraintTop_toBottomOf="@id/View4"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#CACACA"
+        />
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="15dp"
+        app:layout_constraintTop_toBottomOf="@id/View4"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="13sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:background="#CACACA"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

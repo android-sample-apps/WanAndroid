@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WanAndroid">
-        <activity android:name=".ui.home.view.SettingActivity"></activity>
+        <activity android:name=".ui.mine.LoginActivity"></activity>
         <activity android:name=".ui.home.view.SearchActivity" />
+        <activity android:name=".ui.web.WebActivity" />
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

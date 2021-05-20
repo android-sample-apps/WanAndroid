@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.gyf.barlibrary.ImmersionBar
 import com.gyf.barlibrary.ImmersionFragment
+import com.gyf.barlibrary.SimpleImmersionFragment
 import com.kingja.loadsir.callback.Callback
 import com.kingja.loadsir.callback.SuccessCallback
 import com.kingja.loadsir.core.Convertor
@@ -28,53 +29,52 @@ import com.mmp.wanandroid.ui.base.callback.ErrorCallback
 import com.mmp.wanandroid.ui.base.callback.LoadingCallback
 import java.lang.reflect.ParameterizedType
 
-abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : ImmersionFragment(){
+abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : Fragment() {
 
      lateinit var binding: DB
      lateinit var viewModel: VM
-     lateinit var loadService: LoadService<BaseResponse<*>>
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val loadSir = LoadSir.Builder()
-            .addCallback(ErrorCallback())
-            .addCallback(LoadingCallback())
-            .setDefaultCallback(SuccessCallback::class.java)
-            .build()
         binding = DataBindingUtil.inflate(inflater,getLayoutId(),container,false)
         viewModel = initViewModel()
         initDataBinding()
-        initView()
-        loadService = loadSir.register(binding.root
-        ) { reload() } as LoadService<BaseResponse<*>>
-        return loadService.loadLayout
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        loadService.showCallback(LoadingCallback::class.java)
+        initView()
+
+//        initStatusBar()
         initViewObservable()
+        initData()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        ImmersionBar.with(this).destroy()
+//        ImmersionBar.with(this).destroy()
     }
 
     abstract fun getLayoutId() : Int
 
+    open fun initData(){}
 
-//    只有当immersionBarEnabled返回true时才执行
-    override fun initImmersionBar() {
-        ImmersionBar.with(this).init()
-    }
+//    open fun initStatusBar(){
+//        ImmersionBar.with(this).transparentStatusBar().init()
+//    }
+//
+////    只有当immersionBarEnabled返回true时才执行
+//    override fun initImmersionBar() {
+//        ImmersionBar.with(this).init()
+//    }
+//
+//    override fun immersionBarEnabled(): Boolean {
+//        return true
+//    }
 
-    override fun immersionBarEnabled(): Boolean {
-        return true
-    }
 
-    open fun reload(){
-        loadService.showCallback(LoadingCallback::class.java)
-    }
 
     private fun initDataBinding(){
         binding.setVariable(BR.viewModel,viewModel)
@@ -97,12 +97,4 @@ abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : ImmersionFragme
 
     open fun initViewObservable(){}
 
-    fun<T> setLiveDataObserve(liveData: LiveData<BaseResponse<T>>,block:(data: T) -> Unit) = liveData.observe(this){
-        if (it.errorCode != 0 || it.data == null){
-            loadService.showCallback(ErrorCallback::class.java)
-        }else{
-//            loadService.showCallback(SuccessCallback::class.java)
-            block(it.data)
-        }
-    }
 }

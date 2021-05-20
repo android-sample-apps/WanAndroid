@@ -2,6 +2,7 @@ package com.mmp.wanandroid.ui
 
 import android.util.SparseArray
 import androidx.fragment.app.Fragment
+import com.mmp.wanandroid.BR
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.databinding.ActivityMainBinding
 import com.mmp.wanandroid.ui.base.BaseActivity
@@ -80,5 +81,9 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
             mFragmentArray.put(index,fragment)
         }
         return fragment!!
+    }
+
+    override fun getViewModelId(): Int {
+        return BR.viewModel
     }
 }

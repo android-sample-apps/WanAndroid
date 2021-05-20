@@ -8,92 +8,98 @@
         <variable
             name="viewModel"
             type="com.mmp.wanandroid.ui.home.viewmodel.HomeViewModel" />
+
     </data>
 
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/smartRefresh">
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/homeTitle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".ui.home.view.HomeFragment">
+            android:layout_height="54dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/home_icon"
+                android:background="@drawable/home"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/toolbar">
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="15dp"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="250dp"
+                android:layout_height="35dp"
+                android:id="@+id/search"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/home_icon"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/search_border">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/home"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/search"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="7dp"
+                    android:id="@+id/search_icon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_margin="10dp"
-                    android:id="@+id/home_icon"/>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="300dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:id="@+id/search"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/home_icon"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:cardCornerRadius="6dp"
-                    android:background="#DCDCDC"
-                    android:layout_marginStart="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintStart_toEndOf="@id/home_icon"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:background="@drawable/search"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginStart="10dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/search"
-                            android:layout_margin="15dp"
-                            android:textSize="15sp"
-                            android:singleLine="true"/>
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
+                    app:layout_constraintStart_toEndOf="@id/search_icon"
+                    android:textSize="13sp"
+                    android:text="@string/search"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="8dp"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.youth.banner.Banner
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:id="@+id/banner"
-                app:layout_constraintTop_toBottomOf="@id/toolbar"/>
-
-
-<!--            <com.cooltechworks.views.shimmer.ShimmerRecyclerView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/banner"-->
-<!--                android:id="@+id/rv_article"-->
-<!--                app:shimmer_demo_child_count="10"-->
-<!--                app:shimmer_demo_layout=""-->
-<!--                app:shimmer_demo_layout_manager_type="linear_vertical"/>-->
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="54dp"
+            android:id="@+id/smartRefresh">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.youth.banner.Banner
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/banner"
+                    app:layout_scrollFlags="scroll"
+                    android:background="#CACACA"/>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rv_article"
+                android:overScrollMode="never"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                app:shimmer_demo_layout="@layout/shimmer_item"
+                app:shimmer_demo_child_count="10"
+                app:shimmer_demo_layout_manager_type="linear_vertical" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+    </FrameLayout>
+
+
 </layout>

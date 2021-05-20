@@ -1,19 +1,23 @@
 package com.mmp.wanandroid.ui.home.adapter
 
+import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.Banner
+import com.mmp.wanandroid.ui.web.WebActivity
 import com.youth.banner.adapter.BannerAdapter
 
-class ImageAdapter(private val bannerList:List<Banner>) : BannerAdapter<Banner,ImageAdapter.ViewHolder>(bannerList) {
+class ImageAdapter(private val bannerList:List<Banner>,private val context: Context) : BannerAdapter<Banner,ImageAdapter.ViewHolder>(bannerList) {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val image: ImageView = view.findViewById(R.id.banner_image)
@@ -33,8 +37,17 @@ class ImageAdapter(private val bannerList:List<Banner>) : BannerAdapter<Banner,I
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(30)))
                 .into(it)
         }
-        holder?.image?.setOnClickListener{
-            TODO()
+        holder?.image?.setOnClickListener {
+//            val transaction = fragment.parentFragmentManager.beginTransaction()
+//            val webFragment = WebActivity.instance()
+//            val bundle = Bundle()
+//            bundle.putString("url",data?.url)
+//            bundle.putString("title",data?.title)
+//            webFragment.arguments = bundle
+//            transaction.addToBackStack(null)
+//                .hide(fragment)
+//                .add(R.id.container,webFragment)
+//                .commit()
         }
     }
 }

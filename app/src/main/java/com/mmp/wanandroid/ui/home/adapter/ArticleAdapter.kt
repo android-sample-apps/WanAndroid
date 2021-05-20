@@ -1,58 +1,66 @@
 package com.mmp.wanandroid.ui.home.adapter
 
+import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.Article
+import com.mmp.wanandroid.databinding.HomeRvItemBinding
+import com.mmp.wanandroid.ui.base.BindingViewHolder
+import com.mmp.wanandroid.ui.web.WebActivity
+import com.mmp.wanandroid.utils.COMPARATOR
+import com.mmp.wanandroid.utils.start
 
-class ArticleAdapter : PagingDataAdapter<Article, ArticleAdapter.ViewHolder>(COMPARATOR) {
+class ArticleAdapter(private val context: Context) : PagingDataAdapter<Article, BindingViewHolder>(COMPARATOR){
 
-    companion object{
-        private val COMPARATOR = object : DiffUtil.ItemCallback<Article>() {
-            override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
-                return oldItem.id == newItem.id
-            }
 
-            override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
-                return oldItem == newItem
-            }
+
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
+        val binding: HomeRvItemBinding =  DataBindingUtil.inflate(LayoutInflater.from(parent.context),R.layout.home_rv_item,parent,false)
+        return BindingViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
+        val mArticle = getItem(position)
+        val binding = DataBindingUtil.getBinding<HomeRvItemBinding>(holder.itemView)?.apply{
+            article = mArticle
         }
-    }
-
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val title: TextView = view.findViewById(R.id.text_title)
-        val author: TextView = view.findViewById(R.id.text_author)
-        val sort: TextView = view.findViewById(R.id.text_sort)
-        val time:TextView = view.findViewById(R.id.text_time)
-        val textNew: TextView = view.findViewById(R.id.text_new)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val article = getItem(position)
-        if (article != null){
-            if (article.fresh){
-                holder.textNew.visibility = View.VISIBLE
+        holder.itemView.setOnClickListener{
+            val bundle = Bundle()
+            if (mArticle != null) {
+                bundle.putString("url",mArticle.link)
             }
-            holder.title.text = article.title
-            if (article.author != ""){
-                holder.author.text = "作者："+article.author
+            if (mArticle != null) {
+                bundle.putString("title",mArticle.title)
             }
-            if (article.shareUser != ""){
-                holder.author.text = "分享者："+article.shareUser
-            }
-            holder.sort.text = "分类: "+article.superChapterName + "/" + article.chapterName
-            holder.time.text = "时间："+article.niceDate
+            context.start<WebActivity>(bundle)
         }
+        binding?.executePendingBindings()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.article_rv_item,parent,false)
-        return ViewHolder(view)
-    }
+    //
+//
+//    override fun convert(holder: BaseDataBindingHolder<HomeRvItemBinding>, item: Article) {
+//        holder.dataBinding?.apply {
+//            article = item
+//        }
+//        holder.itemView.setOnClickListener{
+//            val bundle = Bundle()
+//            bundle.putString("url",item.link)
+//            bundle.putString("title",item.title)
+//            context.start<WebActivity>(bundle)
+//        }
+//    }
+
 
 }
+
+
+
+

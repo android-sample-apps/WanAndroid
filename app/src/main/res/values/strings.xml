@@ -22,4 +22,9 @@
     <string name="unFollow">未关注</string>
     <string name="tryagain">点击重试</string>
     <string name="scan">扫描</string>
+    <string name="top">置顶</string>
+    <string name="hotkey">搜索热词</string>
+    <string name="history_search">历史搜索</string>
+    <string name="empty">没数据了</string>
+    <string name="retry">retry</string>
 </resources>
