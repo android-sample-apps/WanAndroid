@@ -24,7 +24,9 @@ import com.kingja.loadsir.core.LoadSir
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.ui.base.callback.ErrorCallback
 import com.mmp.wanandroid.ui.base.callback.LoadingCallback
+import com.mmp.wanandroid.ui.customview.CustomTitleBar
 import java.lang.reflect.ParameterizedType
+import java.util.jar.Attributes
 
 abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivity() {
 
@@ -32,8 +34,6 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
 
     lateinit var binding: DB
     lateinit var viewModel: VM
-
-    private var viewModelId = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,15 +60,13 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
     }
 
     private fun initDataBinding(){
-        viewModelId = getViewModelId()
         binding = DataBindingUtil.setContentView(this,getLayoutId())
-        binding.setVariable(viewModelId,viewModel)
+        binding.setVariable(BR.viewModel,viewModel)
         binding.lifecycleOwner = this
     }
 
     abstract fun getLayoutId() : Int
 
-    abstract fun getViewModelId() : Int
 
     open fun initView(){}
 
@@ -77,6 +75,7 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
     override fun onDestroy() {
         super.onDestroy()
         AppManager.instance.removeActivity(this)
+        ImmersionBar.with(this).destroy()
     }
 
     open fun initData(){}

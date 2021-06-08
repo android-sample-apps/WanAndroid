@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.mine.view.CollectActivity"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <com.mmp.wanandroid.ui.customview.CustomTitleBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="我的收藏"
+            android:id="@+id/tool_bar"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tabs"
+            app:layout_constraintTop_toBottomOf="@id/title_bar"
+            />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/tabs"
+            android:id="@+id/view_pager"/>
+
+    </LinearLayout>
+</layout>

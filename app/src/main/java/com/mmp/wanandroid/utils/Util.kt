@@ -6,8 +6,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.mmp.wanandroid.ui.base.MyApplication
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 
@@ -17,14 +20,9 @@ inline fun <reified T> Context.start(bundle: Bundle){
     startActivity(intent)
 }
 
-
-fun<T> fire(block:suspend () -> Result<T>) = liveData {
-    val result = try {
-        block()
-    }catch (e: Exception){
-        Result.failure(e)
-    }
-    emit(result)
+inline fun <reified T> Context.start(){
+    val intent = Intent(this,T::class.java)
+    startActivity(intent)
 }
 
 
@@ -35,4 +33,12 @@ fun Context.toast(msg: String){
 fun toast(msg: String){
     MyApplication.getContext().toast(msg)
 }
+//
+//fun ViewModel.listScrolled(visibleItemCount: Int,lastVisibleItemPosition: Int,totalItemCount: Int,block: suspend () -> Unit){
+//    if (visibleItemCount + lastVisibleItemPosition + Const.VISIBLE_THRESHOLD >= totalItemCount){
+//        viewModelScope.launch {
+//            block()
+//        }
+//    }
+//}
 

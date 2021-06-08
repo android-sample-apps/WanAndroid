@@ -5,17 +5,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.Article
 import com.mmp.wanandroid.databinding.HomeRvItemBinding
 import com.mmp.wanandroid.ui.base.BindingViewHolder
 import com.mmp.wanandroid.ui.web.WebActivity
-import com.mmp.wanandroid.utils.COMPARATOR
 import com.mmp.wanandroid.utils.start
 
 
 class SearchArticleAdapter(private val context: Context) : ListAdapter<Article,BindingViewHolder>(COMPARATOR) {
+
+    private var mOnCollectListener: OnCollectListener? = null
+
+    fun setOnCollectListener(onCollectListener: OnCollectListener){
+        mOnCollectListener = onCollectListener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
         val binding = DataBindingUtil.inflate<HomeRvItemBinding>(LayoutInflater.from(parent.context), R.layout.home_rv_item,parent,false)
@@ -24,8 +31,16 @@ class SearchArticleAdapter(private val context: Context) : ListAdapter<Article,B
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
         val mArticle = getItem(position)
-        val binding = DataBindingUtil.getBinding<HomeRvItemBinding>(holder.itemView)?.apply{
-            article = mArticle
+        val binding = holder.binding as HomeRvItemBinding
+        binding.article = mArticle
+        binding.heart.setOnClickListener {
+            if (mArticle.collect){
+                mOnCollectListener?.unCollect(mArticle)
+                mArticle.collect = false
+            }else{
+                mOnCollectListener?.onCollect(mArticle)
+                mArticle.collect = true
+            }
         }
         holder.itemView.setOnClickListener{
             val bundle = Bundle()
@@ -38,5 +53,26 @@ class SearchArticleAdapter(private val context: Context) : ListAdapter<Article,B
             context.start<WebActivity>(bundle)
         }
         binding?.executePendingBindings()
+    }
+
+
+
+    companion object {
+       val COMPARATOR = object : DiffUtil.ItemCallback<Article>() {
+
+            override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
+                return  oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
+                return oldItem.collect == newItem.collect && oldItem.niceShareDate == newItem.niceShareDate
+            }
+        }
+    }
+
+    interface OnCollectListener{
+        fun onCollect(article: Article)
+
+        fun unCollect(article: Article)
     }
 }

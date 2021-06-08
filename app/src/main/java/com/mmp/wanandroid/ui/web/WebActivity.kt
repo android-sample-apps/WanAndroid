@@ -73,8 +73,5 @@ class WebActivity : BaseActivity<ActivityWebBinding,WebViewModel>() {
         return R.layout.activity_web
     }
 
-    override fun getViewModelId(): Int {
-        return BR.viewModel
-    }
 
 }

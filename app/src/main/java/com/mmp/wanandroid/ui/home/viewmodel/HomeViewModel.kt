@@ -1,75 +1,92 @@
 package com.mmp.wanandroid.ui.home.viewmodel
 
+import android.text.TextUtils
+import android.widget.BaseExpandableListAdapter
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.mmp.wanandroid.api.BaseResponse
 import com.mmp.wanandroid.data.Article
 import com.mmp.wanandroid.data.ArticleData
 import com.mmp.wanandroid.data.Banner
+import com.mmp.wanandroid.ui.CollectRepository
 import com.mmp.wanandroid.ui.home.HomeRepository
+import com.mmp.wanandroid.ui.home.request.HomeRequest
+import com.mmp.wanandroid.utils.Const
 import com.mmp.wanandroid.utils.StateLiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class HomeViewModel :ViewModel() {
+class HomeViewModel : ViewModel() {
 
-    private val repository = HomeRepository()
+    var isCache = false
 
-//    private val bannerLiveData =  MutableLiveData<Boolean>()
-//
-//    val banner = Transformations.switchMap(bannerLiveData){
-//        HomeRepository.getBanner()
-//    }
-//
-//    private val articleLiveData = MutableLiveData<Int>()
-//
-//    val article = Transformations.switchMap(articleLiveData){
-//        when(it){
-//            1 -> HomeRepository.getHomeArticle()
-//            2 -> HomeRepository.getMoreArticle()
-//            else -> null
-//        }
-//    }
-//
-//
-//    fun requestBanner(){
-//        bannerLiveData.value = true
-//    }
-//
-//    fun requestArticle(){
-//        articleLiveData.value = 1
-//    }
-//
-//    fun requestMore(){
-//        articleLiveData.value = 2
-//    }
+    private var page = 0
 
-//     val articleLiveData = StateLiveData<ArticleData>()
-//
-//
-//
-//    fun getHomeArticle(){
-//        viewModelScope.launch {
-//            repository.getHomeArticle(articleLiveData)
-//        }
-//    }
-//
-//    fun getMoreHomeArticle(){
-//        viewModelScope.launch {
-//            repository.getMoreHomeArticle(articleLiveData)
-//        }
-//    }
+    val request = HomeRequest()
 
-    val bannerLiveData = StateLiveData<List<Banner>>()
+    val articleList = MutableLiveData(mutableListOf<Article>())
+
+    val bannerList = MutableLiveData<List<Banner>>()
 
     fun getBanner(){
         viewModelScope.launch {
-            repository.getBanner(bannerLiveData)
+            request.getBanner()
         }
     }
 
-    fun getHomeArticle(): Flow<PagingData<Article>>{
-        return repository.getHomeArticle().cachedIn(viewModelScope)
+    fun getTopArticle(){
+        viewModelScope.launch {
+            request.getTopArticle()
+        }
     }
+
+
+    fun getHomeArticle(){
+        val list = getCacheArticle()
+        if (list != null){
+            articleList.value = articleList.value?.apply {
+                addAll(list)
+            }
+            page++
+            isCache = true
+        }else{
+            viewModelScope.launch {
+                request.getHomeArticle(page)
+                page++
+            }
+        }
+    }
+
+    fun getArticleMore(){
+        viewModelScope.launch {
+            request.getHomeArticle(page)
+            page++
+        }
+    }
+
+
+
+    fun collect(id: Int) {
+        viewModelScope.launch {
+            request.collect(id)
+        }
+    }
+
+    fun unCollect(id: Int){
+        viewModelScope.launch {
+            request.unCollect(id)
+        }
+    }
+
+    private fun getCacheArticle(): ArrayList<Article>? {
+        return HomeRepository.getCacheList<ArrayList<Article>>("articleList")
+    }
+
+
+    fun putCacheArticle(value: Any){
+        HomeRepository.putCache("articleList",value)
+    }
+
 
 }

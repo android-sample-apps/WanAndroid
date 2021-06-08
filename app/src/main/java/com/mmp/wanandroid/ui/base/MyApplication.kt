@@ -3,6 +3,8 @@ package com.mmp.wanandroid.ui.base
 import android.R
 import android.app.Application
 import android.content.Context
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import com.kingja.loadsir.callback.SuccessCallback
 import com.kingja.loadsir.core.LoadSir
 import com.mmp.wanandroid.ui.base.callback.EmptyCallback
@@ -14,8 +16,10 @@ import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 
 
-class MyApplication : Application() {
+class MyApplication : Application(),ViewModelStoreOwner {
 
+
+    private lateinit var mAppViewModelStore: ViewModelStore
 
     companion object{
 
@@ -45,5 +49,10 @@ class MyApplication : Application() {
                 .addCallback(EmptyCallback())
                 .setDefaultCallback(SuccessCallback::class.java)
                 .commit()
+        mAppViewModelStore = ViewModelStore()
+    }
+
+    override fun getViewModelStore(): ViewModelStore {
+        return mAppViewModelStore
     }
 }

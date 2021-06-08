@@ -7,14 +7,16 @@ import kotlin.IllegalArgumentException
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class SPreference<T>(private val name: String,private val default: T) : ReadWriteProperty<Any,T>{
+class SPreference<T>(private val name: String,private val default: T) : ReadWriteProperty<Any?,T>{
 
     companion object{
-        private val sPreference = MyApplication.getContext().getSharedPreferences(MyApplication.getContext().packageName,Context.MODE_PRIVATE)
+        private val sPreference = MyApplication.getContext().getSharedPreferences(
+                MyApplication.getContext().packageName,
+                Context.MODE_PRIVATE)
 
     }
 
-    override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
         setSpValue(name,value)
     }
 
@@ -29,7 +31,7 @@ class SPreference<T>(private val name: String,private val default: T) : ReadWrit
         }
     }.apply()
 
-    override fun getValue(thisRef: Any, property: KProperty<*>): T {
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return getSpValue(name,default)
     }
 
@@ -43,4 +45,7 @@ class SPreference<T>(private val name: String,private val default: T) : ReadWrit
             else -> throw IllegalArgumentException("not this type")
         } as T
     }
+
+
+
 }

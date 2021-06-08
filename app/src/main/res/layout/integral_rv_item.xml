@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="integral"
+            type="com.mmp.wanandroid.data.Integral" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/integral_reason"
+            android:text="@{integral.reason}"
+            android:textSize="15sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="签到"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/integral_desc"
+            android:text="@{integral.desc}"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@id/integral_reason"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="111111111111111111"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

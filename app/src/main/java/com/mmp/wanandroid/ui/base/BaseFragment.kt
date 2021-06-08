@@ -34,47 +34,43 @@ abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : Fragment() {
      lateinit var binding: DB
      lateinit var viewModel: VM
 
+     private var isLoaded = false
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater,getLayoutId(),container,false)
-        viewModel = initViewModel()
-        initDataBinding()
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        loadService.showCallback(LoadingCallback::class.java)
-        initView()
 
-//        initStatusBar()
-        initViewObservable()
-        initData()
+        viewModel = initViewModel()
+        initDataBinding()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!isLoaded){
+            lazyInit()
+            isLoaded = true
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-//        ImmersionBar.with(this).destroy()
+        isLoaded = false
+    }
+
+    private fun lazyInit(){
+        initView()
+        initData()
+        initViewObservable()
     }
 
     abstract fun getLayoutId() : Int
 
     open fun initData(){}
-
-//    open fun initStatusBar(){
-//        ImmersionBar.with(this).transparentStatusBar().init()
-//    }
-//
-////    只有当immersionBarEnabled返回true时才执行
-//    override fun initImmersionBar() {
-//        ImmersionBar.with(this).init()
-//    }
-//
-//    override fun immersionBarEnabled(): Boolean {
-//        return true
-//    }
-
-
 
     private fun initDataBinding(){
         binding.setVariable(BR.viewModel,viewModel)

@@ -1,14 +1,10 @@
 package com.mmp.wanandroid.ui.home.view
 
 import android.text.TextUtils
-import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.AbsListView
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.donkingliang.labels.LabelsView
 import com.mmp.wanandroid.BR
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.Article
@@ -18,15 +14,12 @@ import com.mmp.wanandroid.databinding.ActivitySearchBinding
 import com.mmp.wanandroid.room.HistoryKey
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.IStateObserver
-import com.mmp.wanandroid.ui.home.adapter.ArticleAdapter
-import com.mmp.wanandroid.ui.home.adapter.HistoryKeyAdapter
-import com.mmp.wanandroid.ui.home.adapter.HotKeyAdapter
 import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
 import com.mmp.wanandroid.ui.home.viewmodel.SearchViewModel
 import com.mmp.wanandroid.utils.KeyboardUtils
 import com.mmp.wanandroid.utils.toast
 
-class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
+class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),SearchArticleAdapter.OnCollectListener{
 
 
     private val articleAdapter = SearchArticleAdapter(this)
@@ -45,12 +38,16 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
         initBar()
         initRv()
         initLabel()
-        binding.search.requestFocus()
-        KeyboardUtils.showKeyboard(binding.search)
+        initFresh()
+//        KeyboardUtils.showKeyboard(binding.search)
     }
 
     override fun initData() {
         viewModel.getHotKey()
+    }
+
+    private fun initFresh(){
+        binding.smartFresh.setEnableAutoLoadMore(false)
     }
 
     private fun initRv(){
@@ -58,6 +55,7 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
             layoutManager = articleLayoutManager
             adapter = articleAdapter
         }
+        articleAdapter.setOnCollectListener(this)
         binding.searchArticleRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -71,33 +69,40 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
 
     private fun initLabel(){
         binding.hotKtyLabels.setOnLabelClickListener{ _, data, _ ->
-            viewModel.key.value = data.toString()
+            viewModel.key.set(data.toString())
+            binding.smartFresh.autoRefresh()
             viewModel.getArticle()
             binding.textClean.visibility = View.VISIBLE
+            viewModel.addKey()
             KeyboardUtils.hideKeyboard(binding.search)
         }
         binding.historyLabels.setOnLabelClickListener { _, data, _ ->
-            viewModel.key.value = (data as HistoryKey).name
+            binding.smartFresh.autoRefresh()
+            viewModel.key.set((data as HistoryKey).name)
             viewModel.getArticle()
             binding.textClean.visibility = View.VISIBLE
+            viewModel.addKey()
             KeyboardUtils.hideKeyboard(binding.search)
         }
         binding.historyKeyClean.setOnClickListener {
             viewModel.clean()
-            articleList.clear()
-//            articleAdapter.submitList(null)
         }
     }
 
     private fun initBar(){
+        binding.search.requestFocus()
         binding.search.setOnEditorActionListener { view, actionId, _ ->
             if ( actionId == EditorInfo.IME_ACTION_SEARCH){
-                viewModel.key.value = view.text.toString()
-                viewModel.getArticle()
-                viewModel.addKey()
-                binding.searchKey.visibility = View.GONE
-                binding.searchArticleRv.visibility = View.VISIBLE
-                binding.textClean.visibility = View.VISIBLE
+                if (!TextUtils.isEmpty(view.text.toString())){
+                    viewModel.key.set(view.text.toString())
+                    viewModel.getArticle()
+                    viewModel.addKey()
+                    binding.searchKey.visibility = View.GONE
+                    binding.searchArticleRv.visibility = View.VISIBLE
+                    binding.textClean.visibility = View.VISIBLE
+                }else{
+                    toast("搜索内容不能为空")
+                }
             }
             true
         }
@@ -105,11 +110,13 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
             finish()
         }
         binding.textClean.setOnClickListener {
-            viewModel.key.value = ""
+            viewModel.key.set("")
             binding.searchArticleRv.visibility = View.GONE
             binding.searchKey.visibility = View.VISIBLE
             binding.textClean.visibility = View.GONE
 
+            articleList.clear()
+            articleAdapter.submitList(null)
         }
     }
 
@@ -123,6 +130,7 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
             }
 
             override fun onDataChange(data: ArticleData?) {
+                binding.smartFresh.finishRefresh()
                 if (data != null) {
                     articleList.addAll(data.datas)
                     articleAdapter.submitList(mutableListOf<Article>().apply{
@@ -160,11 +168,22 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
                 data.name
             }
         }
+
+        viewModel.collectLiveData.observe(this){
+            if (it.errorCode == 0){
+                toast("操作成功")
+            }else{
+                toast("操作失败")
+            }
+        }
     }
 
-    override fun getViewModelId(): Int {
-        return BR.viewModel
+    override fun onCollect(article: Article) {
+        viewModel.collect(article.id)
     }
 
+    override fun unCollect(article: Article) {
+        viewModel.unCollect(article.id)
+    }
 }
 

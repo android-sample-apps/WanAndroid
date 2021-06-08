@@ -4,21 +4,35 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.Article
 import com.mmp.wanandroid.databinding.HomeRvItemBinding
 import com.mmp.wanandroid.ui.base.BindingViewHolder
+import com.mmp.wanandroid.ui.home.view.HomeFragment
 import com.mmp.wanandroid.ui.web.WebActivity
-import com.mmp.wanandroid.utils.COMPARATOR
 import com.mmp.wanandroid.utils.start
+import com.mmp.wanandroid.utils.toast
 
-class ArticleAdapter(private val context: Context) : PagingDataAdapter<Article, BindingViewHolder>(COMPARATOR){
+class ArticleAdapter(private val fragment: Fragment) : PagingDataAdapter<Article, BindingViewHolder>(COMPARATOR){
 
 
+    companion object{
+        val COMPARATOR = object : DiffUtil.ItemCallback<Article>() {
 
+            override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
+                return  oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
@@ -28,8 +42,18 @@ class ArticleAdapter(private val context: Context) : PagingDataAdapter<Article, 
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
         val mArticle = getItem(position)
-        val binding = DataBindingUtil.getBinding<HomeRvItemBinding>(holder.itemView)?.apply{
-            article = mArticle
+        val binding = (holder.binding) as HomeRvItemBinding
+        binding.article = mArticle
+        binding.heart.setOnClickListener {
+            if (mArticle != null) {
+                if (mArticle.collect){
+                    (fragment as HomeFragment).viewModel.unCollect(mArticle.id)
+                    mArticle.collect = false
+                }else{
+                    (fragment as HomeFragment).viewModel.collect(mArticle.id)
+                    mArticle.collect = true
+                }
+            }
         }
         holder.itemView.setOnClickListener{
             val bundle = Bundle()
@@ -39,24 +63,13 @@ class ArticleAdapter(private val context: Context) : PagingDataAdapter<Article, 
             if (mArticle != null) {
                 bundle.putString("title",mArticle.title)
             }
-            context.start<WebActivity>(bundle)
+            fragment.activity?.start<WebActivity>(bundle)
         }
-        binding?.executePendingBindings()
+
+        binding.executePendingBindings()
     }
 
-    //
-//
-//    override fun convert(holder: BaseDataBindingHolder<HomeRvItemBinding>, item: Article) {
-//        holder.dataBinding?.apply {
-//            article = item
-//        }
-//        holder.itemView.setOnClickListener{
-//            val bundle = Bundle()
-//            bundle.putString("url",item.link)
-//            bundle.putString("title",item.title)
-//            context.start<WebActivity>(bundle)
-//        }
-//    }
+
 
 
 }

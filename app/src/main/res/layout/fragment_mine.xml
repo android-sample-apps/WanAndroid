@@ -1,14 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.mine.MineFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
-    <TextView
+        <variable
+            name="viewModel"
+            type="com.mmp.wanandroid.ui.mine.viewmodel.MineViewModel" />
+    </data>
+
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/user_icon"
+                android:src="@drawable/ic_baseline_android_24"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="45dp"
+                android:layout_marginStart="25dp"/>
 
-</FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_tip"
+                android:text="@string/user_tip"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/user_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="55dp"
+                android:layout_marginStart="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_id"
+                android:text="@{viewModel.id}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/user_icon"
+                tools:text="1111111"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="73dp"/>
+
+            <ImageView
+                android:id="@+id/user_setting"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/set"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="60dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="#FF0000"
+                app:layout_constraintTop_toBottomOf="@id/user_icon"/>
+
+          <com.google.android.material.card.MaterialCardView
+              android:layout_width="330dp"
+              android:layout_height="wrap_content"
+              app:layout_constraintTop_toBottomOf="@id/user_icon"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"
+              android:id="@+id/user_integral"
+              android:elevation="5dp"
+              android:background="#CACACA"
+              android:layout_marginTop="25dp">
+
+
+
+              <ImageView
+                  android:layout_width="25dp"
+                  android:layout_height="25dp"
+                  android:layout_marginTop="15dp"
+                  android:layout_marginStart="15dp"
+                  android:layout_marginEnd="5dp"
+                  android:background="@drawable/integral" />
+
+              <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/integral"
+                  android:textStyle="bold"
+                  android:textSize="18sp"
+                  android:layout_marginTop="15dp"
+                  android:layout_marginEnd="5dp"
+                  android:layout_marginStart="50dp"/>
+
+              <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/myIntegral"
+                  android:layout_marginTop="15dp"
+                  android:layout_marginStart="200dp"
+                  android:textSize="16sp"/>
+
+              <TextView
+                  android:id="@+id/tv_integral"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@{viewModel.integral}"
+                  android:textSize="16sp"
+                  android:layout_marginTop="15dp"
+                  android:layout_marginStart="270dp"
+                  tools:text="0"/>
+              <ImageView
+                  android:layout_width="20dp"
+                  android:layout_height="20dp"
+                  android:background="@drawable/tight0"
+                  android:layout_marginStart="300dp"
+                  android:layout_marginTop="10dp"/>
+
+          </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/user_integral"
+                android:id="@+id/user_collect"
+                android:elevation="5dp"
+                android:background="#CACACA"
+                android:layout_marginTop="25dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/collect" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/collect"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="50dp"/>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/tight0"
+                    android:layout_marginStart="300dp"
+                    android:layout_marginTop="10dp"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/user_collect"
+                android:id="@+id/user_todo"
+                android:elevation="5dp"
+                android:background="#CACACA"
+                android:layout_marginTop="25dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/todo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/TODO"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="50dp"/>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/tight0"
+                    android:layout_marginStart="300dp"
+                    android:layout_marginTop="10dp"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+</layout>

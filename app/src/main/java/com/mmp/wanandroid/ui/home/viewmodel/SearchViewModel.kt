@@ -1,37 +1,41 @@
 package com.mmp.wanandroid.ui.home.viewmodel
 
 import android.text.TextUtils
+import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.mmp.wanandroid.data.ArticleData
 import com.mmp.wanandroid.data.HotKey
 import com.mmp.wanandroid.ui.home.HomeRepository
 import com.mmp.wanandroid.room.HistoryKey
+import com.mmp.wanandroid.ui.CollectRepository
+import com.mmp.wanandroid.utils.Const
 import com.mmp.wanandroid.utils.StateLiveData
 import com.mmp.wanandroid.utils.toast
 import kotlinx.coroutines.launch
 
 class SearchViewModel : ViewModel() {
 
-    private val homeRepository = HomeRepository()
 //
 
 
-    val key = MutableLiveData<String>("")
+    val key = ObservableField<String>("")
+
+    val collectLiveData = StateLiveData<Any>()
 
 
-    val historyKeyList = homeRepository.getKeyList().asLiveData()
+    val historyKeyList = HomeRepository.getKeyList().asLiveData()
 //
     fun addKey(){
-        if (!TextUtils.isEmpty(key.value)){
+        if (!TextUtils.isEmpty(key.get())){
             viewModelScope.launch {
-                homeRepository.addKey(HistoryKey(0,key.value!!))
+                HomeRepository.addKey(HistoryKey(0,key.get()!!))
             }
         }
     }
 
     fun clean(){
         viewModelScope.launch {
-            homeRepository.clean()
+            HomeRepository.clean()
         }
     }
 
@@ -39,7 +43,7 @@ class SearchViewModel : ViewModel() {
 
     fun getHotKey(){
         viewModelScope.launch {
-            homeRepository.getHotKey(hotKeyLiveData)
+            HomeRepository.getHotKey(hotKeyLiveData)
         }
     }
 
@@ -47,55 +51,37 @@ class SearchViewModel : ViewModel() {
 
     fun getArticle(){
         viewModelScope.launch {
-            if (TextUtils.isEmpty(key.value)){
+            if (TextUtils.isEmpty(key.get())){
                 toast("搜索内容不能为空")
             }else{
-                homeRepository.getSearch(articleLiveData,key.value!!)
+                HomeRepository.getSearch(articleLiveData,key.get()!!)
             }
+        }
+    }
+
+    fun collect(id: Int) {
+        viewModelScope.launch {
+            CollectRepository.collectArticle(collectLiveData,id)
+        }
+    }
+
+    fun unCollect(id: Int){
+        viewModelScope.launch {
+            CollectRepository.unCollectArticle(collectLiveData, id)
         }
     }
 
 
     fun listScrolled(visibleItemCount: Int,lastVisibleItemPosition: Int,totalItemCount: Int){
-        if (visibleItemCount + lastVisibleItemPosition + VISIBLE_THRESHOLD >= totalItemCount){
-            if (!TextUtils.isEmpty(key.value)){
+        if (visibleItemCount + lastVisibleItemPosition + Const.VISIBLE_THRESHOLD >= totalItemCount){
+            if (!TextUtils.isEmpty(key.get())){
                 viewModelScope.launch {
-                    homeRepository.getSearchMore(articleLiveData,key.value!!)
+                    HomeRepository.getSearchMore(articleLiveData,key.get()!!)
                 }
             }
         }
     }
 
-    companion object {
-        private const val VISIBLE_THRESHOLD = 5
-    }
 
 
-//
-//    val hotKey = Transformations.switchMap(hotKeyLiveData){
-//        HomeRepository.getHotKey()
-//    }
-//
-//    fun getHotKey(){
-//        hotKeyLiveData.value = true
-//    }
-//
-//    private val searchArticleLiveData = MutableLiveData<Pair<Int,String>>()
-//
-//    val article = Transformations.switchMap(searchArticleLiveData){
-//        when(it.first){
-//            1 -> HomeRepository.getSearchArticle(it.second)
-//            2 -> HomeRepository.getMoreSearch(it.second)
-//            else -> null
-//        }
-//    }
-//
-//    fun getArticle(k: String){
-//        searchArticleLiveData.value = Pair(1,k)
-//    }
-//
-//    fun getMore(k: String){
-//        searchArticleLiveData.value = Pair(2,k)
-//    }
-//
 }

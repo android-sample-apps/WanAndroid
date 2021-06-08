@@ -2,15 +2,15 @@ package com.mmp.wanandroid.ui
 
 import android.util.SparseArray
 import androidx.fragment.app.Fragment
-import com.mmp.wanandroid.BR
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.databinding.ActivityMainBinding
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.home.view.HomeFragment
-import com.mmp.wanandroid.ui.mine.MineFragment
-import com.mmp.wanandroid.ui.navigation.NavigationFragment
-import com.mmp.wanandroid.ui.project.ProjectFragment
-import com.mmp.wanandroid.ui.system.SystemFragment
+import com.mmp.wanandroid.ui.mine.view.MineFragment
+import com.mmp.wanandroid.ui.navigation.view.NavigationFragment
+import com.mmp.wanandroid.ui.project.view.ProjectContentFragment
+import com.mmp.wanandroid.ui.project.view.ProjectFragment
+import com.mmp.wanandroid.ui.system.view.SystemFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
 
@@ -32,14 +32,16 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
 
 
     private fun initNavigation(){
-        binding.bottomNavigation.setOnNavigationItemReselectedListener {
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.bottom_menu_home -> switchFragment(1)
                 R.id.bottom_menu_navigation -> switchFragment(2)
                 R.id.bottom_menu_system -> switchFragment(3)
                 R.id.bottom_menu_project -> switchFragment(4)
                 R.id.bottom_menu_mine -> switchFragment(5)
+                else -> switchFragment(1)
             }
+            true
         }
     }
 
@@ -83,7 +85,4 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
         return fragment!!
     }
 
-    override fun getViewModelId(): Int {
-        return BR.viewModel
-    }
 }

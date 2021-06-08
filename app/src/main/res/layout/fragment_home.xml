@@ -9,6 +9,9 @@
             name="viewModel"
             type="com.mmp.wanandroid.ui.home.viewmodel.HomeViewModel" />
 
+        <variable
+            name="adapter"
+            type="androidx.recyclerview.widget.ListAdapter" />
     </data>
 
 
@@ -71,6 +74,9 @@
             android:layout_height="match_parent"
             android:layout_marginTop="54dp"
             android:id="@+id/smartRefresh">
+<!--            onLoadMoreListener="@{()->viewModel.getArticleMore()}"-->
+
+
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -88,15 +94,14 @@
                     android:background="#CACACA"/>
             </com.google.android.material.appbar.AppBarLayout>
 
-            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/rv_article"
                 android:overScrollMode="never"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                app:shimmer_demo_layout="@layout/shimmer_item"
-                app:shimmer_demo_child_count="10"
-                app:shimmer_demo_layout_manager_type="linear_vertical" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>
     </FrameLayout>

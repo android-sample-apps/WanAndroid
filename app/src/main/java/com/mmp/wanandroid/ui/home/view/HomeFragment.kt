@@ -2,47 +2,121 @@ package com.mmp.wanandroid.ui.home.view
 
 import android.content.Intent
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bugrui.buslib.LiveDataBus
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.Article
-import com.mmp.wanandroid.data.Banner
-import com.mmp.wanandroid.data.ArticleData
+import com.mmp.wanandroid.data.*
 import com.mmp.wanandroid.databinding.FragmentHomeBinding
+import com.mmp.wanandroid.ui.SharedViewModel
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver
+import com.mmp.wanandroid.ui.base.MyApplication
 import com.mmp.wanandroid.ui.home.adapter.ArticleAdapter
 import com.mmp.wanandroid.ui.home.adapter.ArticleLoadStateAdapter
 import com.mmp.wanandroid.ui.home.adapter.ImageAdapter
+import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
 import com.mmp.wanandroid.ui.home.viewmodel.HomeViewModel
 import com.mmp.wanandroid.utils.toast
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class HomeFragment() : BaseFragment<FragmentHomeBinding,HomeViewModel>() {
+class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArticleAdapter.OnCollectListener{
 
     private val bannerList = mutableListOf<Banner>()
 
     private val bannerAdapter by lazy { context?.let { ImageAdapter(bannerList,it) } }
 
-    private val articleAdapter by lazy { context?.let { ArticleAdapter(it) } }
+    private val articleList = mutableListOf<Article>()
 
-    private val mLayoutManager by lazy { activity?.let { LinearLayoutManager(it) } }
+    private val linearLayoutManager by lazy { activity?.let { LinearLayoutManager(it) } }
 
+    private val sharedViewModel by lazy {  ViewModelProvider(requireActivity().applicationContext as MyApplication,
+        requireActivity().application.let { ViewModelProvider.AndroidViewModelFactory.getInstance(it) }).get(SharedViewModel::class.java)}
+
+    private val articleAdapter by lazy {
+        activity?.let { SearchArticleAdapter(it) }
+    }
+
+    override fun onCollect(article: Article) {
+        viewModel.collect(article.id)
+    }
+
+    override fun unCollect(article: Article) {
+        viewModel.unCollect(article.id)
+    }
 
 
     override fun getLayoutId(): Int = R.layout.fragment_home
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.home_menu,menu)
-//    }
 
     override fun initViewObservable() {
 
+        sharedViewModel.loginSuccess.observe(this){
+            for (i in viewModel.articleList.value!!){
+                for (j in it.peekContent().collectIds){
+                    if (i.id == j){
+                        i.collect = true
+                    }
+                }
+            }
+            viewModel.articleList.value = viewModel.articleList.value
+        }
 
-        viewModel.bannerLiveData.observe(this,object : IStateObserver<List<Banner>>(binding.banner){
+
+        sharedViewModel.logout.observe(this){
+            for (i in viewModel.articleList.value!!){
+                if (i.collect){
+                    i.collect = false
+                }
+            }
+            viewModel.articleList.value = viewModel.articleList.value
+        }
+
+        viewModel.articleList.observe(this){
+            articleAdapter?.submitList(mutableListOf<Article>().apply {
+                addAll(it)
+            })
+        }
+
+        viewModel.request.getTopArticleLiveData.observe(this){
+            if (it.dataState == DataState.STATE_SUCCESS){
+                viewModel.articleList.value = viewModel.articleList.value?.apply {
+                    addAll(it.data!!)
+                }
+            }
+        }
+
+        viewModel.request.getHomeArticleLiveData.observe(this,object : IStateObserver<ArticleData>(binding.rvArticle){
+            override fun onReload(v: View?) {
+                v?.setOnClickListener {
+                    articleList.clear()
+                    viewModel.getTopArticle()
+                    viewModel.getHomeArticle()
+                }
+            }
+
+            override fun onDataChange(data: ArticleData?) {
+                binding.smartRefresh.finishRefresh()
+                binding.smartRefresh.finishLoadMore()
+                if (data != null){
+                    viewModel.articleList.value  = viewModel.articleList.value?.apply {
+                        addAll(data.datas)
+                    }
+                    if (!viewModel.isCache){
+                        viewModel.articleList.value?.let { viewModel.putCacheArticle(it) }
+                        viewModel.isCache = true
+                    }
+                }
+            }
+        })
+
+
+        viewModel.request.getBannerLiveData.observe(this,object : IStateObserver<List<Banner>>(binding.banner){
             override fun onReload(v: View?) {
                 v?.setOnClickListener{
                   viewModel.getBanner()
@@ -51,11 +125,11 @@ class HomeFragment() : BaseFragment<FragmentHomeBinding,HomeViewModel>() {
 
             override fun onDataChange(data: List<Banner>?) {
                 super.onDataChange(data)
+                binding.smartRefresh.finishRefresh()
+                binding.smartRefresh.finishLoadMore()
                 if (data != null) {
-                    if (bannerList.isEmpty()) {
-                        bannerList.addAll(data)
-                        bannerAdapter?.notifyDataSetChanged()
-                    }
+                    bannerList.addAll(data)
+                    bannerAdapter?.notifyDataSetChanged()
                 }
             }
 
@@ -64,6 +138,14 @@ class HomeFragment() : BaseFragment<FragmentHomeBinding,HomeViewModel>() {
                 context?.toast(e.message.toString())
             }
         })
+
+        viewModel.request.getCollectLiveData.observe(this){
+            if (it.errorCode == 0){
+                activity?.toast("操作成功")
+            }else{
+                activity?.toast("操作失败")
+            }
+        }
     }
 
     override fun initView() {
@@ -71,7 +153,10 @@ class HomeFragment() : BaseFragment<FragmentHomeBinding,HomeViewModel>() {
         initRv()
         initSmartFresh()
         initBar()
+//        binding.adapter = articleAdapter
+
     }
+
 
     private fun initBar(){
         binding.search.setOnClickListener{
@@ -81,52 +166,32 @@ class HomeFragment() : BaseFragment<FragmentHomeBinding,HomeViewModel>() {
     }
 
     override fun initData() {
-//        viewModel.requestBanner()
-//        viewModel.requestArticle()
         viewModel.getBanner()
-        lifecycleScope.launch {
-            viewModel.getHomeArticle().collect { articleList ->
-                articleAdapter?.submitData(articleList)
-            }
-        }
+        viewModel.getTopArticle()
+        viewModel.getHomeArticle()
     }
 
-//    override fun initStatusBar() {
-//        ImmersionBar.with(this).statusBarView(binding.statusBarView).init()
-//    }
 
     private fun initRv(){
-        articleAdapter?.addLoadStateListener {
-            when(it.refresh){
-                is LoadState.Loading -> {
-                    binding.rvArticle.showShimmerAdapter()
-                }
-                is LoadState.NotLoading -> {
-                    binding.rvArticle.hideShimmerAdapter()
-                }
-                is LoadState.Error -> {
-                    binding.rvArticle.hideShimmerAdapter()
-                }
-            }
-        }
+
         binding.rvArticle.apply {
-            layoutManager = mLayoutManager
-            adapter = articleAdapter!!.withLoadStateHeaderAndFooter(
-                    header = ArticleLoadStateAdapter(articleAdapter!!),
-                    footer = ArticleLoadStateAdapter(articleAdapter!!)
-            )
-//            showShimmerAdapter()
+            adapter = articleAdapter
+//            layoutManager = linearLayoutManager
         }
+
     }
 
 
     private fun initSmartFresh(){
-        binding.smartRefresh.setEnableLoadMore(false)
         binding.smartRefresh.setOnRefreshListener {
-            initData()
             binding.smartRefresh.finishRefresh()
         }
+
+        binding.smartRefresh.setOnLoadMoreListener {
+            viewModel.getArticleMore()
+        }
         binding.smartRefresh.setEnableOverScrollDrag(true)
+        binding.smartRefresh.setEnableLoadMore(true)
     }
 
     private fun initBanner(){
@@ -134,13 +199,7 @@ class HomeFragment() : BaseFragment<FragmentHomeBinding,HomeViewModel>() {
             .addBannerLifecycleObserver(this)
             .indicator = CircleIndicator(activity)
     }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when(item.itemId){
-//            R.id.scan -> TODO()
-//        }
-//        return true
-//    }
+
 
 
 

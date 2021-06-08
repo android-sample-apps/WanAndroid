@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.Banner
 import com.mmp.wanandroid.ui.web.WebActivity
+import com.mmp.wanandroid.utils.start
 import com.youth.banner.adapter.BannerAdapter
 
 class ImageAdapter(private val bannerList:List<Banner>,private val context: Context) : BannerAdapter<Banner,ImageAdapter.ViewHolder>(bannerList) {
@@ -38,16 +39,10 @@ class ImageAdapter(private val bannerList:List<Banner>,private val context: Cont
                 .into(it)
         }
         holder?.image?.setOnClickListener {
-//            val transaction = fragment.parentFragmentManager.beginTransaction()
-//            val webFragment = WebActivity.instance()
-//            val bundle = Bundle()
-//            bundle.putString("url",data?.url)
-//            bundle.putString("title",data?.title)
-//            webFragment.arguments = bundle
-//            transaction.addToBackStack(null)
-//                .hide(fragment)
-//                .add(R.id.container,webFragment)
-//                .commit()
+            val bundle = Bundle()
+            bundle.putString("url",data?.url)
+            bundle.putString("title",data?.title)
+            context.start<WebActivity>(bundle)
         }
     }
 }

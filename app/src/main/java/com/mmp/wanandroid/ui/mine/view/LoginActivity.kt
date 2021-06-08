@@ -1,0 +1,70 @@
+package com.mmp.wanandroid.ui.mine.view
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import androidx.lifecycle.ViewModelProvider
+import com.bugrui.buslib.LiveDataBus
+import com.mmp.wanandroid.BR
+import com.mmp.wanandroid.R
+import com.mmp.wanandroid.data.DataState
+import com.mmp.wanandroid.data.User
+import com.mmp.wanandroid.databinding.ActivityLoginBinding
+import com.mmp.wanandroid.ui.SharedViewModel
+import com.mmp.wanandroid.ui.base.BaseActivity
+import com.mmp.wanandroid.ui.base.IStateObserver
+import com.mmp.wanandroid.ui.base.MyApplication
+import com.mmp.wanandroid.ui.mine.viewmodel.LoginViewModel
+import com.mmp.wanandroid.utils.Event
+import com.mmp.wanandroid.utils.SPreference
+import com.mmp.wanandroid.utils.start
+import com.mmp.wanandroid.utils.toast
+
+class LoginActivity : BaseActivity<ActivityLoginBinding,LoginViewModel>() {
+
+    private var isLogin: Boolean by SPreference("login_state",false)
+
+
+    private val sharedViewModel by lazy {  ViewModelProvider(this.applicationContext as MyApplication,
+        this.application.let { ViewModelProvider.AndroidViewModelFactory.getInstance(it) }).get(
+        SharedViewModel::class.java)}
+
+
+    override fun getLayoutId(): Int {
+        return R.layout.activity_login
+    }
+
+    override fun initView() {
+        binding.btLogin.setOnClickListener {
+            viewModel.username.value = binding.loginEUsername.text.toString()
+            viewModel.password.value = binding.loginEPassword.text.toString()
+            viewModel.getLogin()
+        }
+        binding.textVisitor.setOnClickListener {
+            finish()
+        }
+        binding.textRegister.setOnClickListener {
+            start<RegisterActivity>()
+        }
+    }
+
+    override fun initViewObservable() {
+        viewModel.loginLiveDaa.observe(this){
+            if (it.dataState == DataState.STATE_SUCCESS){
+                sharedViewModel.loginSuccess.value = Event(it.data!!)
+                Log.d(TAG,it.data.toString())
+                isLogin = true
+                toast("登录成功")
+                finish()
+            }else{
+                toast(it.errorMsg.toString())
+            }
+        }
+    }
+
+    companion object{
+        const val TAG = "LoginActivity"
+    }
+
+}
