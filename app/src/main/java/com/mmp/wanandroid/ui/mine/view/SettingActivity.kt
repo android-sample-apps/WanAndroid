@@ -4,10 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import com.bugrui.buslib.LiveDataBus
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.databinding.ActivitySettingBinding
-import com.mmp.wanandroid.ui.SharedViewModel
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.MyApplication
 import com.mmp.wanandroid.ui.mine.viewmodel.SettingViewModel
@@ -15,9 +16,6 @@ import com.mmp.wanandroid.utils.Event
 
 class SettingActivity : BaseActivity<ActivitySettingBinding,SettingViewModel>() {
 
-    private val sharedViewModel by lazy {  ViewModelProvider(this.applicationContext as MyApplication,
-        this.application.let { ViewModelProvider.AndroidViewModelFactory.getInstance(it) }).get(
-        SharedViewModel::class.java)}
 
     override fun getLayoutId(): Int {
         return R.layout.activity_setting
@@ -36,7 +34,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding,SettingViewModel>() 
 
         binding.logout.setOnClickListener {
             viewModel.logout()
-            sharedViewModel.logout.value = Event(true)
+            LiveDataBus.send("logout")
         }
     }
 }

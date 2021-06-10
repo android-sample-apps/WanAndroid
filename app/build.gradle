@@ -108,4 +108,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$rootProject.navigationVersion"
 
     implementation 'com.blankj:utilcode:1.29.0'
+
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:$latest_version"
+    kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:$latest_version"
 }

@@ -55,7 +55,11 @@ class SearchArticleAdapter(private val context: Context) : ListAdapter<Article,B
         binding?.executePendingBindings()
     }
 
-
+    override fun submitList(list: MutableList<Article>?) {
+        super.submitList(if (list == null) list else mutableListOf<Article>().apply {
+            addAll(list)
+        })
+    }
 
     companion object {
        val COMPARATOR = object : DiffUtil.ItemCallback<Article>() {

@@ -71,9 +71,9 @@ fun getImage(view: ImageView,url: String){
 //}
 
 /**********************smartFreshLayout***************************/
-@BindingAdapter("onLoadMoreListener")
-fun setLoadMoreListener(view: SmartRefreshLayout,block:() -> Unit){
-    view.setOnRefreshListener {
+@BindingAdapter("loadMore")
+fun setLoadMore(view: SmartRefreshLayout,block:() -> Unit){
+    view.setOnLoadMoreListener {
         block()
     }
 }

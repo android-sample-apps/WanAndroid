@@ -10,7 +10,6 @@ import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.DataState
 import com.mmp.wanandroid.data.User
 import com.mmp.wanandroid.databinding.FragmentMineBinding
-import com.mmp.wanandroid.ui.SharedViewModel
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.MyApplication
 import com.mmp.wanandroid.ui.mine.viewmodel.MineViewModel
@@ -23,9 +22,6 @@ class MineFragment : BaseFragment<FragmentMineBinding,MineViewModel>() {
 
 
 
-    private val sharedViewModel by lazy {  ViewModelProvider(requireActivity().applicationContext as MyApplication,
-        requireActivity().application.let { ViewModelProvider.AndroidViewModelFactory.getInstance(it) }).get(
-        SharedViewModel::class.java)}
 
     private var isLogin: Boolean by SPreference("login_state",false)
 
@@ -62,17 +58,17 @@ class MineFragment : BaseFragment<FragmentMineBinding,MineViewModel>() {
     }
 
     override fun initViewObservable() {
-        sharedViewModel.loginSuccess.observe(this){
-            viewModel.id.set(it.peekContent().username)
-            viewModel.integral.set(it.peekContent().coinCount.toString())
-            mUsername = it.peekContent().username
-            mIntegral = it.peekContent().coinCount.toString()
+        LiveDataBus.with("user").observe(this){
+            viewModel.id.set((it as User).username)
+            viewModel.integral.set((it as User).coinCount.toString())
+            mUsername = (it as User).username
+            mIntegral = it.coinCount.toString()
             startUser()
             binding.userTip.visibility = View.GONE
             binding.executePendingBindings()
         }
 
-        sharedViewModel.logout.observe(this){
+        LiveDataBus.with("logout").observe(this){
             viewModel.id.set("--")
             viewModel.integral.set("0")
             startLogin()

@@ -20,6 +20,7 @@ abstract class BaseActivityNoViewModel<DB: ViewDataBinding> : AppCompatActivity(
         initData()
         initViewObservable()
         AppManager.instance.addActivity(this)
+        init()
     }
 
     override fun onDestroy() {
@@ -28,6 +29,7 @@ abstract class BaseActivityNoViewModel<DB: ViewDataBinding> : AppCompatActivity(
         ImmersionBar.with(this).destroy()
     }
 
+    open fun init(){}
     open fun initView(){}
 
     open fun initData(){}

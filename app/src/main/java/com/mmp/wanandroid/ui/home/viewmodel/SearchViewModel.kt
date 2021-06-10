@@ -15,16 +15,12 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel : ViewModel() {
 
-//
-
-
     val key = ObservableField<String>("")
 
     val collectLiveData = StateLiveData<Any>()
 
-
     val historyKeyList = HomeRepository.getKeyList().asLiveData()
-//
+
     fun addKey(){
         if (!TextUtils.isEmpty(key.get())){
             viewModelScope.launch {
@@ -71,6 +67,11 @@ class SearchViewModel : ViewModel() {
         }
     }
 
+//    fun getArticleMore(){
+//        viewModelScope.launch {
+//            HomeRepository.getSearchMore(articleLiveData,key.get()!!)
+//        }
+//    }
 
     fun listScrolled(visibleItemCount: Int,lastVisibleItemPosition: Int,totalItemCount: Int){
         if (visibleItemCount + lastVisibleItemPosition + Const.VISIBLE_THRESHOLD >= totalItemCount){

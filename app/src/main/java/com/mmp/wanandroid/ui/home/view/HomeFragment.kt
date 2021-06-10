@@ -11,7 +11,6 @@ import com.bugrui.buslib.LiveDataBus
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.*
 import com.mmp.wanandroid.databinding.FragmentHomeBinding
-import com.mmp.wanandroid.ui.SharedViewModel
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver
 import com.mmp.wanandroid.ui.base.MyApplication
@@ -22,6 +21,7 @@ import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
 import com.mmp.wanandroid.ui.home.viewmodel.HomeViewModel
 import com.mmp.wanandroid.utils.toast
 import com.youth.banner.indicator.CircleIndicator
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -33,10 +33,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
 
     private val articleList = mutableListOf<Article>()
 
-    private val linearLayoutManager by lazy { activity?.let { LinearLayoutManager(it) } }
-
-    private val sharedViewModel by lazy {  ViewModelProvider(requireActivity().applicationContext as MyApplication,
-        requireActivity().application.let { ViewModelProvider.AndroidViewModelFactory.getInstance(it) }).get(SharedViewModel::class.java)}
+    private var isCache = false
 
     private val articleAdapter by lazy {
         activity?.let { SearchArticleAdapter(it) }
@@ -56,45 +53,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
 
     override fun initViewObservable() {
 
-        sharedViewModel.loginSuccess.observe(this){
-            for (i in viewModel.articleList.value!!){
-                for (j in it.peekContent().collectIds){
-                    if (i.id == j){
-                        i.collect = true
-                    }
-                }
-            }
-            viewModel.articleList.value = viewModel.articleList.value
-        }
-
-
-        sharedViewModel.logout.observe(this){
-            for (i in viewModel.articleList.value!!){
-                if (i.collect){
-                    i.collect = false
-                }
-            }
-            viewModel.articleList.value = viewModel.articleList.value
-        }
-
-        viewModel.articleList.observe(this){
-            articleAdapter?.submitList(mutableListOf<Article>().apply {
-                addAll(it)
-            })
-        }
-
-        viewModel.request.getTopArticleLiveData.observe(this){
+        viewModel.topArticleLiveData.observe(this){
             if (it.dataState == DataState.STATE_SUCCESS){
-                viewModel.articleList.value = viewModel.articleList.value?.apply {
-                    addAll(it.data!!)
-                }
+                it.data?.let { it1 -> articleList.addAll(it1) }
             }
         }
 
-        viewModel.request.getHomeArticleLiveData.observe(this,object : IStateObserver<ArticleData>(binding.rvArticle){
+        viewModel.homeArticleLiveData.observe(this,object : IStateObserver<ArticleData>(binding.rvArticle){
             override fun onReload(v: View?) {
                 v?.setOnClickListener {
-                    articleList.clear()
                     viewModel.getTopArticle()
                     viewModel.getHomeArticle()
                 }
@@ -104,19 +71,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
                 binding.smartRefresh.finishRefresh()
                 binding.smartRefresh.finishLoadMore()
                 if (data != null){
-                    viewModel.articleList.value  = viewModel.articleList.value?.apply {
-                        addAll(data.datas)
-                    }
-                    if (!viewModel.isCache){
-                        viewModel.articleList.value?.let { viewModel.putCacheArticle(it) }
-                        viewModel.isCache = true
+                    articleList.addAll(data.datas)
+                    articleAdapter?.submitList(articleList)
+                    if (!isCache){
+                        viewModel.putCacheArticle(articleList)
+                        isCache = true
                     }
                 }
             }
         })
 
 
-        viewModel.request.getBannerLiveData.observe(this,object : IStateObserver<List<Banner>>(binding.banner){
+        viewModel.bannerLiveData.observe(this,object : IStateObserver<List<Banner>>(binding.banner){
             override fun onReload(v: View?) {
                 v?.setOnClickListener{
                   viewModel.getBanner()
@@ -139,7 +105,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
             }
         })
 
-        viewModel.request.getCollectLiveData.observe(this){
+        viewModel.collectLiveData.observe(this){
             if (it.errorCode == 0){
                 activity?.toast("操作成功")
             }else{
@@ -167,8 +133,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
 
     override fun initData() {
         viewModel.getBanner()
-        viewModel.getTopArticle()
-        viewModel.getHomeArticle()
+        lifecycleScope.launch{
+            val list = viewModel.getCacheArticle()
+            if (list.isEmpty()){
+                viewModel.getTopArticle()
+                viewModel.getHomeArticle()
+            }else{
+                articleList.addAll(list)
+                articleAdapter?.submitList(articleList)
+                isCache = true
+                viewModel.page++
+            }
+        }
     }
 
 
@@ -187,9 +163,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
             binding.smartRefresh.finishRefresh()
         }
 
-        binding.smartRefresh.setOnLoadMoreListener {
-            viewModel.getArticleMore()
-        }
+//        binding.smartRefresh.setOnLoadMoreListener {
+//            viewModel.getArticleMore()
+//        }
         binding.smartRefresh.setEnableOverScrollDrag(true)
         binding.smartRefresh.setEnableLoadMore(true)
     }

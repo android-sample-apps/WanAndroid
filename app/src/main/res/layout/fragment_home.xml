@@ -9,9 +9,6 @@
             name="viewModel"
             type="com.mmp.wanandroid.ui.home.viewmodel.HomeViewModel" />
 
-        <variable
-            name="adapter"
-            type="androidx.recyclerview.widget.ListAdapter" />
     </data>
 
 
@@ -73,8 +70,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="54dp"
-            android:id="@+id/smartRefresh">
-<!--            onLoadMoreListener="@{()->viewModel.getArticleMore()}"-->
+            android:id="@+id/smartRefresh"
+            loadMore="@{() -> viewModel.getArticleMore()}">
 
 
 

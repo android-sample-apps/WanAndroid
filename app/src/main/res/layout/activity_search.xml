@@ -10,167 +10,164 @@
             type="com.mmp.wanandroid.ui.home.viewmodel.SearchViewModel" />
     </data>
 
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:id="@+id/smart_fresh">
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="54dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/search_bar">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
+            <ImageView
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:id="@+id/search_back"
+                android:background="@drawable/back"
                 app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/search_bar">
-
-                <ImageView
-                    android:layout_width="37dp"
-                    android:layout_height="37dp"
-                    android:id="@+id/search_back"
-                    android:background="@drawable/back"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="15dp"/>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/search_back"
-                    android:layout_marginStart="20dp"
-                    android:background="@drawable/search_border"
-                    >
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@drawable/search"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="7dp"
-                        android:id="@+id/search_icon"/>
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/search"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/search_icon"
-                        android:hint="@string/search"
-                        android:layout_marginStart="8dp"
-                        android:maxLines="1"
-                        android:imeOptions="actionSearch"
-                        android:singleLine="true"
-                        android:inputType="text"
-                        android:text="@{viewModel.key}"
-                        android:focusable="true"
-                        android:textSize="15sp"
-                        />
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/search"
-                        android:background="@drawable/ic_baseline_close_24"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginStart="5dp"
-                        android:id="@+id/text_clean"
-                        android:visibility="gone"
-                        tools:visibility="visible"/>
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="15dp"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/search_bar"
-                android:id="@+id/search_key">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/hotkey"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:id="@+id/hotKey_text"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="5dp"/>
-
-                <com.donkingliang.labels.LabelsView
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    app:layout_constraintTop_toBottomOf="@id/hotKey_text"
-                    android:id="@+id/hotKty_labels"
-                    app:labelTextPaddingBottom="5dp"
-                    app:labelTextPaddingLeft="10dp"
-                    app:labelTextPaddingRight="10dp"
-                    app:labelTextPaddingTop="5dp"
-                    app:lineMargin="10dp"
-                    app:selectType="NONE"
-                    app:isIndicator="true"
-                    android:layout_marginTop="5dp"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/hotKey_text"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:text="@string/history_search"
-                    android:textSize="15sp"
-                    android:layout_marginTop="125dp"
-                    android:layout_marginStart="5dp"
-                    android:id="@+id/history_key_text"
-                    android:textStyle="bold"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/search_back"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/search_border"
+                >
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    app:layout_constraintTop_toBottomOf="@id/hotKey_text"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:background="@drawable/clean"
-                    android:layout_marginTop="125dp"
-                    android:layout_marginEnd="5dp"
-                    android:id="@+id/history_key_clean" />
+                    android:background="@drawable/search"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="7dp"
+                    android:id="@+id/search_icon"/>
 
-                <com.donkingliang.labels.LabelsView
-                    android:layout_width="match_parent"
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/search"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/history_key_text"
-                    android:id="@+id/history_labels"
-                    app:labelTextPaddingBottom="5dp"
-                    app:labelTextPaddingLeft="10dp"
-                    app:labelTextPaddingRight="10dp"
-                    app:labelTextPaddingTop="5dp"
-                    app:lineMargin="10dp"
-                    app:selectType="NONE"
-                    app:isIndicator="true"
-                    android:layout_marginTop="5dp"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/search_icon"
+                    android:hint="@string/search"
+                    android:layout_marginStart="8dp"
+                    android:maxLines="1"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true"
+                    android:inputType="text"
+                    android:text="@{viewModel.key}"
+                    android:focusable="true"
+                    android:textSize="15sp"
+                    />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/search"
+                    android:background="@drawable/ic_baseline_close_24"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="5dp"
+                    android:id="@+id/text_clean"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/search_bar"
-                android:id="@+id/search_article_rv"
-                android:visibility="gone"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/search_bar"
+            android:id="@+id/search_key">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/hotkey"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:id="@+id/hotKey_text"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"/>
+
+            <com.donkingliang.labels.LabelsView
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                app:layout_constraintTop_toBottomOf="@id/hotKey_text"
+                android:id="@+id/hotKty_labels"
+                app:labelTextPaddingBottom="5dp"
+                app:labelTextPaddingLeft="10dp"
+                app:labelTextPaddingRight="10dp"
+                app:labelTextPaddingTop="5dp"
+                app:lineMargin="10dp"
+                app:selectType="NONE"
+                app:isIndicator="true"
+                android:layout_marginTop="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/hotKey_text"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/history_search"
+                android:textSize="15sp"
+                android:layout_marginTop="125dp"
+                android:layout_marginStart="5dp"
+                android:id="@+id/history_key_text"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintTop_toBottomOf="@id/hotKey_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@drawable/clean"
+                android:layout_marginTop="125dp"
+                android:layout_marginEnd="5dp"
+                android:id="@+id/history_key_clean" />
+
+            <com.donkingliang.labels.LabelsView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/history_key_text"
+                android:id="@+id/history_labels"
+                app:labelTextPaddingBottom="5dp"
+                app:labelTextPaddingLeft="10dp"
+                app:labelTextPaddingRight="10dp"
+                app:labelTextPaddingTop="5dp"
+                app:lineMargin="10dp"
+                app:selectType="NONE"
+                app:isIndicator="true"
+                android:layout_marginTop="5dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_article_rv"
+            app:layout_constraintTop_toBottomOf="@id/search_bar"
+            android:visibility="gone"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

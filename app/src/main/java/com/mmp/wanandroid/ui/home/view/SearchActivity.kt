@@ -38,7 +38,7 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
         initBar()
         initRv()
         initLabel()
-        initFresh()
+
 //        KeyboardUtils.showKeyboard(binding.search)
     }
 
@@ -46,9 +46,6 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
         viewModel.getHotKey()
     }
 
-    private fun initFresh(){
-        binding.smartFresh.setEnableAutoLoadMore(false)
-    }
 
     private fun initRv(){
         binding.searchArticleRv.apply {
@@ -70,14 +67,12 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
     private fun initLabel(){
         binding.hotKtyLabels.setOnLabelClickListener{ _, data, _ ->
             viewModel.key.set(data.toString())
-            binding.smartFresh.autoRefresh()
             viewModel.getArticle()
             binding.textClean.visibility = View.VISIBLE
             viewModel.addKey()
             KeyboardUtils.hideKeyboard(binding.search)
         }
         binding.historyLabels.setOnLabelClickListener { _, data, _ ->
-            binding.smartFresh.autoRefresh()
             viewModel.key.set((data as HistoryKey).name)
             viewModel.getArticle()
             binding.textClean.visibility = View.VISIBLE
@@ -130,7 +125,6 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
             }
 
             override fun onDataChange(data: ArticleData?) {
-                binding.smartFresh.finishRefresh()
                 if (data != null) {
                     articleList.addAll(data.datas)
                     articleAdapter.submitList(mutableListOf<Article>().apply{

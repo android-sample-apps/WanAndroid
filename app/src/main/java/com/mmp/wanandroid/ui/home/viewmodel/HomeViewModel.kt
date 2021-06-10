@@ -11,56 +11,58 @@ import com.mmp.wanandroid.data.ArticleData
 import com.mmp.wanandroid.data.Banner
 import com.mmp.wanandroid.ui.CollectRepository
 import com.mmp.wanandroid.ui.home.HomeRepository
-import com.mmp.wanandroid.ui.home.request.HomeRequest
+
 import com.mmp.wanandroid.utils.Const
 import com.mmp.wanandroid.utils.StateLiveData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeViewModel : ViewModel() {
 
-    var isCache = false
+    var page = 0
 
-    private var page = 0
+    private val _bannerLiveData = StateLiveData<List<Banner>>()
 
-    val request = HomeRequest()
+    val bannerLiveData: LiveData<BaseResponse<List<Banner>>> = _bannerLiveData
 
-    val articleList = MutableLiveData(mutableListOf<Article>())
+    private val _topArticleLiveData = StateLiveData<List<Article>>()
 
-    val bannerList = MutableLiveData<List<Banner>>()
+    val topArticleLiveData: LiveData<BaseResponse<List<Article>>> = _topArticleLiveData
+
+    private val _collectLiveData = StateLiveData<Any>()
+
+    val collectLiveData: LiveData<BaseResponse<Any>> = _collectLiveData
+
+    private val _homeArticleLiveData = StateLiveData<ArticleData>()
+
+    val homeArticleLiveData: LiveData<BaseResponse<ArticleData>> = _homeArticleLiveData
+
 
     fun getBanner(){
         viewModelScope.launch {
-            request.getBanner()
+            HomeRepository.getBanner(_bannerLiveData)
         }
     }
 
     fun getTopArticle(){
         viewModelScope.launch {
-            request.getTopArticle()
+            HomeRepository.getTopArticle(_topArticleLiveData)
         }
     }
 
 
     fun getHomeArticle(){
-        val list = getCacheArticle()
-        if (list != null){
-            articleList.value = articleList.value?.apply {
-                addAll(list)
-            }
+        viewModelScope.launch {
+            HomeRepository.getHomeArticle(_homeArticleLiveData,page)
             page++
-            isCache = true
-        }else{
-            viewModelScope.launch {
-                request.getHomeArticle(page)
-                page++
-            }
         }
     }
 
     fun getArticleMore(){
         viewModelScope.launch {
-            request.getHomeArticle(page)
+            HomeRepository.getHomeArticle(_homeArticleLiveData,page)
             page++
         }
     }
@@ -69,23 +71,27 @@ class HomeViewModel : ViewModel() {
 
     fun collect(id: Int) {
         viewModelScope.launch {
-            request.collect(id)
+            CollectRepository.collectArticle(_collectLiveData,id)
         }
     }
 
     fun unCollect(id: Int){
         viewModelScope.launch {
-            request.unCollect(id)
+            CollectRepository.unCollectArticle(_collectLiveData,id)
         }
     }
 
-    private fun getCacheArticle(): ArrayList<Article>? {
-        return HomeRepository.getCacheList<ArrayList<Article>>("articleList")
+    suspend fun getCacheArticle(): List<Article> {
+        var list: List<Article>
+        withContext(Dispatchers.IO){
+            list = HomeRepository.getCacheList()
+        }
+        return list
     }
-
-
-    fun putCacheArticle(value: Any){
-        HomeRepository.putCache("articleList",value)
+//
+//
+    fun putCacheArticle(value: List<Article>){
+        HomeRepository.putCache(value)
     }
 
 

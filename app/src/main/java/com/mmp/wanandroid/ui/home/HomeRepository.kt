@@ -9,6 +9,7 @@ import com.mmp.wanandroid.data.*
 import com.mmp.wanandroid.room.HistoryKey
 import com.mmp.wanandroid.room.MyRoomDatabase
 import com.mmp.wanandroid.ui.base.BaseRepository
+import com.mmp.wanandroid.utils.Const
 import com.mmp.wanandroid.utils.StateLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,11 +61,12 @@ object HomeRepository : BaseRepository(){
 
     suspend fun clean() = historyKeyDao.deleteAll()
 
-    fun<T> getCacheList(key: String): T{
-        return LocalSource.getCache(key)
+
+    fun getCacheList(): List<Article> {
+        return LocalSource.getCache<Article>(Const.HOME_ARTICLE) ?: emptyList()
     }
 
-    fun putCache(key: String,value: Any){
-        LocalSource.putCache(key, value)
+    fun putCache(value: List<Article>){
+        LocalSource.putCache(value)
     }
 }

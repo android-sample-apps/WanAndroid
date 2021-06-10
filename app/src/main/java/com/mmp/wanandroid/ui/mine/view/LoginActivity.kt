@@ -11,7 +11,6 @@ import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.DataState
 import com.mmp.wanandroid.data.User
 import com.mmp.wanandroid.databinding.ActivityLoginBinding
-import com.mmp.wanandroid.ui.SharedViewModel
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.IStateObserver
 import com.mmp.wanandroid.ui.base.MyApplication
@@ -26,9 +25,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding,LoginViewModel>() {
     private var isLogin: Boolean by SPreference("login_state",false)
 
 
-    private val sharedViewModel by lazy {  ViewModelProvider(this.applicationContext as MyApplication,
-        this.application.let { ViewModelProvider.AndroidViewModelFactory.getInstance(it) }).get(
-        SharedViewModel::class.java)}
 
 
     override fun getLayoutId(): Int {
@@ -52,7 +48,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding,LoginViewModel>() {
     override fun initViewObservable() {
         viewModel.loginLiveDaa.observe(this){
             if (it.dataState == DataState.STATE_SUCCESS){
-                sharedViewModel.loginSuccess.value = Event(it.data!!)
+                LiveDataBus.send("user",it.data)
                 Log.d(TAG,it.data.toString())
                 isLogin = true
                 toast("登录成功")
