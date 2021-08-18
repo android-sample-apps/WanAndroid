@@ -13,34 +13,47 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.databinding.library.baseAdapters.BR
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.gyf.barlibrary.ImmersionBar
+import com.kingja.loadsir.callback.Callback
 import com.kingja.loadsir.callback.SuccessCallback
+import com.kingja.loadsir.core.Convertor
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.mmp.wanandroid.R
+import com.mmp.wanandroid.network.*
+import com.mmp.wanandroid.ui.base.callback.EmptyCallback
 import com.mmp.wanandroid.ui.base.callback.ErrorCallback
 import com.mmp.wanandroid.ui.base.callback.LoadingCallback
 import com.mmp.wanandroid.ui.customview.CustomTitleBar
 import java.lang.reflect.ParameterizedType
 import java.util.jar.Attributes
 
-abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivity() {
+abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivity(),Callback.OnReloadListener {
 
 
 
     lateinit var binding: DB
     lateinit var viewModel: VM
 
+    private lateinit var loadService: LoadService<Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initStatusBar()
         viewModel = initViewModel()
         initDataBinding()
+        loadService = LoadSir.getDefault().register(this,this,
+            Convertor<DataStatus> {
+                val resultCode = when(it){
+                    is Success<*> -> SuccessCallback::class.java
+                    is Empty -> EmptyCallback::class.java
+                    is Failure -> ErrorCallback::class.java
+                    is Loading -> LoadingCallback::class.java
+                    is None -> EmptyCallback::class.java
+                }
+                resultCode
+            })
         initView()
         initData()
         initViewObservable()
@@ -63,6 +76,8 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
         binding = DataBindingUtil.setContentView(this,getLayoutId())
         binding.setVariable(BR.viewModel,viewModel)
         binding.lifecycleOwner = this
+
+
     }
 
     abstract fun getLayoutId() : Int
@@ -79,6 +94,21 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
     }
 
     open fun initData(){}
+
+    override fun onReload(v: View?) {
+
+    }
+
+    fun <T: DataStatus> myObserve(liveData: LiveData<T>,success: (T) -> Unit){
+        liveData.observe(this, Observer {
+            loadService.showWithConvertor(it)
+            when(it){
+                is Success<*> -> success(it)
+            }
+
+        })
+    }
+
 
 
 

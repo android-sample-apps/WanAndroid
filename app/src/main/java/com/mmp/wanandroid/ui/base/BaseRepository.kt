@@ -2,8 +2,15 @@ package com.mmp.wanandroid.ui.base
 
 import androidx.lifecycle.MutableLiveData
 import com.mmp.wanandroid.api.BaseResponse
+import com.mmp.wanandroid.data.Article
 import com.mmp.wanandroid.data.DataState
+import com.mmp.wanandroid.network.*
 import com.mmp.wanandroid.utils.StateLiveData
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 
 open class BaseRepository {
     suspend fun <T : Any> executeResp(
@@ -31,4 +38,21 @@ open class BaseRepository {
             stateLiveData.postValue(baseResponse)
         }
     }
+
+//    suspend fun <T> execute
+
+    fun<T> execute(block:suspend () -> BaseResponse<T>) = flow<DataStatus> {
+        emit(Loading)
+        val response = block()
+        if (response.errorCode == 0){
+            if ((response.data == null) || (response.data is List<*> && (response.data as List<*>).size == 0) ){
+                emit(Empty)
+            }else{
+                emit(Success(response.data))
+            }
+        }
+    }.catch { throwable ->
+        Timber.d(throwable)
+        emit(Failure(throwable))
+    }.conflate()
 }

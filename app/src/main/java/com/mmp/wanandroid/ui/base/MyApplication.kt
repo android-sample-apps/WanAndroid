@@ -3,10 +3,12 @@ package com.mmp.wanandroid.ui.base
 import android.R
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.kingja.loadsir.callback.SuccessCallback
 import com.kingja.loadsir.core.LoadSir
+import com.mmp.wanandroid.BuildConfig
 import com.mmp.wanandroid.ui.base.callback.EmptyCallback
 //import com.mmp.wanandroid.room.MyRoomDatabase
 import com.mmp.wanandroid.ui.base.callback.ErrorCallback
@@ -14,6 +16,7 @@ import com.mmp.wanandroid.ui.base.callback.LoadingCallback
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import timber.log.Timber
 
 
 class MyApplication : Application(),ViewModelStoreOwner {
@@ -50,9 +53,13 @@ class MyApplication : Application(),ViewModelStoreOwner {
                 .setDefaultCallback(SuccessCallback::class.java)
                 .commit()
         mAppViewModelStore = ViewModelStore()
+
+        Timber.plant(Timber.DebugTree())
     }
 
     override fun getViewModelStore(): ViewModelStore {
         return mAppViewModelStore
     }
+
+
 }

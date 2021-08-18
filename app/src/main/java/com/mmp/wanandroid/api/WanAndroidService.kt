@@ -25,7 +25,9 @@ interface WanAndroidService {
             get() = OkHttpClient.Builder()
                     .addInterceptor(cookieIntercept())
                     .addInterceptor(loginIntercept())
-                    .addNetworkInterceptor(logIntercept())
+                    .addNetworkInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
                     .build()
 
         private val retrofit = Retrofit.Builder()
@@ -45,7 +47,7 @@ interface WanAndroidService {
             return Interceptor { chain ->
                 val request = chain.request()
                 val response = chain.proceed(request)
-                val requestUrl = request.url().toString()
+                val requestUrl = request.url.toString()
                 if (requestUrl.contains("user/login") || requestUrl.contains("user/register")){
                     val mCookie = response.headers("Set-Cookie")
                     saveCookie(parseCookie(mCookie))
@@ -58,7 +60,7 @@ interface WanAndroidService {
             return Interceptor { chain ->
                 val request = chain.request()
                 val builder = request.newBuilder()
-                val domain = request.url().host()
+                val domain = request.url.host
 
                 if(domain.isNotEmpty()){
                     val mCookie by SPreference("cookie","")
@@ -107,7 +109,7 @@ interface WanAndroidService {
 
     /*置顶文章*/
     @GET("article/top/json")
-    suspend fun getTopArticle(): BaseResponse<List<Article>>
+    suspend fun getTopArticle(): BaseResponse<MutableList<Article>>
 
     /*体系数据*/
     @GET("/tree/json")

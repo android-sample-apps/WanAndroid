@@ -21,7 +21,7 @@ data class Article(val author: String, val chapterName: String, val link: String
 
 }
 
-data class ArticleData(val curPage: Int, val datas: List<Article>,val pageCount: Int,val total: Int)
+data class ArticleData(val curPage: Int, val datas: MutableList<Article>,val pageCount: Int,val total: Int)
 
 data class Tag(
     val name: String,
