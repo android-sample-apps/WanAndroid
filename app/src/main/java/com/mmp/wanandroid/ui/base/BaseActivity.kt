@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -104,9 +105,15 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
             loadService.showWithConvertor(it)
             when(it){
                 is Success<*> -> success(it)
+                is Failure -> Toast.makeText(this,"${it.t}",Toast.LENGTH_LONG).show()
             }
 
         })
+    }
+
+
+    fun<T> convert(status: DataStatus): T{
+        return (status as Success<*>).data as T
     }
 
 

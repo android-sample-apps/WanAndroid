@@ -21,7 +21,8 @@ import com.mmp.wanandroid.ui.web.WebActivity
 import com.mmp.wanandroid.utils.start
 import com.mmp.wanandroid.utils.toast
 
-class ArticleAdapter : BaseQuickAdapter<Article,BaseDataBindingHolder<HomeRvItemBinding>>(R.layout.home_rv_item){
+class ArticleAdapter(list: MutableList<Article>) : BaseQuickAdapter<Article,BaseDataBindingHolder<HomeRvItemBinding>>(R.layout.home_rv_item,
+    list){
     override fun convert(holder: BaseDataBindingHolder<HomeRvItemBinding>, item: Article) {
         val binding = holder.dataBinding
         binding?.article = item

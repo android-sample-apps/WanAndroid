@@ -1,71 +1,62 @@
 package com.mmp.wanandroid.ui.home.viewmodel
 
-import android.text.TextUtils
-import android.util.Log
-import android.widget.BaseExpandableListAdapter
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.mmp.wanandroid.api.BaseResponse
+import com.mmp.wanandroid.model.remote.api.BaseResponse
 import com.mmp.wanandroid.data.Article
 import com.mmp.wanandroid.data.ArticleData
 import com.mmp.wanandroid.data.Banner
-import com.mmp.wanandroid.data.DataState
 import com.mmp.wanandroid.network.DataStatus
 import com.mmp.wanandroid.network.None
 import com.mmp.wanandroid.network.Success
 import com.mmp.wanandroid.ui.CollectRepository
 import com.mmp.wanandroid.ui.home.HomeRepository
 
-import com.mmp.wanandroid.utils.Const
 import com.mmp.wanandroid.utils.StateLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-class HomeViewModel : ViewModel() {
-
+class HomeViewModel @ViewModelInject constructor(
+    private val repository: HomeRepository
+): ViewModel() {
 
     init {
         getArticle()
+        getBanner()
     }
 
+    val articleList = mutableListOf<Article>()
+    val bannerList = mutableListOf<Banner>()
     var page = 0
-
-    private val _bannerLiveData = StateLiveData<List<Banner>>()
-
-    val bannerLiveData: LiveData<BaseResponse<List<Banner>>> = _bannerLiveData
-
-    private val _topArticleLiveData = StateLiveData<List<Article>>()
-
-    val topArticleLiveData: LiveData<BaseResponse<List<Article>>> = _topArticleLiveData
 
     private val _collectLiveData = StateLiveData<Any>()
 
     val collectLiveData: LiveData<BaseResponse<Any>> = _collectLiveData
 
-    private val _homeArticleLiveData = StateLiveData<ArticleData>()
-
-    val homeArticleLiveData: LiveData<BaseResponse<ArticleData>> = _homeArticleLiveData
-
     private val _articleLiveData = MutableLiveData<DataStatus>(None)
 
     val articleLiveData: LiveData<DataStatus> = _articleLiveData
 
+    private val _bannerLiveData = MutableLiveData<DataStatus>(None)
+
+    val bannerLiveData: LiveData<DataStatus> = _bannerLiveData
 
     fun getBanner(){
         viewModelScope.launch {
-            HomeRepository.getBanner(_bannerLiveData)
+            repository.getBanner()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _bannerLiveData.value = it
+                }
         }
     }
 
     fun getArticle(){
         viewModelScope.launch {
-//            HomeRepository.getTopArticle(_topArticleLiveData)
-            HomeRepository.getHomeArticle(page)
-                .zip(HomeRepository.getTopArticle()){ a,b ->
+            repository.getHomeArticle(page)
+                .zip(repository.getTopArticle()){ a,b ->
                     if (page == 0){
                         if (a is Success<*> && b is Success<*>) {
                             (b.data as MutableList<Article>).addAll((a.data as ArticleData).datas)
@@ -86,21 +77,6 @@ class HomeViewModel : ViewModel() {
     }
 
 
-    fun getHomeArticle(){
-        viewModelScope.launch {
-            HomeRepository.getHomeArticle(_homeArticleLiveData,page)
-            page++
-        }
-    }
-
-    fun getArticleMore(){
-        viewModelScope.launch {
-            HomeRepository.getHomeArticle(_homeArticleLiveData,page)
-            page++
-        }
-    }
-
-
 
     fun collect(id: Int) {
         viewModelScope.launch {
@@ -114,18 +90,6 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    suspend fun getCacheArticle(): List<Article> {
-        var list: List<Article>
-        withContext(Dispatchers.IO){
-            list = HomeRepository.getCacheList()
-        }
-        return list
-    }
-//
-//
-    fun putCacheArticle(value: List<Article>){
-        HomeRepository.putCache(value)
-    }
 
 
 }

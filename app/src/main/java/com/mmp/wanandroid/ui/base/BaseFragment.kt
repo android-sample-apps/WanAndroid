@@ -4,28 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.databinding.library.baseAdapters.BR
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.gyf.barlibrary.ImmersionBar
-import com.gyf.barlibrary.ImmersionFragment
-import com.gyf.barlibrary.SimpleImmersionFragment
 import com.kingja.loadsir.callback.Callback
 import com.kingja.loadsir.callback.SuccessCallback
 import com.kingja.loadsir.core.Convertor
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
-import com.mmp.wanandroid.R
-import com.mmp.wanandroid.api.BaseResponse
 import com.mmp.wanandroid.network.*
 import com.mmp.wanandroid.ui.base.callback.EmptyCallback
 import com.mmp.wanandroid.ui.base.callback.ErrorCallback
@@ -114,12 +107,14 @@ abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : Fragment(),Call
             loadService.showWithConvertor(it)
             when(it){
                 is Success<*> -> success(it)
+                is Failure -> Toast.makeText(requireContext(),"${it.t}", Toast.LENGTH_LONG).show()
             }
 
         })
     }
 
-    override fun onReload(v: View?) {
 
+    fun<T> convert(status: DataStatus): T{
+        return (status as Success<*>).data as T
     }
 }
