@@ -1,6 +1,6 @@
 package com.mmp.wanandroid.ui.system
 
-import com.mmp.wanandroid.api.WanAndroidService
+import com.mmp.wanandroid.model.remote.api.WanAndroidService
 import com.mmp.wanandroid.data.ArticleData
 import com.mmp.wanandroid.data.SystemTree
 import com.mmp.wanandroid.ui.base.BaseRepository

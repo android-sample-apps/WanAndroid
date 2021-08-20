@@ -1,20 +1,15 @@
 package com.mmp.wanandroid.ui.mine.view
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mmp.wanandroid.BR
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.api.BaseResponse
 import com.mmp.wanandroid.data.DataState
 import com.mmp.wanandroid.data.Integral
 import com.mmp.wanandroid.data.IntegralData
 import com.mmp.wanandroid.databinding.ActivityIntegralBinding
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.IStateObserver
-import com.mmp.wanandroid.ui.mine.MineRepository
 import com.mmp.wanandroid.ui.mine.adapter.CoinAdapter
 import com.mmp.wanandroid.ui.mine.viewmodel.IntegralViewModel
 import com.mmp.wanandroid.utils.start

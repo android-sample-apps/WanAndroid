@@ -1,21 +1,12 @@
 package com.mmp.wanandroid.ui.home
 
-import androidx.lifecycle.liveData
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import com.mmp.wanandroid.api.WanAndroidService
+import com.mmp.wanandroid.model.remote.api.WanAndroidService
 import com.mmp.wanandroid.data.*
 import com.mmp.wanandroid.room.HistoryKey
 import com.mmp.wanandroid.room.MyRoomDatabase
 import com.mmp.wanandroid.ui.base.BaseRepository
 import com.mmp.wanandroid.utils.Const
 import com.mmp.wanandroid.utils.StateLiveData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 
 object HomeRepository : BaseRepository(){

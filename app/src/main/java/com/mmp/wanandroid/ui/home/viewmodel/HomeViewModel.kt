@@ -1,21 +1,15 @@
 package com.mmp.wanandroid.ui.home.viewmodel
 
-import android.text.TextUtils
-import android.widget.BaseExpandableListAdapter
 import androidx.lifecycle.*
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.mmp.wanandroid.api.BaseResponse
+import com.mmp.wanandroid.model.remote.api.BaseResponse
 import com.mmp.wanandroid.data.Article
 import com.mmp.wanandroid.data.ArticleData
 import com.mmp.wanandroid.data.Banner
 import com.mmp.wanandroid.ui.CollectRepository
 import com.mmp.wanandroid.ui.home.HomeRepository
 
-import com.mmp.wanandroid.utils.Const
 import com.mmp.wanandroid.utils.StateLiveData
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

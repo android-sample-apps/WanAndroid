@@ -2,7 +2,7 @@ package com.mmp.wanandroid.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.mmp.wanandroid.api.WanAndroidService
+import com.mmp.wanandroid.model.remote.api.WanAndroidService
 
 class ArticleDataSource : PagingSource<Int,Article>() {
     override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
