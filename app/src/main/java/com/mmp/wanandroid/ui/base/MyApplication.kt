@@ -1,13 +1,14 @@
 package com.mmp.wanandroid.ui.base
 
 //import com.mmp.wanandroid.room.MyRoomDatabase
-import android.R
+
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.kingja.loadsir.callback.SuccessCallback
 import com.kingja.loadsir.core.LoadSir
+import com.mmp.wanandroid.R
 import com.mmp.wanandroid.ui.base.callback.EmptyCallback
 import com.mmp.wanandroid.ui.base.callback.ErrorCallback
 import com.mmp.wanandroid.ui.base.callback.LoadingCallback
@@ -34,7 +35,7 @@ class MyApplication : Application(),ViewModelStoreOwner {
 
         init {
             SmartRefreshLayout.setDefaultRefreshHeaderCreator{ context,layout ->
-                layout.setPrimaryColorsId(R.color.holo_red_light,R.color.white)
+                layout.setPrimaryColorsId(R.color.red,R.color.white)
                 ClassicsHeader(context)
             }
             SmartRefreshLayout.setDefaultRefreshFooterCreator{ context,_ ->

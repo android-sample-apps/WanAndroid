@@ -43,7 +43,7 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
     }
 
     override fun initData() {
-        viewModel.getHotKey()
+//        viewModel.getHotKey()
     }
 
 
@@ -59,7 +59,7 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
                 val totalItemCount = articleLayoutManager.itemCount
                 val visibleItemCount = articleLayoutManager.childCount
                 val lastVisibleItem = articleLayoutManager.findLastVisibleItemPosition()
-                viewModel.listScrolled(visibleItemCount,lastVisibleItem,totalItemCount)
+//                viewModel.listScrolled(visibleItemCount,lastVisibleItem,totalItemCount)
             }
         })
     }
@@ -67,20 +67,20 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
     private fun initLabel(){
         binding.hotKtyLabels.setOnLabelClickListener{ _, data, _ ->
             viewModel.key.set(data.toString())
-            viewModel.getArticle()
+//            viewModel.getArticle()
             binding.textClean.visibility = View.VISIBLE
-            viewModel.addKey()
+//            viewModel.addKey()
             KeyboardUtils.hideKeyboard(binding.search)
         }
         binding.historyLabels.setOnLabelClickListener { _, data, _ ->
             viewModel.key.set((data as HistoryKey).name)
-            viewModel.getArticle()
+//            viewModel.getArticle()
             binding.textClean.visibility = View.VISIBLE
-            viewModel.addKey()
+//            viewModel.addKey()
             KeyboardUtils.hideKeyboard(binding.search)
         }
         binding.historyKeyClean.setOnClickListener {
-            viewModel.clean()
+//            viewModel.clean()
         }
     }
 
@@ -90,8 +90,8 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
             if ( actionId == EditorInfo.IME_ACTION_SEARCH){
                 if (!TextUtils.isEmpty(view.text.toString())){
                     viewModel.key.set(view.text.toString())
-                    viewModel.getArticle()
-                    viewModel.addKey()
+//                    viewModel.getArticle()
+//                    viewModel.addKey()
                     binding.searchKey.visibility = View.GONE
                     binding.searchArticleRv.visibility = View.VISIBLE
                     binding.textClean.visibility = View.VISIBLE
@@ -117,51 +117,51 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
 
 
     override fun initViewObservable() {
-        viewModel.articleLiveData.observe(this,object : IStateObserver<ArticleData>(binding.searchArticleRv) {
-            override fun onReload(v: View?) {
-                v?.setOnClickListener{
-                    viewModel.getArticle()
-                }
-            }
+//        viewModel.articleLiveData.observe(this,object : IStateObserver<ArticleData>(binding.searchArticleRv) {
+//            override fun onReload(v: View?) {
+//                v?.setOnClickListener{
+//                    viewModel.getArticle()
+//                }
+//            }
+//
+//            override fun onDataChange(data: ArticleData?) {
+//                if (data != null) {
+//                    articleList.addAll(data.datas)
+//                    articleAdapter.submitList(mutableListOf<Article>().apply{
+//                        addAll(articleList)
+//                    })
+//                    binding.searchKey.visibility = View.INVISIBLE
+//                    binding.searchArticleRv.visibility = View.VISIBLE
+//                }
+//            }
+//
+//            override fun onError(e: Throwable) {
+//                toast(e.message.toString())
+//            }
+//        })
 
-            override fun onDataChange(data: ArticleData?) {
-                if (data != null) {
-                    articleList.addAll(data.datas)
-                    articleAdapter.submitList(mutableListOf<Article>().apply{
-                        addAll(articleList)
-                    })
-                    binding.searchKey.visibility = View.INVISIBLE
-                    binding.searchArticleRv.visibility = View.VISIBLE
-                }
-            }
-
-            override fun onError(e: Throwable) {
-                toast(e.message.toString())
-            }
-        })
-
-        viewModel.hotKeyLiveData.observe(this,object : IStateObserver<List<HotKey>>(binding.hotKtyLabels){
-            override fun onReload(v: View?) {
-                v?.setOnClickListener {
-                    viewModel.getHotKey()
-                }
-            }
-
-            override fun onDataChange(data: List<HotKey>?) {
-                data?.let {
-                        for (i in 0..7){
-                            hotKeyList.add(it[i].name)
-                    }
-                }
-                binding.hotKtyLabels.setLabels(hotKeyList)
-            }
-        })
-
-        viewModel.historyKeyList.observe(this){
-            binding.historyLabels.setLabels(it){ _,_,data ->
-                data.name
-            }
-        }
+//        viewModel.hotKeyLiveData.observe(this,object : IStateObserver<List<HotKey>>(binding.hotKtyLabels){
+//            override fun onReload(v: View?) {
+//                v?.setOnClickListener {
+//                    viewModel.getHotKey()
+//                }
+//            }
+//
+//            override fun onDataChange(data: List<HotKey>?) {
+//                data?.let {
+//                        for (i in 0..7){
+//                            hotKeyList.add(it[i].name)
+//                    }
+//                }
+//                binding.hotKtyLabels.setLabels(hotKeyList)
+//            }
+//        })
+//
+//        viewModel.historyKeyList.observe(this){
+//            binding.historyLabels.setLabels(it){ _,_,data ->
+//                data.name
+//            }
+//        }
 
         viewModel.collectLiveData.observe(this){
             if (it.errorCode == 0){

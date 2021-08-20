@@ -19,41 +19,41 @@ class SearchViewModel : ViewModel() {
 
     val collectLiveData = StateLiveData<Any>()
 
-    val historyKeyList = HomeRepository.getKeyList().asLiveData()
+//    val historyKeyList = HomeRepository.getKeyList().asLiveData()
 
-    fun addKey(){
-        if (!TextUtils.isEmpty(key.get())){
-            viewModelScope.launch {
-                HomeRepository.addKey(HistoryKey(0,key.get()!!))
-            }
-        }
-    }
-
-    fun clean(){
-        viewModelScope.launch {
-            HomeRepository.clean()
-        }
-    }
+//    fun addKey(){
+//        if (!TextUtils.isEmpty(key.get())){
+//            viewModelScope.launch {
+//                HomeRepository.addKey(HistoryKey(0,key.get()!!))
+//            }
+//        }
+//    }
+//
+//    fun clean(){
+//        viewModelScope.launch {
+//            HomeRepository.clean()
+//        }
+//    }
 
     val hotKeyLiveData = StateLiveData<List<HotKey>>()
 
-    fun getHotKey(){
-        viewModelScope.launch {
-            HomeRepository.getHotKey(hotKeyLiveData)
-        }
-    }
-
-    val articleLiveData = StateLiveData<ArticleData>()
-
-    fun getArticle(){
-        viewModelScope.launch {
-            if (TextUtils.isEmpty(key.get())){
-                toast("搜索内容不能为空")
-            }else{
-                HomeRepository.getSearch(articleLiveData,key.get()!!)
-            }
-        }
-    }
+//    fun getHotKey(){
+//        viewModelScope.launch {
+//            HomeRepository.getHotKey(hotKeyLiveData)
+//        }
+//    }
+//
+//    val articleLiveData = StateLiveData<ArticleData>()
+//
+//    fun getArticle(){
+//        viewModelScope.launch {
+//            if (TextUtils.isEmpty(key.get())){
+//                toast("搜索内容不能为空")
+//            }else{
+//                HomeRepository.getSearch(articleLiveData,key.get()!!)
+//            }
+//        }
+//    }
 
     fun collect(id: Int) {
         viewModelScope.launch {
@@ -72,16 +72,16 @@ class SearchViewModel : ViewModel() {
 //            HomeRepository.getSearchMore(articleLiveData,key.get()!!)
 //        }
 //    }
-
-    fun listScrolled(visibleItemCount: Int,lastVisibleItemPosition: Int,totalItemCount: Int){
-        if (visibleItemCount + lastVisibleItemPosition + Const.VISIBLE_THRESHOLD >= totalItemCount){
-            if (!TextUtils.isEmpty(key.get())){
-                viewModelScope.launch {
-                    HomeRepository.getSearchMore(articleLiveData,key.get()!!)
-                }
-            }
-        }
-    }
+//
+//    fun listScrolled(visibleItemCount: Int,lastVisibleItemPosition: Int,totalItemCount: Int){
+//        if (visibleItemCount + lastVisibleItemPosition + Const.VISIBLE_THRESHOLD >= totalItemCount){
+//            if (!TextUtils.isEmpty(key.get())){
+//                viewModelScope.launch {
+//                    HomeRepository.getSearchMore(articleLiveData,key.get()!!)
+//                }
+//            }
+//        }
+//    }
 
 
 

@@ -1,4 +1,4 @@
-package com.mmp.wanandroid.model.remote.api
+package com.mmp.wanandroid.model.remote
 
 import com.mmp.wanandroid.data.DataState
 

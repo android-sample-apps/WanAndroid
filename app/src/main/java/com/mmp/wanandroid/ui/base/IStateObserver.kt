@@ -7,7 +7,7 @@ import com.kingja.loadsir.callback.SuccessCallback
 import com.kingja.loadsir.core.Convertor
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
-import com.mmp.wanandroid.model.remote.api.BaseResponse
+import com.mmp.wanandroid.model.remote.BaseResponse
 import com.mmp.wanandroid.data.DataState
 import com.mmp.wanandroid.ui.base.callback.EmptyCallback
 import com.mmp.wanandroid.ui.base.callback.ErrorCallback

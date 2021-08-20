@@ -1,15 +1,8 @@
 package com.mmp.wanandroid.ui.base
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -21,14 +14,11 @@ import com.kingja.loadsir.callback.SuccessCallback
 import com.kingja.loadsir.core.Convertor
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
-import com.mmp.wanandroid.R
-import com.mmp.wanandroid.network.*
+import com.mmp.wanandroid.model.remote.*
 import com.mmp.wanandroid.ui.base.callback.EmptyCallback
 import com.mmp.wanandroid.ui.base.callback.ErrorCallback
 import com.mmp.wanandroid.ui.base.callback.LoadingCallback
-import com.mmp.wanandroid.ui.customview.CustomTitleBar
 import java.lang.reflect.ParameterizedType
-import java.util.jar.Attributes
 
 abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivity(),Callback.OnReloadListener {
 
@@ -45,13 +35,13 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
         viewModel = initViewModel()
         initDataBinding()
         loadService = LoadSir.getDefault().register(this,this,
-            Convertor<DataStatus> {
+            Convertor<DataStatus<*>> {
                 val resultCode = when(it){
-                    is Success<*> -> SuccessCallback::class.java
-                    is Empty -> EmptyCallback::class.java
-                    is Failure -> ErrorCallback::class.java
-                    is Loading -> LoadingCallback::class.java
-                    is None -> EmptyCallback::class.java
+                    is DataStatus.Success<*> -> SuccessCallback::class.java
+                    is DataStatus.Empty -> EmptyCallback::class.java
+                    is DataStatus.Failure -> ErrorCallback::class.java
+                    is DataStatus.Loading -> LoadingCallback::class.java
+                    is DataStatus.None -> EmptyCallback::class.java
                 }
                 resultCode
             })
@@ -100,24 +90,16 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
 
     }
 
-    fun <T: DataStatus> myObserve(liveData: LiveData<T>,success: (T) -> Unit){
+    fun <T> myObserve(liveData: LiveData<T>, success: (T) -> Unit){
         liveData.observe(this, Observer {
             loadService.showWithConvertor(it)
             when(it){
-                is Success<*> -> success(it)
-                is Failure -> Toast.makeText(this,"${it.t}",Toast.LENGTH_LONG).show()
+                is DataStatus.Success<*> -> success(it)
+                is DataStatus.Failure -> Toast.makeText(this,"${it.t}",Toast.LENGTH_LONG).show()
             }
 
         })
     }
-
-
-    fun<T> convert(status: DataStatus): T{
-        return (status as Success<*>).data as T
-    }
-
-
-
 
 
 }

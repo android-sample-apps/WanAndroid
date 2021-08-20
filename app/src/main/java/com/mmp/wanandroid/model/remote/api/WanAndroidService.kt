@@ -1,6 +1,7 @@
 package com.mmp.wanandroid.model.remote.api
 
 import com.mmp.wanandroid.data.*
+import com.mmp.wanandroid.model.remote.BaseResponse
 import com.mmp.wanandroid.utils.HttpLogger
 import com.mmp.wanandroid.utils.SPreference
 import okhttp3.Interceptor

@@ -20,9 +20,10 @@ import com.mmp.wanandroid.ui.home.view.HomeFragment
 import com.mmp.wanandroid.ui.web.WebActivity
 import com.mmp.wanandroid.utils.start
 import com.mmp.wanandroid.utils.toast
+import javax.inject.Inject
 
-class ArticleAdapter(list: MutableList<Article>) : BaseQuickAdapter<Article,BaseDataBindingHolder<HomeRvItemBinding>>(R.layout.home_rv_item,
-    list){
+class ArticleAdapter @Inject constructor(list: List<Article>) : BaseQuickAdapter<Article,BaseDataBindingHolder<HomeRvItemBinding>>(R.layout.home_rv_item,
+    list.toMutableList()){
     override fun convert(holder: BaseDataBindingHolder<HomeRvItemBinding>, item: Article) {
         val binding = holder.dataBinding
         binding?.article = item

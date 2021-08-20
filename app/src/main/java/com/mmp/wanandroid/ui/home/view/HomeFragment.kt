@@ -2,20 +2,14 @@ package com.mmp.wanandroid.ui.home.view
 
 import android.content.Intent
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bugrui.buslib.LiveDataBus
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.data.*
 import com.mmp.wanandroid.databinding.FragmentHomeBinding
-import com.mmp.wanandroid.network.DataStatus
-import com.mmp.wanandroid.network.Success
+import com.mmp.wanandroid.extension.safeAs
+import com.mmp.wanandroid.model.remote.DataStatus
 import com.mmp.wanandroid.ui.base.BaseFragment
-import com.mmp.wanandroid.ui.base.IStateObserver
-import com.mmp.wanandroid.ui.base.MyApplication
 import com.mmp.wanandroid.ui.home.adapter.ArticleAdapter
 import com.mmp.wanandroid.ui.home.adapter.ImageAdapter
 import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
@@ -23,17 +17,20 @@ import com.mmp.wanandroid.ui.home.viewmodel.HomeViewModel
 import com.mmp.wanandroid.utils.toast
 import com.youth.banner.indicator.CircleIndicator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArticleAdapter.OnCollectListener{
 
-    private val bannerAdapter by lazy { context?.let { ImageAdapter(viewModel.bannerList,it) } }
+    @Inject lateinit var articleAdapter: ArticleAdapter
 
-    private val articleAdapter by lazy { ArticleAdapter(viewModel.articleList) }
+//    private val bannerAdapter by lazy { context?.let { ImageAdapter(viewModel.bannerList,it) } }
+
+    @Inject lateinit var bannerAdapter: ImageAdapter
+
+
+    var page = 0
 
     override fun onCollect(article: Article) {
         viewModel.collect(article.id)
@@ -49,22 +46,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
 
     override fun initViewObservable() {
 
-
-        myObserve(viewModel.articleLiveData){
-            if (viewModel.page == 0){
-                articleAdapter.addData(convert<MutableList<Article>>(it).toList())
-            }else{
-                articleAdapter.addData(convert<ArticleData>(it).datas.toList())
+        viewModel.articleLiveData.observe(this){
+            loadService.showWithConvertor(it)
+            when(it){
+                is DataStatus.Success -> articleAdapter.addData(it.data)
+                is DataStatus.Failure -> toast("${it.t}")
+                else -> null
             }
-            binding.smartRefresh.finishLoadMore()
-            binding.smartRefresh.finishRefresh()
         }
 
-        myObserve(viewModel.bannerLiveData){
-            bannerAdapter?.setDatas(convert<List<Banner>>(it))
-            bannerAdapter?.notifyDataSetChanged()
+        viewModel.bannerLiveData.observe(this){
+            loadService.showWithConvertor(it)
+            when(it){
+                is DataStatus.Success -> {
+                    bannerAdapter.setDatas(it.data)
+                    bannerAdapter.notifyDataSetChanged()
+                }
+                is DataStatus.Failure -> toast("${it.t}")
+                else -> null
+            }
         }
-
 
         viewModel.collectLiveData.observe(this){
             if (it.errorCode == 0){
@@ -108,13 +109,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
 
     private fun initSmartFresh(){
         binding.smartRefresh.setOnRefreshListener {
-            viewModel.page = 0
+            page = 0
             viewModel.articleList.clear()
-            viewModel.getArticle()
+            viewModel.getArticle(page)
         }
 
         binding.smartRefresh.setOnLoadMoreListener {
-            viewModel.getArticle()
+            page++
+            viewModel.getArticle(page)
         }
         binding.smartRefresh.setEnableLoadMore(true)
     }
@@ -128,8 +130,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
 
     override fun onReload(v: View?) {
         v?.setOnClickListener {
+            page = 0
             viewModel.getBanner()
-            viewModel.getArticle()
+            viewModel.getArticle(page)
         }
     }
 
@@ -138,7 +141,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
             return HomeFragment()
         }
 
-        val TAG = "HomeFragment"
+        const val TAG = "HomeFragment"
     }
 
 }

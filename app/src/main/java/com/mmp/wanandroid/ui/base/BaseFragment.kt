@@ -19,7 +19,7 @@ import com.kingja.loadsir.callback.SuccessCallback
 import com.kingja.loadsir.core.Convertor
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
-import com.mmp.wanandroid.network.*
+import com.mmp.wanandroid.model.remote.*
 import com.mmp.wanandroid.ui.base.callback.EmptyCallback
 import com.mmp.wanandroid.ui.base.callback.ErrorCallback
 import com.mmp.wanandroid.ui.base.callback.LoadingCallback
@@ -32,20 +32,19 @@ abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : Fragment(),Call
 
      private var isLoaded = false
 
-    private lateinit var loadService: LoadService<Any>
+     lateinit var loadService: LoadService<Any>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater,getLayoutId(),container,false)
 
         loadService = LoadSir.getDefault().register(binding.root,this,
-            Convertor<DataStatus> {
-
+            Convertor<DataStatus<*>> {
                 val resultCode = when(it){
-                    is Success<*> -> SuccessCallback::class.java
-                    is Empty -> EmptyCallback::class.java
-                    is Failure -> ErrorCallback::class.java
-                    is Loading -> LoadingCallback::class.java
-                    is None -> EmptyCallback::class.java
+                    is DataStatus.Success<*> -> SuccessCallback::class.java
+                    is DataStatus.Empty -> EmptyCallback::class.java
+                    is DataStatus.Failure -> ErrorCallback::class.java
+                    is DataStatus.Loading -> LoadingCallback::class.java
+                    is DataStatus.None -> EmptyCallback::class.java
                 }
                 resultCode
             })
@@ -93,7 +92,7 @@ abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : Fragment(),Call
 
     open fun initView(){}
 
-    private fun initViewModel(): VM{
+    open fun initViewModel(): VM{
         val type = javaClass.genericSuperclass
         val modelClass = (type as ParameterizedType).actualTypeArguments[1] as Class<VM>
         return ViewModelProvider(this).get(modelClass)
@@ -102,19 +101,8 @@ abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : Fragment(),Call
 
     open fun initViewObservable(){}
 
-    fun <T: DataStatus> myObserve(liveData: LiveData<T>, success: (T) -> Unit){
-        liveData.observe(this, Observer {
-            loadService.showWithConvertor(it)
-            when(it){
-                is Success<*> -> success(it)
-                is Failure -> Toast.makeText(requireContext(),"${it.t}", Toast.LENGTH_LONG).show()
-            }
 
-        })
-    }
+    override fun onReload(v: View?) {
 
-
-    fun<T> convert(status: DataStatus): T{
-        return (status as Success<*>).data as T
     }
 }

@@ -11,7 +11,9 @@ import com.mmp.wanandroid.ui.navigation.view.NavigationFragment
 import com.mmp.wanandroid.ui.project.view.ProjectContentFragment
 import com.mmp.wanandroid.ui.project.view.ProjectFragment
 import com.mmp.wanandroid.ui.system.view.SystemFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
 
     private var mLastIndex = -1

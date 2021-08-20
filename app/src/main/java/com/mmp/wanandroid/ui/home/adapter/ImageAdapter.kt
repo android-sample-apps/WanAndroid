@@ -17,8 +17,10 @@ import com.mmp.wanandroid.data.Banner
 import com.mmp.wanandroid.ui.web.WebActivity
 import com.mmp.wanandroid.utils.start
 import com.youth.banner.adapter.BannerAdapter
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
-class ImageAdapter(private val bannerList:List<Banner>,private val context: Context) : BannerAdapter<Banner,ImageAdapter.ViewHolder>(bannerList) {
+class ImageAdapter @Inject constructor(private val bannerList:List<Banner>,@ActivityContext private val context: Context) : BannerAdapter<Banner,ImageAdapter.ViewHolder>(bannerList) {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val image: ImageView = view.findViewById(R.id.banner_image)
