@@ -4,7 +4,7 @@ import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mmp.wanandroid.data.User
+import com.mmp.wanandroid.model.data.User
 import com.mmp.wanandroid.ui.mine.MineRepository
 import com.mmp.wanandroid.utils.StateLiveData
 import com.mmp.wanandroid.utils.toast

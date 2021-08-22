@@ -8,4 +8,6 @@ class EmptyCallback : Callback() {
         return R.layout.empty_layout
     }
 
+
+
 }

@@ -7,7 +7,7 @@
 
 <!--        <variable-->
 <!--            name="historyKey"-->
-<!--            type="com.mmp.wanandroid.room.HistoryKey" />-->
+<!--            type="com.mmp.wanandroid.model.loacl.room.HistoryKey" />-->
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

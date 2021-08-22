@@ -1,13 +1,11 @@
 package com.mmp.wanandroid.ui.project.view
 
-import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.ProjectBean
+import com.mmp.wanandroid.model.data.ProjectBean
 import com.mmp.wanandroid.databinding.FragmentProjectContentBinding
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver

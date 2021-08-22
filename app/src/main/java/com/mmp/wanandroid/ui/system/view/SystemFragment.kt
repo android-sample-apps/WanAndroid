@@ -1,17 +1,10 @@
 package com.mmp.wanandroid.ui.system.view
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.text.TextUtils.ellipsize
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import com.kunminx.linkage.adapter.viewholder.LinkagePrimaryViewHolder
 import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryFooterViewHolder
 import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryHeaderViewHolder
@@ -21,7 +14,7 @@ import com.kunminx.linkage.bean.DefaultGroupedItem
 import com.kunminx.linkage.contract.ILinkagePrimaryAdapterConfig
 import com.kunminx.linkage.contract.ILinkageSecondaryAdapterConfig
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.SystemTree
+import com.mmp.wanandroid.model.data.SystemTree
 import com.mmp.wanandroid.databinding.FragmentSystemBinding
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver

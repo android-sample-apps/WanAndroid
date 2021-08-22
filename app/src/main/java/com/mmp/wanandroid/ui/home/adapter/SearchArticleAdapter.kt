@@ -5,11 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.Article
+import com.mmp.wanandroid.model.data.Article
 import com.mmp.wanandroid.databinding.HomeRvItemBinding
 import com.mmp.wanandroid.ui.base.BindingViewHolder
 import com.mmp.wanandroid.ui.web.WebActivity
@@ -52,7 +51,7 @@ class SearchArticleAdapter(private val context: Context) : ListAdapter<Article,B
             }
             context.start<WebActivity>(bundle)
         }
-        binding?.executePendingBindings()
+        binding.executePendingBindings()
     }
 
     override fun submitList(list: MutableList<Article>?) {

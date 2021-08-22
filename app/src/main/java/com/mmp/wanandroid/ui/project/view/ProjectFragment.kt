@@ -1,14 +1,10 @@
 package com.mmp.wanandroid.ui.project.view
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.ProjectTree
+import com.mmp.wanandroid.model.data.ProjectTree
 import com.mmp.wanandroid.databinding.FragmentProjectBinding
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.project.viewmodel.ProjectViewModel

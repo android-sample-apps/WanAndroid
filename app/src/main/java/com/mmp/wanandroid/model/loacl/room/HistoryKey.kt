@@ -1,4 +1,4 @@
-package com.mmp.wanandroid.room
+package com.mmp.wanandroid.model.loacl.room
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

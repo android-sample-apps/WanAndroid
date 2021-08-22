@@ -4,9 +4,9 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.DataState
-import com.mmp.wanandroid.data.Integral
-import com.mmp.wanandroid.data.IntegralData
+import com.mmp.wanandroid.model.data.DataState
+import com.mmp.wanandroid.model.data.Integral
+import com.mmp.wanandroid.model.data.IntegralData
 import com.mmp.wanandroid.databinding.ActivityIntegralBinding
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.IStateObserver

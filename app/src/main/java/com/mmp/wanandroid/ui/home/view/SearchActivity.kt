@@ -5,13 +5,12 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mmp.wanandroid.BR
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.Article
-import com.mmp.wanandroid.data.ArticleData
-import com.mmp.wanandroid.data.HotKey
+import com.mmp.wanandroid.model.data.Article
+import com.mmp.wanandroid.model.data.ArticleData
+import com.mmp.wanandroid.model.data.HotKey
 import com.mmp.wanandroid.databinding.ActivitySearchBinding
-import com.mmp.wanandroid.room.HistoryKey
+//import com.mmp.wanandroid.model.loacl.room.HistoryKey
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.IStateObserver
 import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter

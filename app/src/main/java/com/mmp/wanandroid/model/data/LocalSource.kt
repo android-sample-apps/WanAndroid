@@ -1,7 +1,6 @@
-package com.mmp.wanandroid.data
+package com.mmp.wanandroid.model.data
 
 import com.blankj.utilcode.util.CacheDiskUtils
-import com.blankj.utilcode.util.CacheMemoryUtils
 import com.mmp.wanandroid.utils.Const
 import java.io.Serializable
 

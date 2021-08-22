@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.NavBean
+import com.mmp.wanandroid.model.data.NavBean
 import com.mmp.wanandroid.databinding.NavRvItemBinding
 import com.mmp.wanandroid.ui.base.BindingViewHolder
 

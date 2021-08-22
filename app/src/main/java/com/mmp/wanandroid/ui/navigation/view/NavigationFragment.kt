@@ -1,13 +1,10 @@
 package com.mmp.wanandroid.ui.navigation.view
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.NavBean
+import com.mmp.wanandroid.model.data.NavBean
 import com.mmp.wanandroid.databinding.FragmentNavigationBinding
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver

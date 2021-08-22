@@ -1,12 +1,10 @@
 package com.mmp.wanandroid.ui.system.view
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.Article
-import com.mmp.wanandroid.data.ArticleData
+import com.mmp.wanandroid.model.data.Article
+import com.mmp.wanandroid.model.data.ArticleData
 import com.mmp.wanandroid.databinding.ActivitySystemDetailBinding
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.IStateObserver

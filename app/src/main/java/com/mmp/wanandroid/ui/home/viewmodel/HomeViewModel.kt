@@ -2,65 +2,88 @@ package com.mmp.wanandroid.ui.home.viewmodel
 
 import androidx.lifecycle.*
 import com.mmp.wanandroid.model.remote.api.BaseResponse
-import com.mmp.wanandroid.data.Article
-import com.mmp.wanandroid.data.ArticleData
-import com.mmp.wanandroid.data.Banner
+import com.mmp.wanandroid.model.data.Article
+import com.mmp.wanandroid.model.data.ArticleData
+import com.mmp.wanandroid.model.data.Banner
+import com.mmp.wanandroid.model.data.DataState
+import com.mmp.wanandroid.model.remote.DataStatus
 import com.mmp.wanandroid.ui.CollectRepository
 import com.mmp.wanandroid.ui.home.HomeRepository
 
 import com.mmp.wanandroid.utils.StateLiveData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class HomeViewModel : ViewModel() {
 
+   init {
+       getBanner()
+       getRefresh()
+   }
+
     var page = 0
 
-    private val _bannerLiveData = StateLiveData<List<Banner>>()
+    val articleList = mutableListOf<Article>()
 
-    val bannerLiveData: LiveData<BaseResponse<List<Banner>>> = _bannerLiveData
+    val bannerList = mutableListOf<Banner>()
 
-    private val _topArticleLiveData = StateLiveData<List<Article>>()
+    private val _bannerLiveData = MutableLiveData<DataStatus<List<Banner>>>()
 
-    val topArticleLiveData: LiveData<BaseResponse<List<Article>>> = _topArticleLiveData
+    val bannerLiveData: LiveData<DataStatus<List<Banner>>> = _bannerLiveData
 
     private val _collectLiveData = StateLiveData<Any>()
 
     val collectLiveData: LiveData<BaseResponse<Any>> = _collectLiveData
 
-    private val _homeArticleLiveData = StateLiveData<ArticleData>()
+    private val _articleLiveData = MutableLiveData<DataStatus<ArticleData>>()
 
-    val homeArticleLiveData: LiveData<BaseResponse<ArticleData>> = _homeArticleLiveData
+    val articleLiveData: LiveData<DataStatus<ArticleData>> = _articleLiveData
 
+    fun getRefresh(){
+        page = 0
+        viewModelScope.launch {
+            HomeRepository.getHomeArticle(page)
+                .zip(HomeRepository.getTopArticle()){ a,b ->
+                    if (a is DataStatus.Success<ArticleData> && b is DataStatus.Success<List<Article>>){
+                        val list = mutableListOf<Article>()
+                        list.addAll(b.data)
+                        list.addAll(a.data.datas)
+                        a.data.datas = list
+                    }
+                    a
+                }
+                .onCompletion { page++ }
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _articleLiveData.value = it
+                }
+        }
+    }
 
+    fun getLoadMore(){
+        viewModelScope.launch {
+            HomeRepository.getHomeArticle(page)
+                .flowOn(Dispatchers.IO)
+                .onCompletion { page++ }
+                .collect {
+                    _articleLiveData.value = it
+                }
+        }
+    }
     fun getBanner(){
         viewModelScope.launch {
-            HomeRepository.getBanner(_bannerLiveData)
+            HomeRepository.getBanner()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _bannerLiveData.value = it
+                }
         }
     }
-
-    fun getTopArticle(){
-        viewModelScope.launch {
-            HomeRepository.getTopArticle(_topArticleLiveData)
-        }
-    }
-
-
-    fun getHomeArticle(){
-        viewModelScope.launch {
-            HomeRepository.getHomeArticle(_homeArticleLiveData,page)
-            page++
-        }
-    }
-
-    fun getArticleMore(){
-        viewModelScope.launch {
-            HomeRepository.getHomeArticle(_homeArticleLiveData,page)
-            page++
-        }
-    }
-
 
 
     fun collect(id: Int) {
@@ -75,18 +98,6 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    suspend fun getCacheArticle(): List<Article> {
-        var list: List<Article>
-        withContext(Dispatchers.IO){
-            list = HomeRepository.getCacheList()
-        }
-        return list
-    }
-//
-//
-    fun putCacheArticle(value: List<Article>){
-        HomeRepository.putCache(value)
-    }
 
 
 }

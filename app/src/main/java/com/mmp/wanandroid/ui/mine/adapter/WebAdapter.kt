@@ -1,6 +1,5 @@
 package com.mmp.wanandroid.ui.mine.adapter
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,8 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.Integral
-import com.mmp.wanandroid.data.Web
+import com.mmp.wanandroid.model.data.Web
 import com.mmp.wanandroid.databinding.WebRvItemBinding
 import com.mmp.wanandroid.ui.base.BindingViewHolder
 import com.mmp.wanandroid.ui.mine.view.CollectWebFragment

@@ -1,6 +1,6 @@
 package com.mmp.wanandroid.model.remote.api
 
-import com.mmp.wanandroid.data.DataState
+import com.mmp.wanandroid.model.data.DataState
 
 class BaseResponse<T>{
     var errorCode = -1

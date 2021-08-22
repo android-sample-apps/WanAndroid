@@ -3,10 +3,10 @@ package com.mmp.wanandroid.ui.home.viewmodel
 import android.text.TextUtils
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
-import com.mmp.wanandroid.data.ArticleData
-import com.mmp.wanandroid.data.HotKey
+import com.mmp.wanandroid.model.data.ArticleData
+import com.mmp.wanandroid.model.data.HotKey
 import com.mmp.wanandroid.ui.home.HomeRepository
-import com.mmp.wanandroid.room.HistoryKey
+//import com.mmp.wanandroid.model.loacl.room.HistoryKey
 import com.mmp.wanandroid.ui.CollectRepository
 import com.mmp.wanandroid.utils.Const
 import com.mmp.wanandroid.utils.StateLiveData

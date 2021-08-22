@@ -5,16 +5,11 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.Article
-import com.mmp.wanandroid.ui.base.BindingViewHolder
 import com.mmp.wanandroid.ui.base.MyApplication
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener
+import java.text.SimpleDateFormat
+import java.util.*
 
 /********************* home_rv_item ******************************/
 //@BindingAdapter("android:visibility")
@@ -76,6 +71,19 @@ fun setLoadMore(view: SmartRefreshLayout,block:() -> Unit){
     view.setOnLoadMoreListener {
         block()
     }
+}
+
+@BindingAdapter("refresh")
+fun setRefresh(view: SmartRefreshLayout,block: () -> Unit){
+    view.setOnRefreshListener {
+        block()
+    }
+}
+/**********************todo_rv_item**********************************/
+@BindingAdapter("android:text")
+fun dataFormat(view: TextView,date: Calendar){
+    val mFormat = SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.CHINA)
+    view.text = mFormat.format(date.time)
 }
 
 

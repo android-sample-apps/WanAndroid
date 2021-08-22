@@ -1,21 +1,15 @@
 package com.mmp.wanandroid.ui.mine.view
 
-import android.util.Log
 import android.view.View
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.bugrui.buslib.LiveDataBus
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.DataState
-import com.mmp.wanandroid.data.User
+import com.mmp.wanandroid.model.data.DataState
+import com.mmp.wanandroid.model.data.User
 import com.mmp.wanandroid.databinding.FragmentMineBinding
 import com.mmp.wanandroid.ui.base.BaseFragment
-import com.mmp.wanandroid.ui.base.MyApplication
 import com.mmp.wanandroid.ui.mine.viewmodel.MineViewModel
 import com.mmp.wanandroid.utils.SPreference
 import com.mmp.wanandroid.utils.start
-import kotlinx.coroutines.NonCancellable.start
 
 
 class MineFragment : BaseFragment<FragmentMineBinding,MineViewModel>() {

@@ -16,8 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WanAndroid">
         <activity
+            android:name=".ui.mine.view.TodoCreateActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.SplashActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,9 +37,7 @@
         <activity android:name=".ui.mine.view.LoginActivity" />
         <activity android:name=".ui.home.view.SearchActivity" />
         <activity android:name=".ui.web.WebActivity" />
-        <activity android:name=".ui.MainActivity">
-
-        </activity>
+        <activity android:name=".ui.MainActivity"></activity>
     </application>
 
 </manifest>

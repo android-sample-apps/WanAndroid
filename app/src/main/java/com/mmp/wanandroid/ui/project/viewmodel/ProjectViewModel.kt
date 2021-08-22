@@ -3,8 +3,7 @@ package com.mmp.wanandroid.ui.project.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.mmp.wanandroid.data.ProjectBean
-import com.mmp.wanandroid.data.ProjectTree
+import com.mmp.wanandroid.model.data.ProjectTree
 import com.mmp.wanandroid.ui.project.ProjectRepository
 import com.mmp.wanandroid.utils.StateLiveData
 import kotlinx.coroutines.launch

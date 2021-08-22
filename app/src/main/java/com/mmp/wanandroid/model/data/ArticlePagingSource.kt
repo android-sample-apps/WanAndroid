@@ -1,4 +1,4 @@
-package com.mmp.wanandroid.data
+package com.mmp.wanandroid.model.data
 
 //class HomeArticlePagingSource : PagingSource<Int,Article>() {
 //    override fun getRefreshKey(state: PagingState<Int, Article>): Int? {

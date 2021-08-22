@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.ProjectBean
+import com.mmp.wanandroid.model.data.ProjectBean
 import com.mmp.wanandroid.databinding.LayoutProjectRvItemBinding
 import com.mmp.wanandroid.ui.base.BindingViewHolder
 import com.mmp.wanandroid.ui.web.WebActivity

@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.Integral
+import com.mmp.wanandroid.model.data.Integral
 import com.mmp.wanandroid.databinding.IntegralRvItemBinding
 import com.mmp.wanandroid.ui.base.BindingViewHolder
 

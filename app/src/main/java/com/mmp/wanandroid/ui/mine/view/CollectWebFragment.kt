@@ -4,15 +4,13 @@ import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.DataState
-import com.mmp.wanandroid.data.Web
+import com.mmp.wanandroid.model.data.Web
 import com.mmp.wanandroid.databinding.FragmentCollectWebBinding
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver
 import com.mmp.wanandroid.ui.mine.adapter.WebAdapter
 import com.mmp.wanandroid.ui.mine.viewmodel.CollectWebViewModel
 import com.mmp.wanandroid.utils.toast
-import kotlin.math.log
 
 class CollectWebFragment : BaseFragment<FragmentCollectWebBinding,CollectWebViewModel>() {
 

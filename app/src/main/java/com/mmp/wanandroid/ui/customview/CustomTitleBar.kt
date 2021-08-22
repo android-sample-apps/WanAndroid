@@ -11,11 +11,11 @@ import com.mmp.wanandroid.R
 
 class CustomTitleBar constructor(context: Context,attrs: AttributeSet? = null) : RelativeLayout(context, attrs) {
 
-    private lateinit var barBack: ImageView
+    private var barBack: ImageView
 
-    private lateinit var barTitle: TextView
+    private var barTitle: TextView
 
-    private lateinit var barMore: ImageView
+    private var barMore: ImageView
 
 
     init {

@@ -1,15 +1,21 @@
 package com.mmp.wanandroid.ui.base
 
 import com.mmp.wanandroid.model.remote.api.BaseResponse
-import com.mmp.wanandroid.data.DataState
+import com.mmp.wanandroid.model.data.DataState
+import com.mmp.wanandroid.model.loacl.room.MyRoomDatabase
 import com.mmp.wanandroid.model.remote.DataStatus
+import com.mmp.wanandroid.model.remote.api.WanAndroidService
 import com.mmp.wanandroid.utils.StateLiveData
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
-import retrofit2.HttpException
 
 open class BaseRepository {
+
+    val wanAndroidService = WanAndroidService.create()
+
+    val database = MyRoomDatabase.getDatabase()
+
     suspend fun <T : Any> executeResp(
         stateLiveData: StateLiveData<T>,
         block: suspend () -> BaseResponse<T>

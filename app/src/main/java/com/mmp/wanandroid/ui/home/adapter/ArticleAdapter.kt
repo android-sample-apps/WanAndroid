@@ -1,22 +1,19 @@
 package com.mmp.wanandroid.ui.home.adapter
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.Article
+import com.mmp.wanandroid.model.data.Article
 import com.mmp.wanandroid.databinding.HomeRvItemBinding
 import com.mmp.wanandroid.ui.base.BindingViewHolder
 import com.mmp.wanandroid.ui.home.view.HomeFragment
 import com.mmp.wanandroid.ui.web.WebActivity
 import com.mmp.wanandroid.utils.start
-import com.mmp.wanandroid.utils.toast
 
 class ArticleAdapter(private val fragment: Fragment) : PagingDataAdapter<Article, BindingViewHolder>(COMPARATOR){
 
@@ -33,7 +30,6 @@ class ArticleAdapter(private val fragment: Fragment) : PagingDataAdapter<Article
             }
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
         val binding: HomeRvItemBinding =  DataBindingUtil.inflate(LayoutInflater.from(parent.context),R.layout.home_rv_item,parent,false)

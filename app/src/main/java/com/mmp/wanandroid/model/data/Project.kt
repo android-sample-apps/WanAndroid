@@ -1,4 +1,4 @@
-package com.mmp.wanandroid.data
+package com.mmp.wanandroid.model.data
 
 data class ProjectBean(val curPage: Int,val datas: List<Project>,val pageCount: Int){
     data class Project(val author: String,val chapterId: Int,val chapterName: String,

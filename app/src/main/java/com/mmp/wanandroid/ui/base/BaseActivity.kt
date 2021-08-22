@@ -35,6 +35,7 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
     lateinit var binding: DB
     lateinit var viewModel: VM
 
+    lateinit var loadService: LoadService<Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
         initData()
         initViewObservable()
         AppManager.instance.addActivity(this)
+        load
     }
 
 

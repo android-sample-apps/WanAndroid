@@ -1,4 +1,4 @@
-package com.mmp.wanandroid.data
+package com.mmp.wanandroid.model.data
 
 data class Integral(val coinCount: Int,val desc: String,val reason: String)
 

@@ -1,13 +1,15 @@
-package com.mmp.wanandroid.room
+package com.mmp.wanandroid.model.loacl.room
 
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.mmp.wanandroid.data.ProjectTree
+import androidx.room.TypeConverters
+import com.mmp.wanandroid.model.data.ProjectTree
 import com.mmp.wanandroid.ui.base.MyApplication
 
 
 @Database(entities = [HistoryKey::class,ProjectTree::class],version = 1,exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class MyRoomDatabase : RoomDatabase(){
 
     abstract fun historyKeyDao(): HistoryKeyDao
@@ -18,7 +20,7 @@ abstract class MyRoomDatabase : RoomDatabase(){
         @Volatile
         private var INSTANCE: MyRoomDatabase? = null
 
-        fun getDatabase(): MyRoomDatabase{
+        fun getDatabase(): MyRoomDatabase {
             return INSTANCE ?: synchronized(this){
                 val instance = Room.databaseBuilder(
                         MyApplication.getContext(),

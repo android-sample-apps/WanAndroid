@@ -1,10 +1,10 @@
-package com.mmp.wanandroid.room
+package com.mmp.wanandroid.model.loacl.room
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.mmp.wanandroid.data.ProjectTree
+import com.mmp.wanandroid.model.data.ProjectTree
 import kotlinx.coroutines.flow.Flow
 
 

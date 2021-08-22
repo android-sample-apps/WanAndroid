@@ -1,4 +1,4 @@
-package com.mmp.wanandroid.data
+package com.mmp.wanandroid.model.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

@@ -3,8 +3,8 @@ package com.mmp.wanandroid.ui.mine.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mmp.wanandroid.data.IntegralData
-import com.mmp.wanandroid.data.Rank
+import com.mmp.wanandroid.model.data.IntegralData
+import com.mmp.wanandroid.model.data.Rank
 import com.mmp.wanandroid.ui.mine.MineRepository
 import com.mmp.wanandroid.utils.Const
 import com.mmp.wanandroid.utils.StateLiveData

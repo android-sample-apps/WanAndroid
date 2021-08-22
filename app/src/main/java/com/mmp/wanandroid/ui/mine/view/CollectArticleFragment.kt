@@ -4,16 +4,13 @@ import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.data.Article
-import com.mmp.wanandroid.data.ArticleData
-import com.mmp.wanandroid.data.DataState
+import com.mmp.wanandroid.model.data.Article
+import com.mmp.wanandroid.model.data.ArticleData
 import com.mmp.wanandroid.databinding.FragmentCollectArticleBinding
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver
-import com.mmp.wanandroid.ui.home.adapter.ArticleAdapter
 import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
 import com.mmp.wanandroid.ui.mine.viewmodel.CollectArticleViewModel
-import com.mmp.wanandroid.utils.toast
 
 class CollectArticleFragment : BaseFragment<FragmentCollectArticleBinding,CollectArticleViewModel>(),SearchArticleAdapter.OnCollectListener {
 
