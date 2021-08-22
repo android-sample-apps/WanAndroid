@@ -2,8 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'androidx.navigation.safeargs.kotlin'
 }
+
 
 android {
     compileSdkVersion 30
@@ -80,7 +80,7 @@ dependencies {
     implementation 'com.youth.banner:banner:2.1.0'
 
     implementation "com.github.bumptech.glide:glide:4.11.0"
-    implementation "com.github.bumptech.glide:compiler:4.11.0"
+    annotationProcessor "com.github.bumptech.glide:compiler:4.11.0"
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
 
     implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'
@@ -111,4 +111,7 @@ dependencies {
 
     implementation "com.github.permissions-dispatcher:permissionsdispatcher:$latest_version"
     kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:$latest_version"
+
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
 }

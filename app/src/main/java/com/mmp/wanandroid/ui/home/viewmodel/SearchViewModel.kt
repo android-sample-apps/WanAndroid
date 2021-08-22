@@ -3,23 +3,40 @@ package com.mmp.wanandroid.ui.home.viewmodel
 import android.text.TextUtils
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
+import com.mmp.wanandroid.model.data.Article
 import com.mmp.wanandroid.model.data.ArticleData
 import com.mmp.wanandroid.model.data.HotKey
+import com.mmp.wanandroid.model.loacl.room.HistoryKey
+import com.mmp.wanandroid.model.remote.DataStatus
 import com.mmp.wanandroid.ui.home.HomeRepository
 //import com.mmp.wanandroid.model.loacl.room.HistoryKey
 import com.mmp.wanandroid.ui.CollectRepository
 import com.mmp.wanandroid.utils.Const
 import com.mmp.wanandroid.utils.StateLiveData
 import com.mmp.wanandroid.utils.toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class SearchViewModel : ViewModel() {
 
-    val key = ObservableField<String>("")
+    val key = ObservableField("")
+
+    private val _hotKeyLiveData = MutableLiveData<DataStatus<List<HotKey>>>()
+
+    val hotKeyLiveData: LiveData<DataStatus<List<HotKey>>> = _hotKeyLiveData
+
+    private val _historyLiveData = MutableLiveData<DataStatus<List<HistoryKey>>>()
+
+    val historyLiveData: LiveData<DataStatus<List<HistoryKey>>> = _historyLiveData
+
 
     val collectLiveData = StateLiveData<Any>()
 
-    val historyKeyList = HomeRepository.getKeyList().asLiveData()
+
+
 
     fun addKey(){
         if (!TextUtils.isEmpty(key.get())){
@@ -27,6 +44,7 @@ class SearchViewModel : ViewModel() {
                 HomeRepository.addKey(HistoryKey(0,key.get()!!))
             }
         }
+        key.addOnPropertyChangedCallback()
     }
 
     fun clean(){
@@ -35,25 +53,28 @@ class SearchViewModel : ViewModel() {
         }
     }
 
-    val hotKeyLiveData = StateLiveData<List<HotKey>>()
 
     fun getHotKey(){
         viewModelScope.launch {
-            HomeRepository.getHotKey(hotKeyLiveData)
+            HomeRepository.getHotKey()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _hotKeyLiveData.value = it
+                }
         }
     }
 
-    val articleLiveData = StateLiveData<ArticleData>()
-
-    fun getArticle(){
+    fun getHistoryKey(){
         viewModelScope.launch {
-            if (TextUtils.isEmpty(key.get())){
-                toast("搜索内容不能为空")
-            }else{
-                HomeRepository.getSearch(articleLiveData,key.get()!!)
-            }
+            HomeRepository.getHistoryKeyList()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _historyLiveData.value = DataStatus.Success(it)
+                }
         }
     }
+
+
 
     fun collect(id: Int) {
         viewModelScope.launch {
@@ -73,15 +94,15 @@ class SearchViewModel : ViewModel() {
 //        }
 //    }
 
-    fun listScrolled(visibleItemCount: Int,lastVisibleItemPosition: Int,totalItemCount: Int){
-        if (visibleItemCount + lastVisibleItemPosition + Const.VISIBLE_THRESHOLD >= totalItemCount){
-            if (!TextUtils.isEmpty(key.get())){
-                viewModelScope.launch {
-                    HomeRepository.getSearchMore(articleLiveData,key.get()!!)
-                }
-            }
-        }
-    }
+//    fun listScrolled(visibleItemCount: Int,lastVisibleItemPosition: Int,totalItemCount: Int){
+//        if (visibleItemCount + lastVisibleItemPosition + Const.VISIBLE_THRESHOLD >= totalItemCount){
+//            if (!TextUtils.isEmpty(key.get())){
+//                viewModelScope.launch {
+//                    HomeRepository.getSearchMore(articleLiveData,key.get()!!)
+//                }
+//            }
+//        }
+//    }
 
 
 

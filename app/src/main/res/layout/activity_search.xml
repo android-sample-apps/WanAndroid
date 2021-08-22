@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.mmp.wanandroid.ui.home.viewmodel.SearchViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+        android:orientation="vertical"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +32,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="15dp"/>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -46,8 +46,6 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/search"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="7dp"
                     android:id="@+id/search_icon"/>
@@ -56,15 +54,13 @@
                     android:id="@+id/search"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/search_icon"
                     android:hint="@string/search"
                     android:layout_marginStart="8dp"
                     android:maxLines="1"
                     android:imeOptions="actionSearch"
                     android:singleLine="true"
                     android:inputType="text"
-                    android:text="@{viewModel.key}"
+                    android:text="@={viewModel.key}"
                     android:focusable="true"
                     android:textSize="15sp"
                     />
@@ -72,8 +68,6 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/search"
                     android:background="@drawable/ic_baseline_close_24"
                     android:layout_marginTop="5dp"
                     android:layout_marginStart="5dp"
@@ -82,7 +76,7 @@
                     tools:visibility="visible"/>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
 
 
@@ -91,8 +85,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/search_bar"
-            android:id="@+id/search_key">
+            android:id="@+id/search_key"
+            android:layout_below="@id/search_bar">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -159,15 +153,13 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/search_article_rv"
-            app:layout_constraintTop_toBottomOf="@id/search_bar"
+            android:layout_height="match_parent"
+            android:id="@+id/container"
             android:visibility="gone"
-            />
+            android:layout_below="@id/search_bar"/>
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
 </layout>

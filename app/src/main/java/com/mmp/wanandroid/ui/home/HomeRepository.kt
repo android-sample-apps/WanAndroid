@@ -10,29 +10,17 @@ import com.mmp.wanandroid.utils.StateLiveData
 
 object HomeRepository : BaseRepository() {
 
-    private var pager = 0
-
-    private var homePager = 0
-
     private val historyKeyDao = database.historyKeyDao()
 
-    suspend fun getHotKey(hotKeyLiveData: StateLiveData<List<HotKey>>) =
-        executeResp(hotKeyLiveData) {
-            wanAndroidService.getHotKey()
-        }
+    suspend fun getHotKey() = execute {
+        wanAndroidService.getHotKey()
+    }
 
-    suspend fun getSearch(articleLiveData: StateLiveData<ArticleData>, k: String) =
-        executeResp(articleLiveData) {
-            pager = 0
-            wanAndroidService.getSearchArticle(pager, k)
-        }
+    suspend fun getSearchList(page: Int,k: String) = execute {
+        wanAndroidService.getSearchArticle(page, k)
+    }
 
-    suspend fun getSearchMore(articleLiveData: StateLiveData<ArticleData>, k: String) =
-        executeResp(articleLiveData) {
-            wanAndroidService.getSearchArticle(pager++, k)
-        }
-
-    fun getKeyList() = historyKeyDao.getHistoryKeyList()
+    fun getHistoryKeyList() = historyKeyDao.getHistoryKeyList()
 
     suspend fun addKey(historyKey: HistoryKey) = historyKeyDao.addKey(historyKey)
 

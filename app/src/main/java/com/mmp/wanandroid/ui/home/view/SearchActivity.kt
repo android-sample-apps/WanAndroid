@@ -21,14 +21,6 @@ import com.mmp.wanandroid.utils.toast
 class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),SearchArticleAdapter.OnCollectListener{
 
 
-    private val articleAdapter = SearchArticleAdapter(this)
-
-    private val hotKeyList = mutableListOf<String>()
-
-    private val articleLayoutManager = LinearLayoutManager(this)
-
-    private val articleList = mutableListOf<Article>()
-
     override fun getLayoutId(): Int {
         return R.layout.activity_search
     }
@@ -38,7 +30,6 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
         initRv()
         initLabel()
 
-//        KeyboardUtils.showKeyboard(binding.search)
     }
 
     override fun initData() {
