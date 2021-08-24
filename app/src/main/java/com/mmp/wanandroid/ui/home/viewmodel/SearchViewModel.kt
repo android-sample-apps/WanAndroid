@@ -25,7 +25,6 @@ class SearchViewModel : ViewModel() {
 
     init{
         getHotKey()
-        getHistoryKey()
     }
 
     val hotkeyList = mutableListOf<String>()
@@ -34,9 +33,9 @@ class SearchViewModel : ViewModel() {
 
     val hotKeyLiveData: LiveData<DataStatus<List<HotKey>>> = _hotKeyLiveData
 
-    private val _historyLiveData = MutableLiveData<DataStatus<List<HistoryKey>>>()
 
-    val historyLiveData: LiveData<DataStatus<List<HistoryKey>>> = _historyLiveData
+    val historyLiveData: LiveData<List<HistoryKey>> = HomeRepository.getHistoryKeyList().asLiveData()
+
 
 
     fun addKey(k: String){
@@ -62,14 +61,5 @@ class SearchViewModel : ViewModel() {
         }
     }
 
-    fun getHistoryKey(){
-        viewModelScope.launch {
-            HomeRepository.getHistoryKeyList()
-                .flowOn(Dispatchers.IO)
-                .collect {
-                    _historyLiveData.value = DataStatus.Success(it)
-                }
-        }
-    }
 
 }

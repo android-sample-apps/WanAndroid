@@ -1,24 +1,39 @@
 package com.mmp.wanandroid.ui.project.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.mmp.wanandroid.model.data.ProjectTree
+import com.mmp.wanandroid.model.remote.DataStatus
 import com.mmp.wanandroid.ui.project.ProjectRepository
 import com.mmp.wanandroid.utils.StateLiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class ProjectViewModel : ViewModel() {
 
-    val projectTreeLiveData = StateLiveData<List<ProjectTree>>()
+    init {
+        getProjectTree()
+    }
+
+    val treeList = mutableListOf<ProjectTree>()
+
+    private val _projectTreeLiveData = MutableLiveData<DataStatus<List<ProjectTree>>>()
+
+    val projectTreeLiveData: LiveData<DataStatus<List<ProjectTree>>> = _projectTreeLiveData
+
+    val localTreeLiveData = ProjectRepository.getLocalTree().asLiveData()
 
     fun getProjectTree(){
         viewModelScope.launch {
-            ProjectRepository.getProjectTree(projectTreeLiveData)
+            ProjectRepository.getProjectTree()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _projectTreeLiveData.value = it
+                }
         }
     }
-
-    val treeLiveData = ProjectRepository.getProjectTree().asLiveData()
 
     fun addProjectTree(list: List<ProjectTree>) {
         viewModelScope.launch {

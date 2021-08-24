@@ -31,10 +31,8 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
     }
 
     override fun initView() {
-
         initBar()
         initLabel()
-
     }
 
     override fun initData() {
@@ -106,7 +104,7 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
             binding.hotKtyLabels.setLabels(viewModel.hotkeyList)
         }
 
-        viewModel.historyLiveData.myObserver(this,loadService){
+        viewModel.historyLiveData.observe(this){
             binding.historyLabels.setLabels(it){ _,_,data ->
                 data.name
             }

@@ -6,6 +6,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.ProjectTree
 import com.mmp.wanandroid.databinding.FragmentProjectBinding
+import com.mmp.wanandroid.ext.myObserver
+import com.mmp.wanandroid.ext.registerLoad
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.project.viewmodel.ProjectViewModel
 import com.mmp.wanandroid.utils.toast
@@ -15,7 +17,11 @@ class ProjectFragment : BaseFragment<FragmentProjectBinding,ProjectViewModel>() 
 
 
     override fun initViewObservable() {
-        viewModel.treeLiveData.observe(this){
+
+        val loadService = binding.llLayout.registerLoad {
+            viewModel.getProjectTree()
+        }
+        viewModel.localTreeLiveData.observe(this){
             if (it.isEmpty()){
                 viewModel.getProjectTree()
             }else{
@@ -23,13 +29,11 @@ class ProjectFragment : BaseFragment<FragmentProjectBinding,ProjectViewModel>() 
             }
         }
 
-        viewModel.projectTreeLiveData.observe(this){
-            if (it.isSuccess){
-                it.data?.let { it1 -> viewModel.addProjectTree(it1) }
-            }else{
-                activity?.toast(it.errorMsg.toString())
-            }
+        viewModel.projectTreeLiveData.myObserver(this,loadService){
+            viewModel.addProjectTree(it)
         }
+
+
     }
 
     private fun initViewPage(list: List<ProjectTree>){
