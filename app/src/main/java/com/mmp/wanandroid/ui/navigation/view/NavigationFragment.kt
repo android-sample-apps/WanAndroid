@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.NavBean
 import com.mmp.wanandroid.databinding.FragmentNavigationBinding
+import com.mmp.wanandroid.ext.myObserver
+import com.mmp.wanandroid.ext.registerLoad
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver
 import com.mmp.wanandroid.ui.navigation.adapter.NavAdapter
@@ -22,37 +24,22 @@ class NavigationFragment : BaseFragment<FragmentNavigationBinding,NavigationView
             layoutManager = LinearLayoutManager(activity,RecyclerView.VERTICAL,false)
         }
         binding.smartFresh.setEnableLoadMore(false)
-        binding.smartFresh.setOnRefreshListener {
-            initData()
-        }
     }
 
     override fun initData() {
-        viewModel.getNavList()
     }
 
     override fun initViewObservable() {
-        viewModel.navLiveData.observe(this,object : IStateObserver<List<NavBean>>(binding.navigationRv){
-            override fun onReload(v: View?) {
-                v?.setOnClickListener {
-                    initData()
-                }
-            }
-
-            override fun onDataChange(data: List<NavBean>?) {
-                if (data != null){
-                    navAdapter?.submitList(data)
-                }
-            }
-
-            override fun onError(e: Throwable) {
-                activity?.toast(e.message.toString())
-            }
-        })
+        val loadService = binding.navigationRv.registerLoad {
+            viewModel.getNavList()
+        }
+        viewModel.navLiveData.myObserver(this,loadService){
+            viewModel.navList.addAll(it)
+            navAdapter?.submitList(viewModel.navList)
+        }
     }
 
     companion object {
-
         fun instance(): NavigationFragment = NavigationFragment()
     }
 

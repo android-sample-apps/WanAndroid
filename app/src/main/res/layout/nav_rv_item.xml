@@ -5,7 +5,7 @@
 
         <variable
             name="navBean"
-            type="com.mmp.wanandroid.data.NavBean" />
+            type="com.mmp.wanandroid.model.data.NavBean" />
     </data>
 
     <LinearLayout

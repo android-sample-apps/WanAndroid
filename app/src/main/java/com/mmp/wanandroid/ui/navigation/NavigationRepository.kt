@@ -7,9 +7,7 @@ import com.mmp.wanandroid.utils.StateLiveData
 
 object NavigationRepository : BaseRepository(){
 
-    private val wanAndroidService = WanAndroidService.create()
-
-    suspend fun getNavList(navLiveData: StateLiveData<List<NavBean>>) = executeResp(navLiveData){
+    suspend fun getNavList() = execute {
         wanAndroidService.getNavList()
     }
 }
