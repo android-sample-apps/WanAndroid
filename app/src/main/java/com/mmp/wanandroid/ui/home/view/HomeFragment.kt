@@ -29,11 +29,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
         activity?.let { SearchArticleAdapter(it) }
     }
 
+    private var mArticle: Article? = null
+
     override fun onCollect(article: Article) {
+        mArticle = article
         viewModel.collect(article.id)
     }
 
     override fun unCollect(article: Article) {
+        mArticle = article
         viewModel.unCollect(article.id)
     }
 
@@ -63,11 +67,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
             articleAdapter?.submitList(viewModel.articleList)
         }
 
-        viewModel.collectLiveData.observe(this){
-            if (it.errorCode == 0){
-                activity?.toast("操作成功")
+        viewModel.collectLiveData.myObserver(this){
+            if (mArticle?.collect == true){
+                toast("收藏成功")
             }else{
-                activity?.toast("操作失败")
+                toast("取消收藏")
             }
         }
     }
@@ -76,7 +80,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
         initBanner()
         initRv()
         initBar()
-
     }
 
 

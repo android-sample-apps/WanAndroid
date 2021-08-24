@@ -36,9 +36,9 @@ class HomeViewModel : ViewModel() {
 
     val bannerLiveData: LiveData<DataStatus<List<Banner>>> = _bannerLiveData
 
-    private val _collectLiveData = StateLiveData<Any>()
+    private val _collectLiveData = MutableLiveData<DataStatus<Any>>()
 
-    val collectLiveData: LiveData<BaseResponse<Any>> = _collectLiveData
+    val collectLiveData: LiveData<DataStatus<Any>> = _collectLiveData
 
     private val _articleLiveData = MutableLiveData<DataStatus<ArticleData>>()
 
@@ -88,13 +88,22 @@ class HomeViewModel : ViewModel() {
 
     fun collect(id: Int) {
         viewModelScope.launch {
-            CollectRepository.collectArticle(_collectLiveData,id)
+            CollectRepository.collectArticle(id)
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _collectLiveData.value = it
+                }
         }
     }
 
     fun unCollect(id: Int){
         viewModelScope.launch {
-            CollectRepository.unCollectArticle(_collectLiveData,id)
+            CollectRepository.unCollectArticle(id)
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _collectLiveData.value = it
+                }
+
         }
     }
 

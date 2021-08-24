@@ -22,7 +22,13 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel : ViewModel() {
 
-    val key = ObservableField("")
+
+    init{
+        getHotKey()
+        getHistoryKey()
+    }
+
+    val hotkeyList = mutableListOf<String>()
 
     private val _hotKeyLiveData = MutableLiveData<DataStatus<List<HotKey>>>()
 
@@ -33,18 +39,10 @@ class SearchViewModel : ViewModel() {
     val historyLiveData: LiveData<DataStatus<List<HistoryKey>>> = _historyLiveData
 
 
-    val collectLiveData = StateLiveData<Any>()
-
-
-
-
-    fun addKey(){
-        if (!TextUtils.isEmpty(key.get())){
-            viewModelScope.launch {
-                HomeRepository.addKey(HistoryKey(0,key.get()!!))
-            }
+    fun addKey(k: String){
+        viewModelScope.launch {
+            HomeRepository.addKey(HistoryKey(0,k))
         }
-        key.addOnPropertyChangedCallback()
     }
 
     fun clean(){
@@ -73,37 +71,5 @@ class SearchViewModel : ViewModel() {
                 }
         }
     }
-
-
-
-    fun collect(id: Int) {
-        viewModelScope.launch {
-            CollectRepository.collectArticle(collectLiveData,id)
-        }
-    }
-
-    fun unCollect(id: Int){
-        viewModelScope.launch {
-            CollectRepository.unCollectArticle(collectLiveData, id)
-        }
-    }
-
-//    fun getArticleMore(){
-//        viewModelScope.launch {
-//            HomeRepository.getSearchMore(articleLiveData,key.get()!!)
-//        }
-//    }
-
-//    fun listScrolled(visibleItemCount: Int,lastVisibleItemPosition: Int,totalItemCount: Int){
-//        if (visibleItemCount + lastVisibleItemPosition + Const.VISIBLE_THRESHOLD >= totalItemCount){
-//            if (!TextUtils.isEmpty(key.get())){
-//                viewModelScope.launch {
-//                    HomeRepository.getSearchMore(articleLiveData,key.get()!!)
-//                }
-//            }
-//        }
-//    }
-
-
 
 }

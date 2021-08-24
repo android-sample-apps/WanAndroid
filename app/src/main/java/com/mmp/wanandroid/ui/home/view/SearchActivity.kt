@@ -10,6 +10,9 @@ import com.mmp.wanandroid.model.data.Article
 import com.mmp.wanandroid.model.data.ArticleData
 import com.mmp.wanandroid.model.data.HotKey
 import com.mmp.wanandroid.databinding.ActivitySearchBinding
+import com.mmp.wanandroid.ext.myObserver
+import com.mmp.wanandroid.ext.registerLoad
+import com.mmp.wanandroid.model.loacl.room.HistoryKey
 //import com.mmp.wanandroid.model.loacl.room.HistoryKey
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.IStateObserver
@@ -18,7 +21,9 @@ import com.mmp.wanandroid.ui.home.viewmodel.SearchViewModel
 import com.mmp.wanandroid.utils.KeyboardUtils
 import com.mmp.wanandroid.utils.toast
 
-class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),SearchArticleAdapter.OnCollectListener{
+class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
+
+    private lateinit var searchFragment: SearchFragment
 
 
     override fun getLayoutId(): Int {
@@ -26,47 +31,36 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
     }
 
     override fun initView() {
+
         initBar()
-        initRv()
         initLabel()
 
     }
 
     override fun initData() {
-        viewModel.getHotKey()
-    }
+        searchFragment = SearchFragment.newInstance("")
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction
+            .add(R.id.container
+                    ,searchFragment,SearchFragment::class.simpleName)
+            .commitAllowingStateLoss()
 
 
-    private fun initRv(){
-        binding.searchArticleRv.apply {
-            layoutManager = articleLayoutManager
-            adapter = articleAdapter
-        }
-        articleAdapter.setOnCollectListener(this)
-        binding.searchArticleRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val totalItemCount = articleLayoutManager.itemCount
-                val visibleItemCount = articleLayoutManager.childCount
-                val lastVisibleItem = articleLayoutManager.findLastVisibleItemPosition()
-                viewModel.listScrolled(visibleItemCount,lastVisibleItem,totalItemCount)
-            }
-        })
     }
 
     private fun initLabel(){
         binding.hotKtyLabels.setOnLabelClickListener{ _, data, _ ->
-            viewModel.key.set(data.toString())
-            viewModel.getArticle()
             binding.textClean.visibility = View.VISIBLE
-            viewModel.addKey()
+            searchFragment.setSearch(data.toString())
+            showFragment()
+            viewModel.addKey(data.toString())
             KeyboardUtils.hideKeyboard(binding.search)
         }
         binding.historyLabels.setOnLabelClickListener { _, data, _ ->
-            viewModel.key.set((data as HistoryKey).name)
-            viewModel.getArticle()
             binding.textClean.visibility = View.VISIBLE
-            viewModel.addKey()
+            viewModel.addKey((data as HistoryKey).name)
+            searchFragment.setSearch((data as HistoryKey).name)
+            showFragment()
             KeyboardUtils.hideKeyboard(binding.search)
         }
         binding.historyKeyClean.setOnClickListener {
@@ -78,12 +72,11 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
         binding.search.requestFocus()
         binding.search.setOnEditorActionListener { view, actionId, _ ->
             if ( actionId == EditorInfo.IME_ACTION_SEARCH){
-                if (!TextUtils.isEmpty(view.text.toString())){
-                    viewModel.key.set(view.text.toString())
-                    viewModel.getArticle()
-                    viewModel.addKey()
-                    binding.searchKey.visibility = View.GONE
-                    binding.searchArticleRv.visibility = View.VISIBLE
+                val str = view.text.toString()
+                if (!TextUtils.isEmpty(str)){
+                    searchFragment.setSearch(str)
+                    viewModel.addKey(str)
+                    showFragment()
                     binding.textClean.visibility = View.VISIBLE
                 }else{
                     toast("搜索内容不能为空")
@@ -95,79 +88,44 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(),S
             finish()
         }
         binding.textClean.setOnClickListener {
-            viewModel.key.set("")
-            binding.searchArticleRv.visibility = View.GONE
-            binding.searchKey.visibility = View.VISIBLE
+            binding.search.setText("")
             binding.textClean.visibility = View.GONE
-
-            articleList.clear()
-            articleAdapter.submitList(null)
+            hideFragment()
         }
     }
 
 
     override fun initViewObservable() {
-        viewModel.articleLiveData.observe(this,object : IStateObserver<ArticleData>(binding.searchArticleRv) {
-            override fun onReload(v: View?) {
-                v?.setOnClickListener{
-                    viewModel.getArticle()
-                }
+        val loadService = binding.rlLayout.registerLoad {
+            viewModel.getHotKey()
+        }
+        viewModel.hotKeyLiveData.myObserver(this,loadService){
+            for (i in 0..7){
+                viewModel.hotkeyList.add(it[i].name)
             }
+            binding.hotKtyLabels.setLabels(viewModel.hotkeyList)
+        }
 
-            override fun onDataChange(data: ArticleData?) {
-                if (data != null) {
-                    articleList.addAll(data.datas)
-                    articleAdapter.submitList(mutableListOf<Article>().apply{
-                        addAll(articleList)
-                    })
-                    binding.searchKey.visibility = View.INVISIBLE
-                    binding.searchArticleRv.visibility = View.VISIBLE
-                }
-            }
-
-            override fun onError(e: Throwable) {
-                toast(e.message.toString())
-            }
-        })
-
-        viewModel.hotKeyLiveData.observe(this,object : IStateObserver<List<HotKey>>(binding.hotKtyLabels){
-            override fun onReload(v: View?) {
-                v?.setOnClickListener {
-                    viewModel.getHotKey()
-                }
-            }
-
-            override fun onDataChange(data: List<HotKey>?) {
-                data?.let {
-                        for (i in 0..7){
-                            hotKeyList.add(it[i].name)
-                    }
-                }
-                binding.hotKtyLabels.setLabels(hotKeyList)
-            }
-        })
-
-        viewModel.historyKeyList.observe(this){
+        viewModel.historyLiveData.myObserver(this,loadService){
             binding.historyLabels.setLabels(it){ _,_,data ->
                 data.name
             }
         }
 
-        viewModel.collectLiveData.observe(this){
-            if (it.errorCode == 0){
-                toast("操作成功")
-            }else{
-                toast("操作失败")
-            }
-        }
     }
 
-    override fun onCollect(article: Article) {
-        viewModel.collect(article.id)
+
+    private fun hideFragment(){
+        supportFragmentManager.beginTransaction()
+            .hide(searchFragment)
+            .commitAllowingStateLoss()
+
     }
 
-    override fun unCollect(article: Article) {
-        viewModel.unCollect(article.id)
+    private fun showFragment(){
+        supportFragmentManager.beginTransaction()
+            .show(searchFragment)
+            .commitAllowingStateLoss()
     }
 }
 

@@ -34,11 +34,11 @@ class SearchArticleAdapter(private val context: Context) : ListAdapter<Article,B
         binding.article = mArticle
         binding.heart.setOnClickListener {
             if (mArticle.collect){
-                mOnCollectListener?.unCollect(mArticle)
                 mArticle.collect = false
+                mOnCollectListener?.unCollect(mArticle)
             }else{
-                mOnCollectListener?.onCollect(mArticle)
                 mArticle.collect = true
+                mOnCollectListener?.onCollect(mArticle)
             }
         }
         holder.itemView.setOnClickListener{
