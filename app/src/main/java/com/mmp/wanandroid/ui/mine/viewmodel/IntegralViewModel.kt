@@ -19,9 +19,6 @@ import kotlinx.coroutines.launch
 
 class IntegralViewModel : ViewModel() {
 
-    init {
-        getRefresh()
-    }
 
     private var page = 0
 
@@ -37,7 +34,7 @@ class IntegralViewModel : ViewModel() {
 
     val integralLiveData: LiveData<DataStatus<Rank>> = _integralLiveData
 
-    fun getRefresh() {
+    val  getRefresh: () -> Unit = {
         page =0
         coinList.clear()
         viewModelScope.launch {
@@ -52,7 +49,8 @@ class IntegralViewModel : ViewModel() {
         }
     }
 
-    fun getLoadMore(){
+
+    val getLoadMore: () -> Unit = {
         viewModelScope.launch {
             MineRepository.getCoinList(page)
                 .flowOn(Dispatchers.IO)
@@ -73,6 +71,10 @@ class IntegralViewModel : ViewModel() {
                     _integralLiveData.value = it
                 }
         }
+    }
+
+    init {
+        getRefresh()
     }
 
 }

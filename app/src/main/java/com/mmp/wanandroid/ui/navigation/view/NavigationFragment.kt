@@ -31,7 +31,7 @@ class NavigationFragment : BaseFragment<FragmentNavigationBinding,NavigationView
 
     override fun initViewObservable() {
         val loadService = binding.navigationRv.registerLoad {
-            viewModel.getNavList()
+            viewModel.getList()
         }
         viewModel.navLiveData.myObserver(this,loadService){
             viewModel.navList.addAll(it)

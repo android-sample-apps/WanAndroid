@@ -71,8 +71,8 @@
             android:layout_height="match_parent"
             android:layout_marginTop="54dp"
             android:id="@+id/smartRefresh"
-            loadMore="@{() -> viewModel.getLoadMore()}"
-            refresh="@{() -> viewModel.getRefresh()}">
+            loadMore="@{viewModel.getLoadMore}"
+            refresh="@{viewModel.getRefresh}">
 
 
 

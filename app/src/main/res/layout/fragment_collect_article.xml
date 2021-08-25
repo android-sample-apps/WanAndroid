@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/smart_fresh"
-        loadMore="@{() -> viewModel.gerArticleMore()}"
-        refresh="@{() -> viewModel.getRefresh()}">
+        loadMore="@{viewModel.getLoadMore}"
+        refresh="@{viewModel.getRefresh}">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

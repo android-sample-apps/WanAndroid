@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.navigation.view.NavigationFragment"
         android:id="@+id/smart_fresh"
-        refresh="@{() -> viewModel.getNavList()}">
+        refresh="@{() -> viewModel.getList()}">
 
        <LinearLayout
            android:layout_width="match_parent"

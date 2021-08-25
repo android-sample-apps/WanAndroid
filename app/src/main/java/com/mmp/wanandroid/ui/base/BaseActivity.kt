@@ -46,7 +46,7 @@ abstract class BaseActivity<DB: ViewDataBinding,VM: ViewModel> : AppCompatActivi
         initData()
         initViewObservable()
         AppManager.instance.addActivity(this)
-        load
+
     }
 
 

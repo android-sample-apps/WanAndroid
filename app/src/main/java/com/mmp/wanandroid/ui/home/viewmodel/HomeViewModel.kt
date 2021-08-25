@@ -21,11 +21,6 @@ import kotlinx.coroutines.withContext
 
 class HomeViewModel : ViewModel() {
 
-   init {
-       getBanner()
-       getRefresh()
-   }
-
     var page = 0
 
     val articleList = mutableListOf<Article>()
@@ -44,7 +39,7 @@ class HomeViewModel : ViewModel() {
 
     val articleLiveData: LiveData<DataStatus<ArticleData>> = _articleLiveData
 
-    fun getRefresh(){
+    val getRefresh:() -> Unit = {
         page = 0
         viewModelScope.launch {
             HomeRepository.getHomeArticle(page)
@@ -65,7 +60,7 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun getLoadMore(){
+    val getLoadMore:() -> Unit = {
         viewModelScope.launch {
             HomeRepository.getHomeArticle(page)
                 .flowOn(Dispatchers.IO)
@@ -75,7 +70,7 @@ class HomeViewModel : ViewModel() {
                 }
         }
     }
-    fun getBanner(){
+    fun getBanner() {
         viewModelScope.launch {
             HomeRepository.getBanner()
                 .flowOn(Dispatchers.IO)
@@ -105,6 +100,11 @@ class HomeViewModel : ViewModel() {
                 }
 
         }
+    }
+
+    init {
+        getBanner()
+        getRefresh()
     }
 
 }

@@ -18,10 +18,6 @@ import kotlinx.coroutines.launch
 
 class CollectArticleViewModel : ViewModel() {
 
-    init {
-        getRefresh()
-    }
-
     private var page = 0
 
     val articleList = mutableListOf<Article>()
@@ -35,7 +31,7 @@ class CollectArticleViewModel : ViewModel() {
     val collectLiveData: LiveData<DataStatus<Any>> = _collectLiveData
 
 
-    fun getRefresh(){
+    val getRefresh: () -> Unit = {
         page = 0
         articleList.clear()
         viewModelScope.launch {
@@ -50,7 +46,7 @@ class CollectArticleViewModel : ViewModel() {
         }
     }
 
-    fun gerArticleMore(){
+    val getLoadMore: () -> Unit = {
         viewModelScope.launch {
             MineRepository.getCollectArticle(page)
                 .flowOn(Dispatchers.IO)
@@ -68,6 +64,10 @@ class CollectArticleViewModel : ViewModel() {
         viewModelScope.launch {
             CollectRepository.unCollectArticle(id)
         }
+    }
+
+    init {
+        getRefresh()
     }
 
 }

@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class NavigationViewModel : ViewModel() {
 
     init {
-        getNavList()
+        getList()
     }
 
     val navList = mutableListOf<NavBean>()
@@ -25,7 +25,7 @@ class NavigationViewModel : ViewModel() {
 
     val navLiveData: LiveData<DataStatus<List<NavBean>>> = _navLiveData
 
-    fun getNavList(){
+    fun getList(){
         viewModelScope.launch {
             NavigationRepository.getNavList()
                 .flowOn(Dispatchers.IO)

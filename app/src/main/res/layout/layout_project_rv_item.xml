@@ -6,7 +6,7 @@
 
         <variable
             name="project"
-            type="com.mmp.wanandroid.data.ProjectBean.Project" />
+            type="com.mmp.wanandroid.model.data.ProjectBean.Project" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
