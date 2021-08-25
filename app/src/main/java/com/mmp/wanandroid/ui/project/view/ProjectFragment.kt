@@ -39,7 +39,7 @@ class ProjectFragment : BaseFragment<FragmentProjectBinding,ProjectViewModel>() 
     private fun initViewPage(list: List<ProjectTree>){
         val fragments = mutableListOf<Fragment>()
         list.forEach{
-            val fragment = ProjectContentFragment(it.id)
+            val fragment = ProjectContentFragment.newInstance(it.id)
             fragments.add(fragment)
         }
         binding.viewPager.adapter = object : FragmentStateAdapter(this){

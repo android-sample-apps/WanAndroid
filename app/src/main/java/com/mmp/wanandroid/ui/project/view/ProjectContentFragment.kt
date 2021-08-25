@@ -1,5 +1,6 @@
 package com.mmp.wanandroid.ui.project.view
 
+import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -7,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.ProjectBean
 import com.mmp.wanandroid.databinding.FragmentProjectContentBinding
+import com.mmp.wanandroid.ext.myObserver
+import com.mmp.wanandroid.ext.registerLoad
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver
 import com.mmp.wanandroid.ui.project.adapter.ProjectAdapter
@@ -23,55 +26,46 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ProjectContentFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ProjectContentFragment(private val cid: Int) : BaseFragment<FragmentProjectContentBinding,ProjectContentViewModel>() {
+class ProjectContentFragment : BaseFragment<FragmentProjectContentBinding,ProjectContentViewModel>() {
     // TODO: Rename and change types of parameters
-//    private var cid: Int? = null
-
-    private val projectList  = mutableListOf<ProjectBean.Project>()
+    private var cid: Int? = null
 
     private val projectAdapter by lazy { activity?.let { ProjectAdapter(it) }}
 
     override fun initView() {
-//        cid = arguments?.getInt(ARG_PARAM1,294)
+        cid = arguments?.getInt(ARG_PARAM1,1)
         initFresh()
         initRv()
     }
 
+    override fun initData() {
+        if (viewModel.projectList.isEmpty()){
+            viewModel.getRefresh(cid!!)
+        }
+    }
 
     override fun initViewObservable() {
-        viewModel.projectLiveData.observe(this,object : IStateObserver<ProjectBean>(binding.projectRv){
-            override fun onReload(v: View?) {
-                v?.setOnClickListener {
-                    initData()
-                }
-            }
 
-            override fun onDataChange(data: ProjectBean?) {
-                binding.smartFresh.finishLoadMore()
-                binding.smartFresh.finishRefresh()
-                if (data != null){
-                    projectList.addAll(data.datas)
-                    projectAdapter?.submitList(mutableListOf<ProjectBean.Project>().apply {
-                        addAll(projectList)
-                    })
-                }
-            }
+        val loadService = binding.smartFresh.registerLoad {
+            viewModel.getRefresh(cid!!)
+        }
 
-            override fun onError(e: Throwable) {
-                activity?.toast(e.message.toString())
-            }
-        })
+        viewModel.projectLiveData.myObserver(this,loadService){
+            viewModel.projectList.addAll(it.datas)
+            projectAdapter?.submitList(viewModel.projectList)
+            binding.smartFresh.finishLoadMore()
+            binding.smartFresh.finishRefresh()
+        }
     }
 
     private fun initFresh(){
         binding.smartFresh.setOnRefreshListener {
-            projectList.clear()
-            viewModel.getProjectList(cid!!)
+            viewModel.projectList.clear()
+            viewModel.getRefresh(cid!!)
         }
         binding.smartFresh.setOnLoadMoreListener {
-            viewModel.getMoreProject(cid!!)
+            viewModel.getRefresh(cid!!)
         }
-        binding.smartFresh.autoRefresh()
     }
 
     private fun initRv(){
@@ -91,12 +85,12 @@ class ProjectContentFragment(private val cid: Int) : BaseFragment<FragmentProjec
          * @return A new instance of fragment ProjectContentFragment.
          */
         // TODO: Rename and change types and number of parameters
-//        fun newInstance(cid: Int) =
-//            ProjectContentFragment().apply {
-//                arguments = Bundle().apply {
-////                    putInt(ARG_PARAM1, cid)
-//                }
-//            }
+        fun newInstance(cid: Int) =
+            ProjectContentFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_PARAM1, cid)
+                }
+            }
     }
 
     override fun getLayoutId(): Int {

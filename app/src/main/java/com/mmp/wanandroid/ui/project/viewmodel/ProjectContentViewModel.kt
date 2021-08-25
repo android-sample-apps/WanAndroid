@@ -22,6 +22,8 @@ class ProjectContentViewModel : ViewModel() {
 
     val projectLiveData: LiveData<DataStatus<ProjectBean>> = _projectLiveData
 
+    val projectList = mutableListOf<ProjectBean.Project>()
+
     fun getRefresh(cid: Int){
         page = 0
         viewModelScope.launch {
