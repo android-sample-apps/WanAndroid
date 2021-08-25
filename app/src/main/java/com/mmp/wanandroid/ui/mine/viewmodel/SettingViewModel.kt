@@ -9,13 +9,5 @@ import com.mmp.wanandroid.utils.StateLiveData
 import kotlinx.coroutines.launch
 
 class SettingViewModel : ViewModel(){
-    private val _logoutLiveData = StateLiveData<Any>()
 
-    val logoutLiveData: LiveData<BaseResponse<Any>> = _logoutLiveData
-
-    fun logout() {
-        viewModelScope.launch {
-            MineRepository.logout(_logoutLiveData)
-        }
-    }
 }

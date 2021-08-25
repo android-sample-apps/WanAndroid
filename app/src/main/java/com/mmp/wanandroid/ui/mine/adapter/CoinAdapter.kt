@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.Integral
 import com.mmp.wanandroid.databinding.IntegralRvItemBinding
+import com.mmp.wanandroid.model.data.Article
 import com.mmp.wanandroid.ui.base.BindingViewHolder
 
 class CoinAdapter : ListAdapter<Integral,BindingViewHolder>(COMPARATOR) {
@@ -38,4 +39,11 @@ class CoinAdapter : ListAdapter<Integral,BindingViewHolder>(COMPARATOR) {
         }
         binding?.executePendingBindings()
     }
+
+    override fun submitList(list: MutableList<Integral>?) {
+        super.submitList(if (list == null) list else mutableListOf<Integral>().apply {
+            addAll(list)
+        })
+    }
+
 }

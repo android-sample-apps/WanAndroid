@@ -7,6 +7,8 @@ import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.Article
 import com.mmp.wanandroid.model.data.ArticleData
 import com.mmp.wanandroid.databinding.FragmentCollectArticleBinding
+import com.mmp.wanandroid.ext.myObserver
+import com.mmp.wanandroid.ext.registerLoad
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver
 import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
@@ -15,8 +17,6 @@ import com.mmp.wanandroid.ui.mine.viewmodel.CollectArticleViewModel
 class CollectArticleFragment : BaseFragment<FragmentCollectArticleBinding,CollectArticleViewModel>(),SearchArticleAdapter.OnCollectListener {
 
     private val articleAdapter by lazy { activity?.let { SearchArticleAdapter(it) } }
-
-    private val articleList = mutableListOf<Article>()
 
     private var mArticle: Article? = null
 
@@ -35,56 +35,25 @@ class CollectArticleFragment : BaseFragment<FragmentCollectArticleBinding,Collec
 
     override fun initView() {
 
-        Log.d(TAG,"initView")
-
         binding.articleRv.apply {
             adapter = articleAdapter
             layoutManager = LinearLayoutManager(activity)
         }
 
-        binding.smartFresh.setOnRefreshListener {
-            articleList.clear()
-            initData()
-        }
-
-        binding.smartFresh.setOnLoadMoreListener {
-            viewModel.gerArticleMore()
-        }
-
-        binding.smartFresh.autoRefresh()
-
     }
 
     override fun initData() {
-        viewModel.getCollectArticle()
     }
 
     override fun initViewObservable() {
-        viewModel.articlesLiveData.observe(this,object : IStateObserver<ArticleData>(binding.articleRv){
-            override fun onReload(v: View?) {
-                v?.setOnClickListener {
-                    articleList.clear()
-                    initData()
-                }
-            }
-
-            override fun onDataChange(data: ArticleData?) {
-                binding.smartFresh.finishRefresh()
-                binding.smartFresh.finishLoadMore()
-                data?.datas?.let { articleList.addAll(it) }
-                articleAdapter?.submitList(mutableListOf<Article>().apply {
-                    addAll(articleList)
-                })
-            }
-        })
-
-        viewModel.collectLiveData.observe(this){
-            if (it.errorCode == 0){
-                val position = articleList.indexOf(mArticle)
-                articleList.removeAt(position)
-                articleAdapter?.notifyItemRemoved(position)
-                articleAdapter?.notifyItemRangeChanged(position,articleList.size - position)
-            }
+        val loadService = binding.smartFresh.registerLoad {
+            viewModel.getRefresh()
+        }
+        viewModel.articleLiveData.myObserver(this,loadService){
+            viewModel.articleList.addAll(it.datas)
+            articleAdapter?.submitList(viewModel.articleList)
+            binding.smartFresh.finishRefresh()
+            binding.smartFresh.finishLoadMore()
         }
     }
 

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.Web
 import com.mmp.wanandroid.databinding.WebRvItemBinding
+import com.mmp.wanandroid.model.data.Article
 import com.mmp.wanandroid.ui.base.BindingViewHolder
 import com.mmp.wanandroid.ui.mine.view.CollectWebFragment
 import com.mmp.wanandroid.ui.web.WebActivity
@@ -16,6 +17,7 @@ import com.mmp.wanandroid.utils.start
 
 class WebAdapter(private val mFragment: CollectWebFragment) : ListAdapter<Web,BindingViewHolder>(COMPARATOR) {
 
+    private var onCollectListener: OnCollectListener? = null
 
     companion object{
         val COMPARATOR = object : DiffUtil.ItemCallback<Web>(){
@@ -42,6 +44,7 @@ class WebAdapter(private val mFragment: CollectWebFragment) : ListAdapter<Web,Bi
         val mWeb = getItem(position)
         val binding = holder.binding as WebRvItemBinding
 
+
         binding.web = mWeb
         holder.itemView.setOnClickListener {
             val bundle = Bundle()
@@ -49,8 +52,20 @@ class WebAdapter(private val mFragment: CollectWebFragment) : ListAdapter<Web,Bi
             bundle.putString("url",mWeb.link)
             mFragment.activity?.start<WebActivity>(bundle)
         }
+        holder.binding.collect.setOnClickListener {
+            onCollectListener?.unCollect(mWeb.id,position)
+        }
 
-        binding?.executePendingBindings()
+        binding.executePendingBindings()
+    }
+
+    fun setOnCollectListener(listener: OnCollectListener){
+        this.onCollectListener = listener
+    }
+
+    interface OnCollectListener{
+
+        fun unCollect(id: Int,position: Int)
     }
 
 }

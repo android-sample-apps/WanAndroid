@@ -6,7 +6,7 @@
     <data>
         <variable
             name="integral"
-            type="com.mmp.wanandroid.data.Integral" />
+            type="com.mmp.wanandroid.model.data.Integral" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

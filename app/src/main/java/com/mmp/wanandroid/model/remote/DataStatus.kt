@@ -11,8 +11,12 @@ sealed class DataStatus<out R>{
 
     class Failure(val e: Throwable): DataStatus<Nothing>()
 
+    class Error(val errorMsg: String): DataStatus<Nothing>()
+
     object Loading: DataStatus<Nothing>()
 
     object Empty: DataStatus<Nothing>()
+
+
 
 }

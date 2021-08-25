@@ -33,7 +33,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding,SettingViewModel>() 
         }
 
         binding.logout.setOnClickListener {
-            viewModel.logout()
             LiveDataBus.send("logout")
         }
     }

@@ -4,7 +4,7 @@ import com.mmp.wanandroid.model.data.DataState
 
 class BaseResponse<T>{
     var errorCode = -1
-    var errorMsg: String? = null
+    var errorMsg: String = ""
     var data: T? = null
         private set
     var dataState: DataState? = null

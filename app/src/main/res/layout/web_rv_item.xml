@@ -7,7 +7,7 @@
 
         <variable
             name="web"
-            type="com.mmp.wanandroid.data.Web" />
+            type="com.mmp.wanandroid.model.data.Web" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

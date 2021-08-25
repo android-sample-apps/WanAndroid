@@ -7,24 +7,15 @@
             type="com.mmp.wanandroid.ui.mine.viewmodel.CollectWebViewModel" />
     </data>
 
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/smart_fresh">
+        android:orientation="vertical">
 
-
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/web_rv"
-                />
-        </LinearLayout>
-
-
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+            android:layout_height="wrap_content"
+            android:id="@+id/web_rv"
+            />
+    </LinearLayout>
 </layout>

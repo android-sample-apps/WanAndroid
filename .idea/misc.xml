@@ -4,8 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/android project/WanAndroid/app/src/main/res/drawable/textview_border2.xml" value="0.2125" />
+        <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/activity_integral.xml" value="0.2346014492753623" />
+        <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/activity_login.xml" value="0.24139492753623187" />
+        <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/activity_register.xml" value="0.2346014492753623" />
         <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/activity_search.xml" value="0.2441123188405797" />
         <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/activity_system_detail.xml" value="0.15520833333333334" />
+        <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/fragment_collect_article.xml" value="0.153125" />
+        <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/fragment_collect_web.xml" value="0.153125" />
         <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/fragment_home.xml" value="0.13020833333333334" />
         <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/fragment_navigation.xml" value="0.19635416666666666" />
         <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/fragment_project.xml" value="0.1" />
@@ -16,6 +21,7 @@
         <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/nav_item_rv_item.xml" value="0.4" />
         <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/nav_rv_item.xml" value="0.13020833333333334" />
         <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/search_history_key_rv_item.xml" value="0.14427083333333332" />
+        <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/web_rv_item.xml" value="0.153125" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/drawable/button_select.xml" value="0.27037037037037037" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/drawable/textview_border1.xml" value="0.2760416666666667" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_collect.xml" value="0.10106382978723404" />

@@ -20,6 +20,7 @@ fun View.registerLoad(reload: () -> Unit): LoadService<Any> = LoadSir.getDefault
             is DataStatus.Failure -> ErrorCallback::class.java
             is DataStatus.Success<*> -> SuccessCallback::class.java
             is DataStatus.Loading -> LoadingCallback::class.java
+            is DataStatus.Error -> SuccessCallback::class.java
             else -> ErrorCallback::class.java
         }
     })
@@ -32,6 +33,7 @@ fun<T> Activity.registerLoad(reload: () -> Unit): LoadService<Any> = LoadSir.get
             is DataStatus.Failure -> ErrorCallback::class.java
             is DataStatus.Success<*> -> SuccessCallback::class.java
             is DataStatus.Loading -> LoadingCallback::class.java
+            is DataStatus.Error -> SuccessCallback::class.java
             else -> ErrorCallback::class.java
         }
     })

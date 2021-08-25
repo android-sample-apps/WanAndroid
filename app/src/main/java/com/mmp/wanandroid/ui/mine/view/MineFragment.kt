@@ -1,12 +1,16 @@
 package com.mmp.wanandroid.ui.mine.view
 
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import com.bugrui.buslib.LiveDataBus
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.DataState
 import com.mmp.wanandroid.model.data.User
 import com.mmp.wanandroid.databinding.FragmentMineBinding
+import com.mmp.wanandroid.ext.myObserver
+import com.mmp.wanandroid.ui.ShareViewModel
 import com.mmp.wanandroid.ui.base.BaseFragment
+import com.mmp.wanandroid.ui.base.MyApplication
 import com.mmp.wanandroid.ui.mine.viewmodel.MineViewModel
 import com.mmp.wanandroid.utils.SPreference
 import com.mmp.wanandroid.utils.start
@@ -14,8 +18,7 @@ import com.mmp.wanandroid.utils.start
 
 class MineFragment : BaseFragment<FragmentMineBinding,MineViewModel>() {
 
-
-
+    private val shareViewModel by lazy { ViewModelProvider(requireActivity().application as MyApplication).get(ShareViewModel::class.java) }
 
     private var isLogin: Boolean by SPreference("login_state",false)
 
@@ -23,14 +26,12 @@ class MineFragment : BaseFragment<FragmentMineBinding,MineViewModel>() {
 
     private var mUsername: String by SPreference("username","")
 
-    private var mIntegral: String by SPreference("integral","0")
 
     override fun initView() {
         if (isLogin){
             startUser()
             binding.userTip.visibility = View.GONE
             binding.userId.text = mUsername
-            binding.tvIntegral.text = mIntegral
         }else{
             startLogin()
             binding.userTip.visibility = View.VISIBLE
@@ -44,7 +45,7 @@ class MineFragment : BaseFragment<FragmentMineBinding,MineViewModel>() {
     }
 
     override fun initData() {
-        viewModel.getUserRank()
+
     }
 
     override fun getLayoutId(): Int {
@@ -52,32 +53,29 @@ class MineFragment : BaseFragment<FragmentMineBinding,MineViewModel>() {
     }
 
     override fun initViewObservable() {
-        LiveDataBus.with("user").observe(this){
-            viewModel.id.set((it as User).username)
-            viewModel.integral.set((it as User).coinCount.toString())
-            mUsername = (it as User).username
-            mIntegral = it.coinCount.toString()
-            startUser()
-            binding.userTip.visibility = View.GONE
-            binding.executePendingBindings()
+
+        shareViewModel.loginLiveData.observe(this){
+            if (it != null){
+                viewModel.id.set(it.username)
+                viewModel.integral.set(it.coinCount.toString())
+                mUsername = it.username
+                startUser()
+                binding.userTip.visibility = View.GONE
+            }
         }
 
-        LiveDataBus.with("logout").observe(this){
+        shareViewModel.logoutLiveData.observe(this){
             viewModel.id.set("--")
             viewModel.integral.set("0")
             startLogin()
             mUsername = "--"
-            mIntegral = "0"
             isLogin = false
             binding.userTip.visibility = View.VISIBLE
             mCookie = ""
-            binding.executePendingBindings()
         }
 
-        viewModel.integralLiveData.observe(this){
-            if (it.dataState == DataState.STATE_SUCCESS){
-                viewModel.integral.set(it.data?.coinCount.toString())
-            }
+        viewModel.integralLiveData.myObserver(this){
+            viewModel.integral.set(it.coinCount.toString())
         }
     }
 

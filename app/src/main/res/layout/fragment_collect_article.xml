@@ -13,18 +13,13 @@
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/smart_fresh">
+        android:id="@+id/smart_fresh"
+        loadMore="@{() -> viewModel.gerArticleMore()}"
+        refresh="@{() -> viewModel.getRefresh()}">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/article_rv"/>
-        </LinearLayout>
-
+            android:id="@+id/article_rv"/>
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </layout>

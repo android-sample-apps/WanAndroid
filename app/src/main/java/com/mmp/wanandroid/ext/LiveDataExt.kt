@@ -11,13 +11,14 @@ fun <T> LiveData<DataStatus<T>>.myObserver(
     owner: LifecycleOwner, loadService: LoadService<Any>? = null, failure: (Throwable) -> Unit = {
         Timber.e(it)
         toast("$it")
-    }, success: (T) -> Unit
+    },error: (String) -> Unit = {}, success: (T) -> Unit
 ) {
     observe(owner) {
         loadService?.showWithConvertor(it)
         when (it) {
             is DataStatus.Success<T> -> success(it.data)
             is DataStatus.Failure -> failure(it.e)
+            is DataStatus.Error -> error(it.errorMsg)
             else -> {
             }
         }

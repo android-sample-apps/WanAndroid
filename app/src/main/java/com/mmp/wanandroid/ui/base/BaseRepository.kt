@@ -43,7 +43,7 @@ open class BaseRepository {
     }
 
     fun<T> execute(block: suspend () -> BaseResponse<T>) = flow<DataStatus<T>> {
-        emit(DataStatus.Loading)
+//        emit(DataStatus.Loading)
         val response = block()
         if (response.errorCode == 0){
             if (response.data == null || (response.data is List<*> && (response.data as List<*>).size == 0)){
@@ -51,6 +51,8 @@ open class BaseRepository {
             }else{
                 emit(DataStatus.Success(response.data!!))
             }
+        }else{
+            emit(DataStatus.Error(response.errorMsg))
         }
     }.catch { e ->
         emit(DataStatus.Failure(e))
