@@ -8,21 +8,11 @@ import com.mmp.wanandroid.utils.StateLiveData
 
 object SystemRepository : BaseRepository(){
 
-    private var page = 0
-
-    private val wanAndroidService = WanAndroidService.create()
-
-    suspend fun getTree(treeLiveData: StateLiveData<List<SystemTree>>) = executeResp(treeLiveData){
+    suspend fun getTree() = execute {
         wanAndroidService.getTree()
     }
 
-    suspend fun getSystemArticle(articlesLiveData: StateLiveData<ArticleData>,cid: Int) = executeResp(articlesLiveData){
-        page = 0
-        wanAndroidService.getSystemArticle(page,cid)
-    }
-
-    suspend fun getMoreArticle(articlesLiveData: StateLiveData<ArticleData>, cid: Int) = executeResp(articlesLiveData){
-        page++
-        wanAndroidService.getSystemArticle(page,cid)
+    suspend fun getSystemArticle(page: Int,cid: Int) = execute {
+        wanAndroidService.getSystemArticle(page, cid)
     }
 }

@@ -16,6 +16,8 @@ import com.kunminx.linkage.contract.ILinkageSecondaryAdapterConfig
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.SystemTree
 import com.mmp.wanandroid.databinding.FragmentSystemBinding
+import com.mmp.wanandroid.ext.myObserver
+import com.mmp.wanandroid.ext.registerLoad
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver
 import com.mmp.wanandroid.ui.system.viewmodel.SystemViewModel
@@ -23,42 +25,32 @@ import com.mmp.wanandroid.utils.start
 
 class SystemFragment : BaseFragment<FragmentSystemBinding,SystemViewModel>() {
 
-
-
-
     override fun initView() {
         binding.smartFresh.autoRefresh()
         binding.smartFresh.setEnableLoadMore(false)
     }
 
     override fun initData() {
-        viewModel.getTree()
     }
 
     override fun initViewObservable() {
-        viewModel.treeLiveData.observe(this,object : IStateObserver<List<SystemTree>>(binding.linkage){
-            override fun onReload(v: View?) {
-                v?.setOnClickListener {
-                    initData()
-                }
-            }
 
-            override fun onDataChange(data: List<SystemTree>?) {
-                binding.smartFresh.finishRefresh()
-                if (data != null){
-                    val list = mutableListOf<DefaultGroupedItem>()
-                    data.forEach{
-                        list.add(DefaultGroupedItem(true,it.name))
-                        for (child in it.children){
-                            list.add(DefaultGroupedItem(DefaultGroupedItem.ItemInfo(child.name,it.name,
-                                child.id.toString()
-                            )))
-                        }
-                    }
-                    binding.linkage.init(list,PrimaryAdapterConfig(),SecondAdapterConfig())
+        val loadService = binding.smartFresh.registerLoad {
+            viewModel.getTree()
+        }
+        viewModel.treeLiveData.myObserver(this,loadService){
+            val list = mutableListOf<DefaultGroupedItem>()
+            it.forEach{ tree ->
+                list.add(DefaultGroupedItem(true,tree.name))
+                for (child in tree.children){
+                    list.add(DefaultGroupedItem(DefaultGroupedItem.ItemInfo(child.name,tree.name,
+                        child.id.toString()
+                    )))
                 }
             }
-        })
+            binding.linkage.init(list,PrimaryAdapterConfig(),SecondAdapterConfig())
+            binding.smartFresh.finishRefresh()
+        }
     }
 
 

@@ -6,6 +6,8 @@ import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.Article
 import com.mmp.wanandroid.model.data.ArticleData
 import com.mmp.wanandroid.databinding.ActivitySystemDetailBinding
+import com.mmp.wanandroid.ext.myObserver
+import com.mmp.wanandroid.ext.registerLoad
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.IStateObserver
 import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
@@ -17,15 +19,13 @@ class SystemDetailActivity : BaseActivity<ActivitySystemDetailBinding,SystemDeta
 
     private val articleAdapter = SearchArticleAdapter(this)
 
-    private val articleList = mutableListOf<Article>()
-
     override fun getLayoutId(): Int {
         return R.layout.activity_system_detail
     }
 
-    private var cid by Delegates.notNull<Int>()
+    private var cid: Int? = null
 
-    private lateinit var name: String
+    private var name: String = ""
 
     override fun initView() {
         initTitleBar()
@@ -34,35 +34,27 @@ class SystemDetailActivity : BaseActivity<ActivitySystemDetailBinding,SystemDeta
     }
 
     override fun initData() {
-        cid = intent.extras!!.getInt("cid")
-        viewModel.getSystemArticle(cid)
+        cid = intent.extras?.getInt("cid",0)
+        if (viewModel.articleList.isEmpty()){
+            viewModel.getRefresh(cid!!)
+        }
     }
 
     override fun initViewObservable() {
-        viewModel.articlesLiveData.observe(this,object : IStateObserver<ArticleData>(binding.articleRv){
-            override fun onReload(v: View?) {
-                v?.setOnClickListener {
-                    initData()
-                }
-            }
-
-            override fun onDataChange(data: ArticleData?) {
-                binding.smartFresh.finishRefresh()
-                binding.smartFresh.finishLoadMore()
-                if (data != null){
-                    articleList.addAll(data.datas)
-                    articleAdapter.submitList(mutableListOf<Article>().apply {
-                        addAll(articleList)
-                    })
-                }
-            }
-        })
+        val loadService = binding.smartFresh.registerLoad {
+            viewModel.getRefresh(cid!!)
+        }
+        viewModel.articleData.myObserver(this,loadService){
+            viewModel.articleList.addAll(it.datas)
+            articleAdapter.submitList(viewModel.articleList)
+            binding.smartFresh.finishRefresh()
+            binding.smartFresh.finishLoadMore()
+        }
     }
 
     private fun initFresh(){
-        binding.smartFresh.autoRefresh()
         binding.smartFresh.setOnLoadMoreListener{
-            viewModel.getMoreArticle(cid)
+            viewModel.getLoadMore(cid!!)
         }
     }
 
@@ -74,7 +66,7 @@ class SystemDetailActivity : BaseActivity<ActivitySystemDetailBinding,SystemDeta
     }
 
     private fun initTitleBar(){
-        name = intent.extras!!.getString("name").toString()
+        name = intent.extras?.getString("name").toString()
         binding.titleBar.setTitle(name)
         binding.titleBar.setLeftIconOnClickListener{
             finish()

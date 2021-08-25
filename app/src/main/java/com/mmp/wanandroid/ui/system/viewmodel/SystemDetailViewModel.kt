@@ -1,26 +1,57 @@
 package com.mmp.wanandroid.ui.system.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mmp.wanandroid.model.data.Article
 import com.mmp.wanandroid.model.data.ArticleData
+import com.mmp.wanandroid.model.remote.DataStatus
 import com.mmp.wanandroid.ui.system.SystemRepository
 import com.mmp.wanandroid.utils.StateLiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class SystemDetailViewModel : ViewModel(){
 
-    val articlesLiveData = StateLiveData<ArticleData>()
+    private var page = 0
 
-    fun getSystemArticle(cid: Int){
+    val articleList = mutableListOf<Article>()
+
+    private val _articleLiveData = MutableLiveData<DataStatus<ArticleData>>()
+
+    val articleData: LiveData<DataStatus<ArticleData>> = _articleLiveData
+
+    fun getRefresh(cid: Int){
+        page = 0
         viewModelScope.launch {
-            SystemRepository.getSystemArticle(articlesLiveData, cid)
+            SystemRepository.getSystemArticle(page, cid)
+                .flowOn(Dispatchers.IO)
+                .onCompletion {
+                    page++
+                }
+                .collect {
+                    _articleLiveData.value = it
+                }
         }
     }
 
-    fun getMoreArticle(cid: Int){
+    fun getLoadMore(cid: Int){
         viewModelScope.launch {
-            SystemRepository.getMoreArticle(articlesLiveData, cid)
+            SystemRepository.getSystemArticle(page, cid)
+                .flowOn(Dispatchers.IO)
+                .onCompletion {
+                    page++
+                }
+                .collect {
+                    _articleLiveData.value = it
+                }
         }
     }
+
+
 
 }

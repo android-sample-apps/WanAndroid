@@ -10,30 +10,30 @@
             type="com.mmp.wanandroid.ui.system.viewmodel.SystemDetailViewModel" />
     </data>
 
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/smart_fresh"
+        android:id="@+id/ll_layout"
+        android:orientation="vertical"
         android:fitsSystemWindows="true">
-        
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:orientation="vertical">
 
-           <com.mmp.wanandroid.ui.customview.CustomTitleBar
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:id="@+id/title_bar"
-               />
+        <com.mmp.wanandroid.ui.customview.CustomTitleBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/title_bar"
+            />
 
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/smart_fresh"
+            android:fitsSystemWindows="true">
 
-           <androidx.recyclerview.widget.RecyclerView
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:id="@+id/article_rv"/>
-       </LinearLayout>
-        
-        
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/article_rv"/>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+    </LinearLayout>
+
 </layout>
