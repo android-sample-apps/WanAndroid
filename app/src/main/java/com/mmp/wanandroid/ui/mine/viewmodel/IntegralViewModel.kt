@@ -34,7 +34,7 @@ class IntegralViewModel : ViewModel() {
 
     val integralLiveData: LiveData<DataStatus<Rank>> = _integralLiveData
 
-    val  getRefresh: () -> Unit = {
+    fun getRefresh(){
         page =0
         coinList.clear()
         viewModelScope.launch {
@@ -50,7 +50,7 @@ class IntegralViewModel : ViewModel() {
     }
 
 
-    val getLoadMore: () -> Unit = {
+    fun getLoadMore(){
         viewModelScope.launch {
             MineRepository.getCoinList(page)
                 .flowOn(Dispatchers.IO)

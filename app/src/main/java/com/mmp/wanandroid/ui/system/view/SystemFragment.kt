@@ -35,7 +35,7 @@ class SystemFragment : BaseFragment<FragmentSystemBinding,SystemViewModel>() {
 
     override fun initViewObservable() {
 
-        val loadService = binding.llLayout.registerLoad {
+        val loadService = binding.linkage.registerLoad {
             viewModel.getTree()
         }
         viewModel.treeLiveData.myObserver(this,loadService){

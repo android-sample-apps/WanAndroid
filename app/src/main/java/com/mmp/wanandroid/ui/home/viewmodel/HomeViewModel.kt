@@ -39,7 +39,7 @@ class HomeViewModel : ViewModel() {
 
     val articleLiveData: LiveData<DataStatus<ArticleData>> = _articleLiveData
 
-    val getRefresh:() -> Unit = {
+    fun getRefresh(){
         page = 0
         viewModelScope.launch {
             HomeRepository.getHomeArticle(page)
@@ -60,7 +60,7 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    val getLoadMore:() -> Unit = {
+    fun getLoadMore(){
         viewModelScope.launch {
             HomeRepository.getHomeArticle(page)
                 .flowOn(Dispatchers.IO)

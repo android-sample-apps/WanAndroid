@@ -15,6 +15,7 @@ import com.mmp.wanandroid.ui.base.IStateObserver
 import com.mmp.wanandroid.ui.home.adapter.ImageAdapter
 import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
 import com.mmp.wanandroid.ui.home.viewmodel.HomeViewModel
+import com.mmp.wanandroid.utils.start
 import com.mmp.wanandroid.utils.toast
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.coroutines.launch
@@ -80,6 +81,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
         initBanner()
         initRv()
         initBar()
+        binding.ivScan.setOnClickListener {
+            BtnBottomDialog()
+                .show(childFragmentManager,HomeFragment::class.simpleName)
+
+        }
     }
 
 
