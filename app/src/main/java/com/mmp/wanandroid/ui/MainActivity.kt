@@ -66,7 +66,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>() {
                 transaction.add(R.id.container,mCurrentFragment!!,index.toString())
             }
         }
-        transaction.commit()
+        transaction.commitAllowingStateLoss()
         mLastIndex = index
     }
 

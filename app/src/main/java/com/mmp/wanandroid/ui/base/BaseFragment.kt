@@ -18,7 +18,6 @@ abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : Fragment() {
      lateinit var binding: DB
      lateinit var viewModel: VM
 
-     private var isLoaded = false
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,26 +29,11 @@ abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : Fragment() {
 
         viewModel = initViewModel()
         initDataBinding()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (!isLoaded){
-            lazyInit()
-            isLoaded = true
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        isLoaded = false
-    }
-
-    private fun lazyInit(){
         initView()
         initData()
         initViewObservable()
     }
+
 
     abstract fun getLayoutId() : Int
 

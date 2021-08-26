@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="viewmodel"
+            type="com.mmp.wanandroid.ui.system.viewmodel.SystemViewModel" />
 
     </data>
 
@@ -11,12 +14,13 @@
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/smart_fresh">
+        android:id="@+id/smart_fresh"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.system.view.SystemFragment"
+            android:id="@+id/ll_layout"
             android:orientation="vertical">
 
             <TextView

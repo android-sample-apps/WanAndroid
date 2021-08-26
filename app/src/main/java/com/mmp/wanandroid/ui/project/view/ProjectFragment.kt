@@ -1,5 +1,9 @@
 package com.mmp.wanandroid.ui.project.view
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -31,6 +35,7 @@ class ProjectFragment : BaseFragment<FragmentProjectBinding,ProjectViewModel>() 
 
         viewModel.projectTreeLiveData.myObserver(this,loadService){
             viewModel.addProjectTree(it)
+            initViewPage(it)
         }
 
 

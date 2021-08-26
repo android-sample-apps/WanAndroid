@@ -17,8 +17,6 @@ class ProjectViewModel : ViewModel() {
         getProjectTree()
     }
 
-    val treeList = mutableListOf<ProjectTree>()
-
     private val _projectTreeLiveData = MutableLiveData<DataStatus<List<ProjectTree>>>()
 
     val projectTreeLiveData: LiveData<DataStatus<List<ProjectTree>>> = _projectTreeLiveData

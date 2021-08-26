@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
 
 class SystemViewModel : ViewModel() {
 
+
     init {
         getTree()
     }
-
 
     private val _treeLiveData = MutableLiveData<DataStatus<List<SystemTree>>>()
 

@@ -2,6 +2,7 @@ package com.mmp.wanandroid.ext
 
 import android.app.Activity
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.kingja.loadsir.callback.Callback
 import com.kingja.loadsir.callback.SuccessCallback
 import com.kingja.loadsir.core.Convertor

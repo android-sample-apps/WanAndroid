@@ -7,7 +7,7 @@ import okhttp3.HttpUrl
 
 class CookieJarImpl : CookieJar {
 
-    var result by SPreference("cookie","")
+    private var result by SPreference("cookie","")
 
 
     override fun loadForRequest(url: HttpUrl): MutableList<Cookie> {
