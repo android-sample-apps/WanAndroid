@@ -44,10 +44,6 @@ abstract class BaseFragment<DB: ViewDataBinding,VM: ViewModel> : Fragment() {
         binding.lifecycleOwner = this
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        ImmersionBar.with(this).destroy()
-    }
 
     open fun initView(){}
 

@@ -1,8 +1,11 @@
 package com.mmp.wanandroid.ui.home.view
 
+import android.Manifest
+import android.content.DialogInterface
 import android.content.Intent
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.*
@@ -19,8 +22,10 @@ import com.mmp.wanandroid.utils.start
 import com.mmp.wanandroid.utils.toast
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.coroutines.launch
+import permissions.dispatcher.*
 import timber.log.Timber
 
+@RuntimePermissions
 class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArticleAdapter.OnCollectListener{
 
 
@@ -81,10 +86,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
         initBanner()
         initRv()
         initBar()
-        binding.ivScan.setOnClickListener {
-            BtnBottomDialog()
-                .show(childFragmentManager,HomeFragment::class.simpleName)
-
+        binding.ivCamera.setOnClickListener {
+            showCameraWithPermissionCheck()
         }
     }
 
@@ -114,6 +117,33 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
             .indicator = CircleIndicator(activity)
     }
 
+    @NeedsPermission(Manifest.permission.CAMERA)
+    fun showCamera(){
+        activity?.apply {
+            start<CameraActivity>()
+        }
+    }
+
+
+    @OnPermissionDenied(Manifest.permission.CAMERA)
+    fun onCameraDenied(){
+        AlertDialog.Builder(requireActivity())
+            .setMessage("未授予权限，无法使用照相功能")
+            .setPositiveButton("确定") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        onRequestPermissionsResult(requestCode,grantResults)
+    }
 
     companion object{
         fun instance(): HomeFragment {

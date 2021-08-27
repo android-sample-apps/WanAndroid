@@ -10,34 +10,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@android:color/transparent"
         >
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:text="从照片中选择"
             android:textColor="#000000"
-            android:background="@drawable/btn_gb_fff"
+            android:backgroundTint="@color/colorWhite"
             android:id="@+id/bt_photo"
-            android:elevation="2dp"/>
+            android:elevation="2dp"
+            app:cornerRadius="30dp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:text="相机扫描"
             android:textColor="#000000"
-            android:background="@drawable/btn_gb_fff"
+            android:backgroundTint="@color/colorWhite"
+            app:cornerRadius="30dp"
             android:id="@+id/bt_camera"
             android:elevation="2dp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:text="取消"
             android:textColor="#000000"
             android:layout_marginTop="20dp"
-            android:background="@drawable/btn_gb_fff"
+            android:backgroundTint="@color/colorWhite"
+            app:cornerRadius="30dp"
             android:id="@+id/bt_cancel"
             android:elevation="2dp"/>
     </LinearLayout>

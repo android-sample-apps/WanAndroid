@@ -38,8 +38,10 @@ abstract class BaseActivityNoViewModel<DB: ViewDataBinding> : AppCompatActivity(
 
     abstract fun getLayoutId(): Int
 
-    private fun initStatusBar(){
-        ImmersionBar.with(this).transparentStatusBar().statusBarAlpha(0.3f).init()
+    open fun initStatusBar(){
+        ImmersionBar.with(this).transparentStatusBar().init()
+
+
     }
 
     private fun initDataBinding(){

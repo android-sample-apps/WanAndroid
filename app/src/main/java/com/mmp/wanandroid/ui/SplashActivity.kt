@@ -21,7 +21,7 @@ class SplashActivity : BaseActivityNoViewModel<ActivitySplashBinding>() {
         return R.layout.activity_splash
     }
 
-    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun startIntent(){
         lifecycleScope.launch {
             delay(2000)
@@ -30,15 +30,8 @@ class SplashActivity : BaseActivityNoViewModel<ActivitySplashBinding>() {
         }
     }
 
-    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onDenied(){
-        toast("不开缓存会很消耗流量哦")
-        startIntent()
-    }
-
     override fun initView() {
         startIntentWithPermissionCheck()
-
     }
 
     override fun onRequestPermissionsResult(
