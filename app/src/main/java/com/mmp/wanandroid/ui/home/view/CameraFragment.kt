@@ -15,8 +15,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.google.common.util.concurrent.ListenableFuture
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.databinding.FragmentCameraBinding
+import com.mmp.wanandroid.utils.toast
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
@@ -39,6 +41,12 @@ class CameraFragment : Fragment() {
 
     private lateinit var cameraExecutor: ExecutorService
 
+    private var isBack = true
+
+    private lateinit var cameraProvider: ProcessCameraProvider
+
+    private lateinit var preview: Preview
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,6 +66,18 @@ class CameraFragment : Fragment() {
             takePhoto()
         }
 
+        binding.ivSwitch.setOnClickListener {
+            isBack = !isBack
+            bindCamera()
+        }
+
+        binding.ivPhoto.setOnClickListener {
+            onFragmentListener?.loadToGallery(outputDirectory.absolutePath)
+        }
+
+        binding.ivScan.setOnClickListener {
+            onFragmentListener?.loadToScan()
+        }
     }
 
     override fun onDestroyView() {
@@ -71,10 +91,10 @@ class CameraFragment : Fragment() {
 
         cameraProviderFuture.addListener(Runnable {
             // Used to bind the lifecycle of cameras to the lifecycle owner
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+            cameraProvider = cameraProviderFuture.get()
 
             // Preview
-            val preview = Preview.Builder()
+            preview = Preview.Builder()
                 .build()
                 .also {
                     it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
@@ -83,22 +103,25 @@ class CameraFragment : Fragment() {
             imageCapture = ImageCapture.Builder()
                 .build()
 
-            // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-            try {
-                // Unbind use cases before rebinding
-                cameraProvider.unbindAll()
-
-                // Bind use cases to camera
-                cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture)
-
-            } catch(exc: Exception) {
-                Timber.e(exc)
-            }
+            bindCamera()
 
         }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    private fun bindCamera(){
+        // Select back camera as a default
+        val cameraSelector = if (isBack) CameraSelector.DEFAULT_BACK_CAMERA else CameraSelector.DEFAULT_FRONT_CAMERA
+
+        try {
+            // Unbind use cases before rebinding
+            cameraProvider.unbindAll()
+
+            // Bind use cases to camera
+            cameraProvider.bindToLifecycle(
+                this, cameraSelector, preview, imageCapture)
+        }catch (e: Exception){
+            Timber.e(e)
+        }
     }
 
     private fun takePhoto(){
@@ -142,5 +165,16 @@ class CameraFragment : Fragment() {
     companion object{
         fun getInstance() = CameraFragment()
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    }
+
+    private var onFragmentListener: OnFragmentListener? = null
+
+    interface OnFragmentListener{
+        fun loadToGallery(path: String)
+        fun loadToScan()
+    }
+
+    fun setOnFragmentListener(listener: OnFragmentListener){
+        onFragmentListener = listener
     }
 }

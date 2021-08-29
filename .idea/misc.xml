@@ -34,14 +34,17 @@
         <entry key="..\:/android project/WanAndroid/app/src/main/res/layout/web_rv_item.xml" value="0.153125" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/drawable/button_select.xml" value="0.27037037037037037" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/drawable/textview_border1.xml" value="0.2760416666666667" />
+        <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_camera.xml" value="0.37182971014492755" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_collect.xml" value="0.10106382978723404" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_main.xml" value="0.12635869565217392" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_search.xml" value="0.23278985507246377" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_setting.xml" value="0.33" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_splash.xml" value="0.1431159420289855" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_todo.xml" value="0.23177083333333334" />
+        <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_camera.xml" value="0.1879432624113475" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_collect_article.xml" value="0.16032608695652173" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_collect_web.xml" value="0.1400709219858156" />
+        <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_gallery.xml" value="0.18617021276595744" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_home.xml" value="0.21875" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_mine.xml" value="0.23007246376811594" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_navigation.xml" value="0.1393110435663627" />
@@ -56,6 +59,7 @@
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/search_history_key_rv_item.xml" value="0.1" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/todo_rv_item.xml" value="0.1" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/web_rv_item.xml" value="0.1400709219858156" />
+        <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/menu/home_menu.xml" value="0.1453125" />
       </map>
     </option>
   </component>
