@@ -5,18 +5,20 @@
     <data>
         <variable
             name="article"
-            type="com.mmp.wanandroid.model.data.Article" />
+            type="String" />
     </data>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/textview_border2">
+        android:background="@drawable/textview_border2"
+        android:padding="5dp"
+        android:layout_margin="5dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{article.title}"
+            android:text="@{article}"
             tools:text="11111"
             android:layout_margin="5dp"/>
     </LinearLayout>

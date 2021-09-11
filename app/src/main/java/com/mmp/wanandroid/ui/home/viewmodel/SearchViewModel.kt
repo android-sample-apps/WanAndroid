@@ -27,7 +27,7 @@ class SearchViewModel : ViewModel() {
         getHotKey()
     }
 
-    val hotkeyList = mutableListOf<String>()
+    val hotkeyList = mutableListOf<HotKey>()
 
     private val _hotKeyLiveData = MutableLiveData<DataStatus<List<HotKey>>>()
 

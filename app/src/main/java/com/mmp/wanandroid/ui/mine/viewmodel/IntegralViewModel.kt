@@ -74,6 +74,7 @@ class IntegralViewModel : ViewModel() {
     }
 
     init {
+        getIntegral()
         getRefresh()
     }
 

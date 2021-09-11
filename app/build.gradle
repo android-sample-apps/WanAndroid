@@ -91,7 +91,7 @@ dependencies {
 
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
 
-    implementation 'com.github.donkingliang:LabelsView:1.6.5'
+//    implementation 'com.github.donkingliang:LabelsView:1.6.5'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
@@ -122,4 +122,5 @@ dependencies {
 // CameraX View class
     implementation "androidx.camera:camera-view:1.0.0-alpha27"
 
+    implementation 'com.github.jenly1314:zxing-lite:2.1.1'
 }

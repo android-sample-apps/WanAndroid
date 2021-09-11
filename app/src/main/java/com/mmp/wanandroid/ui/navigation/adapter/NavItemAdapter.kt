@@ -37,7 +37,7 @@ class NavItemAdapter(private val context: Context) : ListAdapter<Article,Binding
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
         val mArticle = getItem(position)
-        (holder.binding as NavItemRvItemBinding).article = mArticle
+        (holder.binding as NavItemRvItemBinding).article = mArticle.title
         holder.itemView.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("title",mArticle.title)

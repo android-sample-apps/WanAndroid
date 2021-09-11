@@ -15,20 +15,10 @@ class CookieJarImpl : CookieJar {
         val cookies = mutableListOf<Cookie>()
         if (result.isNotEmpty()){
             result.split(";").forEach {
-                val builder = Cookie.Builder()
-                val list = it.split("=")
-                for (i in list.indices step 2){
-                    when(list[i]){
-                        "name" -> builder.name(list[i+1])
-                        "value" -> builder.value(list[i+1])
-                        "expiresAt" -> builder.expiresAt(list[i+1].toLong())
-                        "domain" -> builder.domain(list[i+1])
-                        "path" -> builder.path(list[i+1])
-                        "secure" -> builder.secure()
-                        "httpOnly" -> builder.httpOnly()
-                    }
+                val cookie = Cookie.parse(url,it)
+                if (cookie != null) {
+                    cookies.add(cookie)
                 }
-                cookies.add(builder.build())
             }
         }
         return cookies

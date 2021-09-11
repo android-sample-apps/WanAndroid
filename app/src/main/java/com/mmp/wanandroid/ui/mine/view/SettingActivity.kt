@@ -9,14 +9,19 @@ import androidx.lifecycle.ViewModelProvider
 import com.bugrui.buslib.LiveDataBus
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.databinding.ActivitySettingBinding
+import com.mmp.wanandroid.ui.ShareViewModel
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.MyApplication
 import com.mmp.wanandroid.ui.mine.viewmodel.SettingViewModel
 import com.mmp.wanandroid.utils.Event
+import com.mmp.wanandroid.utils.toast
 
 class SettingActivity : BaseActivity<ActivitySettingBinding,SettingViewModel>() {
 
 
+    private val shareViewModel by lazy {
+        ViewModelProvider(application as MyApplication).get(ShareViewModel::class.java)
+    }
     override fun getLayoutId(): Int {
         return R.layout.activity_setting
     }
@@ -33,7 +38,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding,SettingViewModel>() 
         }
 
         binding.logout.setOnClickListener {
-            LiveDataBus.send("logout")
+            shareViewModel.logoutLiveData.value = true
+            toast("退出成功")
         }
     }
 }

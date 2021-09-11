@@ -3,28 +3,24 @@ package com.mmp.wanandroid.ui.home.view
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.mmp.wanandroid.R
-import com.mmp.wanandroid.model.data.Article
-import com.mmp.wanandroid.model.data.ArticleData
-import com.mmp.wanandroid.model.data.HotKey
 import com.mmp.wanandroid.databinding.ActivitySearchBinding
 import com.mmp.wanandroid.ext.myObserver
 import com.mmp.wanandroid.ext.registerLoad
-import com.mmp.wanandroid.model.loacl.room.HistoryKey
-//import com.mmp.wanandroid.model.loacl.room.HistoryKey
 import com.mmp.wanandroid.ui.base.BaseActivity
-import com.mmp.wanandroid.ui.base.IStateObserver
-import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
+import com.mmp.wanandroid.ui.home.adapter.HistoryKeyAdapter
+import com.mmp.wanandroid.ui.home.adapter.HotKeyAdapter
 import com.mmp.wanandroid.ui.home.viewmodel.SearchViewModel
 import com.mmp.wanandroid.utils.KeyboardUtils
 import com.mmp.wanandroid.utils.toast
 
-class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
+class SearchActivity : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
 
     private lateinit var searchFragment: SearchFragment
 
+    private val hotKeyAdapter = HotKeyAdapter(this)
+    private val historyKeyAdapter = HistoryKeyAdapter(this)
 
     override fun getLayoutId(): Int {
         return R.layout.activity_search
@@ -32,6 +28,12 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
 
     override fun initView() {
         initBar()
+        binding.hotkeyLabels.adapter = hotKeyAdapter
+        binding.hotkeyLabels.layoutManager = FlexboxLayoutManager(this)
+        binding.historyLabels.apply {
+            adapter = historyKeyAdapter
+            layoutManager = FlexboxLayoutManager(this@SearchActivity)
+        }
         initLabel()
     }
 
@@ -41,23 +43,26 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
         transaction
             .add(R.id.container
                     ,searchFragment,SearchFragment::class.simpleName)
-            .commitAllowingStateLoss()
+            .commit()
+        hideFragment()
 
 
     }
 
     private fun initLabel(){
-        binding.hotKtyLabels.setOnLabelClickListener{ _, data, _ ->
+        hotKeyAdapter.setOnLabelClickListener{
             binding.textClean.visibility = View.VISIBLE
-            searchFragment.setSearch(data.toString())
+            binding.search.setText(it)
+            searchFragment.setSearch(it)
             showFragment()
-            viewModel.addKey(data.toString())
+            viewModel.addKey(it)
             KeyboardUtils.hideKeyboard(binding.search)
         }
-        binding.historyLabels.setOnLabelClickListener { _, data, _ ->
+        historyKeyAdapter.setOnLabelClickListener {
             binding.textClean.visibility = View.VISIBLE
-            viewModel.addKey((data as HistoryKey).name)
-            searchFragment.setSearch((data as HistoryKey).name)
+            binding.search.setText(it)
+            viewModel.addKey(it)
+            searchFragment.setSearch(it)
             showFragment()
             KeyboardUtils.hideKeyboard(binding.search)
         }
@@ -99,15 +104,13 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
         }
         viewModel.hotKeyLiveData.myObserver(this,loadService){
             for (i in 0..7){
-                viewModel.hotkeyList.add(it[i].name)
+                viewModel.hotkeyList.add(it[i])
             }
-            binding.hotKtyLabels.setLabels(viewModel.hotkeyList)
+            hotKeyAdapter.submitList(viewModel.hotkeyList)
         }
 
         viewModel.historyLiveData.observe(this){
-            binding.historyLabels.setLabels(it){ _,_,data ->
-                data.name
-            }
+            historyKeyAdapter.submitList(it)
         }
 
     }
@@ -116,14 +119,14 @@ class SearchActivity() : BaseActivity<ActivitySearchBinding,SearchViewModel>(){
     private fun hideFragment(){
         supportFragmentManager.beginTransaction()
             .hide(searchFragment)
-            .commitAllowingStateLoss()
+            .commit()
 
     }
 
     private fun showFragment(){
         supportFragmentManager.beginTransaction()
             .show(searchFragment)
-            .commitAllowingStateLoss()
+            .commit()
     }
 }
 

@@ -17,9 +17,13 @@ import java.util.*
 //    view.visibility = if (type == 1) View.VISIBLE else View.GONE
 //}
 
-@BindingAdapter("android:text")
-fun isTop(view: TextView,type: Int){
-    view.text = if (type ==1) "置顶" else ""
+@BindingAdapter("isTop")
+fun isTop(view: TextView,top: Boolean){
+    if (top){
+        view.visibility = View.VISIBLE
+    }else{
+        view.visibility = View.GONE
+    }
 }
 
 
