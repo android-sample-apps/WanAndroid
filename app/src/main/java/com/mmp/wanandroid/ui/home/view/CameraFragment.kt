@@ -63,7 +63,8 @@ class CameraFragment : Fragment() {
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
         binding.ivCapture.setOnClickListener {
-            takePhoto()
+//            takePhoto()
+
         }
 
         binding.ivSwitch.setOnClickListener {

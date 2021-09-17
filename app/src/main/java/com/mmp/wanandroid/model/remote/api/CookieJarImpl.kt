@@ -16,9 +16,7 @@ class CookieJarImpl : CookieJar {
         if (result.isNotEmpty()){
             result.split(";").forEach {
                 val cookie = Cookie.parse(url,it)
-                if (cookie != null) {
-                    cookies.add(cookie)
-                }
+                cookie?.let { cookie ->  cookies.add(cookie) }
             }
         }
         return cookies

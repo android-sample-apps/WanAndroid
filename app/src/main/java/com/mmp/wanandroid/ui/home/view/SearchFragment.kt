@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.databinding.FragmentSearchBinding
 import com.mmp.wanandroid.ext.myObserver
 import com.mmp.wanandroid.ext.registerLoad
 import com.mmp.wanandroid.model.data.Article
+import com.mmp.wanandroid.ui.ShareViewModel
 import com.mmp.wanandroid.ui.base.BaseFragment
+import com.mmp.wanandroid.ui.base.MyApplication
 import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
 import com.mmp.wanandroid.ui.home.viewmodel.SearchFragmentViewModel
 import com.mmp.wanandroid.utils.toast
@@ -23,6 +26,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchFragmentViewMod
     private val articleAdapter by lazy { activity?.let { SearchArticleAdapter(it) } }
 
     private var mArticle: Article? = null
+
+    private val shareViewModel by lazy {
+        ViewModelProvider(requireActivity().application as MyApplication).get(ShareViewModel::class.java)
+    }
 
     override fun initView() {
         binding.rvArticle.adapter = articleAdapter
@@ -88,10 +95,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchFragmentViewMod
     override fun onCollect(article: Article) {
         mArticle = article
         viewModel.collect(article.id)
+        shareViewModel.collectLiveData.value = article
     }
 
     override fun unCollect(article: Article) {
         mArticle = article
         viewModel.unCollect(article.id)
+        shareViewModel.collectLiveData.value = article
     }
 }

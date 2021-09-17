@@ -32,8 +32,8 @@ class BtnBottomDialog : DialogFragment(){
         window?.decorView?.setPadding(0,0,0,0)
         val params = window?.attributes
         params?.gravity = Gravity.BOTTOM
-        params?.width = WindowManager.LayoutParams.MATCH_PARENT
-        params?.height = WindowManager.LayoutParams.WRAP_CONTENT
+//        params?.width = WindowManager.LayoutParams.MATCH_PARENT
+//        params?.height = WindowManager.LayoutParams.WRAP_CONTENT
         window?.attributes = params
         val slide = TranslateAnimation(Animation.RELATIVE_TO_SELF,0f,Animation.RELATIVE_TO_SELF,0f,
             Animation.RELATIVE_TO_SELF,1.0f,Animation.RELATIVE_TO_SELF,0f)
@@ -47,14 +47,14 @@ class BtnBottomDialog : DialogFragment(){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val btCamera = view.findViewById<Button>(R.id.bt_camera)
-        val btPhoto = view.findViewById<Button>(R.id.bt_photo)
-        val btCancel = view.findViewById<Button>(R.id.bt_cancel)
-        btCamera.setOnClickListener {
-            it.context.start<CameraActivity>()
-        }
-        btCancel.setOnClickListener {
-            dismiss()
-        }
+//        val btCamera = view.findViewById<Button>(R.id.bt_camera)
+//        val btPhoto = view.findViewById<Button>(R.id.bt_photo)
+//        val btCancel = view.findViewById<Button>(R.id.bt_cancel)
+//        btCamera.setOnClickListener {
+//            it.context.start<CameraActivity>()
+//        }
+//        btCancel.setOnClickListener {
+//            dismiss()
+//        }
     }
 }

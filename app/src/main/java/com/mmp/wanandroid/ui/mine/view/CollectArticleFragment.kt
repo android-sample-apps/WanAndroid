@@ -2,6 +2,7 @@ package com.mmp.wanandroid.ui.mine.view
 
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.Article
@@ -9,14 +10,20 @@ import com.mmp.wanandroid.model.data.ArticleData
 import com.mmp.wanandroid.databinding.FragmentCollectArticleBinding
 import com.mmp.wanandroid.ext.myObserver
 import com.mmp.wanandroid.ext.registerLoad
+import com.mmp.wanandroid.ui.ShareViewModel
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver
+import com.mmp.wanandroid.ui.base.MyApplication
 import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
 import com.mmp.wanandroid.ui.mine.viewmodel.CollectArticleViewModel
 
 class CollectArticleFragment : BaseFragment<FragmentCollectArticleBinding,CollectArticleViewModel>(),SearchArticleAdapter.OnCollectListener {
 
     private val articleAdapter by lazy { activity?.let { SearchArticleAdapter(it) } }
+
+    private val shareViewModel by lazy {
+        ViewModelProvider(requireActivity().application as MyApplication).get(ShareViewModel::class.java)
+    }
 
     private var mArticle: Article? = null
 
@@ -31,6 +38,7 @@ class CollectArticleFragment : BaseFragment<FragmentCollectArticleBinding,Collec
     override fun unCollect(article: Article) {
         mArticle = article
         viewModel.unCollect(article.id)
+        shareViewModel.collectLiveData.value = article
     }
 
     override fun initView() {

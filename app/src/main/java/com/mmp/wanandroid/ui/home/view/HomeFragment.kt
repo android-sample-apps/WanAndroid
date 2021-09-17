@@ -6,6 +6,7 @@ import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mmp.wanandroid.R
 import com.mmp.wanandroid.model.data.*
@@ -13,8 +14,10 @@ import com.mmp.wanandroid.databinding.FragmentHomeBinding
 import com.mmp.wanandroid.ext.myObserver
 import com.mmp.wanandroid.ext.registerLoad
 import com.mmp.wanandroid.model.remote.DataStatus
+import com.mmp.wanandroid.ui.ShareViewModel
 import com.mmp.wanandroid.ui.base.BaseFragment
 import com.mmp.wanandroid.ui.base.IStateObserver
+import com.mmp.wanandroid.ui.base.MyApplication
 import com.mmp.wanandroid.ui.home.adapter.ImageAdapter
 import com.mmp.wanandroid.ui.home.adapter.SearchArticleAdapter
 import com.mmp.wanandroid.ui.home.viewmodel.HomeViewModel
@@ -30,6 +33,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
 
 
     private val bannerAdapter by lazy { context?.let { ImageAdapter(viewModel.bannerList,it) } }
+
+    private val shareViewModel by lazy {
+        ViewModelProvider(requireActivity().application as MyApplication).get(ShareViewModel::class.java)
+    }
 
     private val articleAdapter by lazy {
         activity?.let { SearchArticleAdapter(it) }
@@ -80,6 +87,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
                 toast("取消收藏")
             }
         }
+
+        shareViewModel.loginLiveData.observe(this){
+            if (it != null){
+                viewModel.articleList.forEach { article ->
+                    it.collectIds.forEach { id ->
+                        if (id == article.id){
+                            article.collect = true
+                        }
+                    }
+                }
+            }
+        }
+
+        shareViewModel.collectLiveData.observe(this){
+            if (it != null){
+                viewModel.articleList.forEach { article ->
+                    if (it.id == article.id){
+                        article.collect = it.collect
+                    }
+                }
+            }
+        }
     }
 
     override fun initView() {
@@ -87,7 +116,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(),SearchArt
         initRv()
         initBar()
         binding.ivCamera.setOnClickListener {
-            showCameraWithPermissionCheck()
+//            showCameraWithPermissionCheck()
+            childFragmentManager.beginTransaction().add(BtnBottomDialog(),BtnBottomDialog::class.java.simpleName)
+                .commit()
         }
     }
 
