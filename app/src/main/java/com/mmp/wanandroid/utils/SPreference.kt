@@ -46,6 +46,4 @@ class SPreference<T>(private val name: String,private val default: T) : ReadWrit
         } as T
     }
 
-
-
 }

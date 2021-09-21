@@ -35,9 +35,7 @@ class NavAdapter(private val context: Context) : ListAdapter<NavBean,BindingView
     }
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
-
         val mNavBean = getItem(position)
-
         (holder.binding as NavRvItemBinding).navBean = mNavBean
         val navItemAdapter = NavItemAdapter(context)
         holder.binding.itemRv.apply {

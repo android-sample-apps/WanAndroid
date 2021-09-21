@@ -123,4 +123,6 @@ dependencies {
     implementation "androidx.camera:camera-view:1.0.0-alpha27"
 
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 }

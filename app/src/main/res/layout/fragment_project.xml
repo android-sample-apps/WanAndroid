@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.project.ProjectFragment"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/white">
 
         <!--  直接用外面的layout会出现crash      -->
         <LinearLayout
