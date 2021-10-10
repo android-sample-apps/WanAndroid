@@ -42,6 +42,7 @@
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_search.xml" value="0.23278985507246377" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_setting.xml" value="0.33" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_splash.xml" value="0.1431159420289855" />
+        <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_system_detail.xml" value="0.1879432624113475" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/activity_todo.xml" value="0.23177083333333334" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_camera.xml" value="0.1879432624113475" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_collect_article.xml" value="0.16032608695652173" />
@@ -53,6 +54,7 @@
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_project.xml" value="0.1393110435663627" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_project_content.xml" value="0.1393110435663627" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_search.xml" value="0.22509057971014493" />
+        <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/fragment_system.xml" value="0.1879432624113475" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/home_rv_item.xml" value="0.33" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/integral_rv_item.xml" value="0.12259371833839919" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/layout_project_rv_item.xml" value="0.33" />
@@ -62,6 +64,7 @@
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/todo_rv_item.xml" value="0.1" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/layout/web_rv_item.xml" value="0.1400709219858156" />
         <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/menu/home_menu.xml" value="0.1453125" />
+        <entry key="..\:/android-kotlin/WanAndroid/app/src/main/res/xml/network_security_config.xml" value="0.259375" />
       </map>
     </option>
   </component>
