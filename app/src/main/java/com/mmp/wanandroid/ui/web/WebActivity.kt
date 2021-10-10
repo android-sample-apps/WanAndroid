@@ -1,10 +1,10 @@
 package com.mmp.wanandroid.ui.web
 
+import android.content.Intent
+import android.net.Uri
+import android.net.http.SslError
 import android.os.Build
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.databinding.library.baseAdapters.BR
@@ -12,6 +12,7 @@ import com.mmp.wanandroid.R
 import com.mmp.wanandroid.databinding.ActivityWebBinding
 import com.mmp.wanandroid.ui.base.BaseActivity
 import com.mmp.wanandroid.ui.base.BaseFragment
+import com.mmp.wanandroid.utils.start
 
 class WebActivity : BaseActivity<ActivityWebBinding,WebViewModel>() {
 
@@ -24,17 +25,46 @@ class WebActivity : BaseActivity<ActivityWebBinding,WebViewModel>() {
             finish()
         }
         val url = intent?.extras?.getString("url")
-        url?.let { binding.webView.loadUrl(it) }
         binding.webView.webViewClient = object : WebViewClient(){
-            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                return false
-            }
 
             override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
+                view: WebView,
+                request: WebResourceRequest
             ): Boolean {
-                return false
+                val tempUrl = request.url.toString()
+                if (tempUrl.startsWith("intent://") || tempUrl.endsWith(".apk")
+                ) {
+                    try {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    return true
+                }
+
+                return super.shouldOverrideUrlLoading(view, request)
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
+                if (url.startsWith("intent://") || url.endsWith(".apk")) {
+                    try {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    return true
+                }
+                return super.shouldOverrideUrlLoading(view, url)
+            }
+
+            override fun onReceivedSslError(
+                view: WebView?,
+                handler: SslErrorHandler?,
+                error: SslError?
+            ) {
+                //默认为false
+                //忽略证书，存在安全风险
+                handler?.proceed()
             }
         }
 
@@ -50,10 +80,11 @@ class WebActivity : BaseActivity<ActivityWebBinding,WebViewModel>() {
             useWideViewPort = true
             // 缩放至屏幕的大小
             loadWithOverviewMode = true
+            //支持缩放
             setSupportZoom(true)
             builtInZoomControls = true
-            useWideViewPort = true
             javaScriptEnabled = true
+            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         }
 
         val callback = object : OnBackPressedCallback(true){
@@ -65,6 +96,7 @@ class WebActivity : BaseActivity<ActivityWebBinding,WebViewModel>() {
                 }
             }
         }
+        url?.let { binding.webView.loadUrl(it) }
         onBackPressedDispatcher.addCallback(this,callback)
     }
 

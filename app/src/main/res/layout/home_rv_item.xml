@@ -54,14 +54,14 @@
                 tools:text="mmp" />
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@{article.collect?@drawable/redheart:@drawable/heart}"
                 android:id="@+id/heart"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="13dp"
-                android:layout_marginEnd="15dp" />
+                android:layout_marginEnd="15dp"
+                android:background="@{article.collect?@drawable/redheart:@drawable/heart}" />
 
             <TextView
                 android:layout_width="350dp"

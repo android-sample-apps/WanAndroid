@@ -12,7 +12,9 @@ import com.mmp.wanandroid.model.data.Article
 import com.mmp.wanandroid.databinding.HomeRvItemBinding
 import com.mmp.wanandroid.ui.base.BindingViewHolder
 import com.mmp.wanandroid.ui.web.WebActivity
+import com.mmp.wanandroid.utils.SPreference
 import com.mmp.wanandroid.utils.start
+import com.mmp.wanandroid.utils.toast
 
 
 class SearchArticleAdapter(private val context: Context) : ListAdapter<Article,BindingViewHolder>(COMPARATOR) {
@@ -22,6 +24,8 @@ class SearchArticleAdapter(private val context: Context) : ListAdapter<Article,B
     fun setOnCollectListener(onCollectListener: OnCollectListener){
         mOnCollectListener = onCollectListener
     }
+
+    private val isLogin by SPreference("login_state",false)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
         val binding = DataBindingUtil.inflate<HomeRvItemBinding>(LayoutInflater.from(parent.context), R.layout.home_rv_item,parent,false)
@@ -33,12 +37,16 @@ class SearchArticleAdapter(private val context: Context) : ListAdapter<Article,B
         val binding = holder.binding as HomeRvItemBinding
         binding.article = mArticle
         binding.heart.setOnClickListener {
-            if (mArticle.collect){
-                mArticle.collect = false
-                mOnCollectListener?.unCollect(mArticle)
+            if (isLogin){
+                if (mArticle.collect){
+                    mArticle.collect = false
+                    mOnCollectListener?.unCollect(mArticle)
+                }else{
+                    mArticle.collect = true
+                    mOnCollectListener?.onCollect(mArticle)
+                }
             }else{
-                mArticle.collect = true
-                mOnCollectListener?.onCollect(mArticle)
+                toast("请先登录")
             }
         }
         holder.itemView.setOnClickListener{
